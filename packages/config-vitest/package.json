@@ -4,37 +4,11 @@
 	"type": "module",
 	"private": true,
 	"description": "Shared Vitest configuration for the monorepo.",
-	"files": [
-		"dist"
-	],
-	"main": "./dist/es/index.js",
-	"module": "./dist/es/index.js",
-	"types": "./dist/es/index.d.ts",
 	"exports": {
-		".": {
-			"import": {
-				"types": "./dist/es/index.d.ts",
-				"default": "./dist/es/index.js"
-			},
-			"require": {
-				"types": "./dist/cjs/index.d.cts",
-				"default": "./dist/cjs/index.cjs"
-			}
-		},
-		"./mocks": {
-			"import": {
-				"types": "./dist/es/mocks/index.d.ts",
-				"default": "./dist/es/mocks/index.js"
-			},
-			"require": {
-				"types": "./dist/cjs/mocks/index.d.cts",
-				"default": "./dist/cjs/mocks/index.cjs"
-			}
-		}
+		".": "./src/index.ts",
+		"./mocks": "./src/mocks/index.ts"
 	},
 	"scripts": {
-		"build": "bunchee",
-		"dev": "bunchee --watch",
 		"typecheck": "tsc --noEmit",
 		"lint": "biome check --write"
 	},
@@ -53,7 +27,6 @@
 		"@repo/biome-config": "workspace:*",
 		"@testing-library/jest-dom": "catalog:",
 		"@vitest/coverage-v8": "catalog:",
-		"bunchee": "catalog:",
 		"typescript": "catalog:",
 		"vitest": "catalog:",
 		"jsdom": "catalog:",

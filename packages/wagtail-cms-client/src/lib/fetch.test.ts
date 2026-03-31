@@ -207,9 +207,9 @@ describe("fetchRequest", () => {
 			json: vi.fn(),
 		});
 
-		await expect(fetchRequest("https://example.com/api/pages/")).rejects.toThrow(
-			/404 Not Found/,
-		);
+		await expect(
+			fetchRequest("https://example.com/api/pages/"),
+		).rejects.toThrow(/404 Not Found/);
 	});
 
 	it("should work without init parameter", async () => {

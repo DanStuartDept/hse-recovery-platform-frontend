@@ -12,10 +12,11 @@
 		"./snippets": "./src/types/snippets/index.ts"
 	},
 	"scripts": {
-		"dev": "concurrently \"pnpm run build:watch\" \"pnpm run serve:live\"",
-		"build": "typedoc",
-		"build:watch": "typedoc --watch",
-		"serve:live": "npx live-server public --port=3002 --wait=2000",
+		"dev:docs": "concurrently \"pnpm run docs:watch\" \"pnpm run docs:serve\"",
+		"build": "echo 'Source-only package — no build step'",
+		"docs": "typedoc",
+		"docs:watch": "typedoc --watch",
+		"docs:serve": "npx live-server public --port=3002 --wait=2000",
 		"lint": "biome check --write",
 		"typecheck": "tsc --noEmit",
 		"test": "vitest run",
