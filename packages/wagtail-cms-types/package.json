@@ -26,7 +26,7 @@
 	"devDependencies": {
 		"@repo/biome-config": "workspace:*",
 		"@repo/typescript-config": "workspace:*",
-		"@repo/vitest-config": "workspace:^",
+		"@repo/vitest-config": "workspace:*",
 		"@types/node": "catalog:",
 		"@vitest/coverage-v8": "catalog:",
 		"concurrently": "^9.0.2",

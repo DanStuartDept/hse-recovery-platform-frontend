@@ -27,7 +27,7 @@
 	},
 	"devDependencies": {
 		"@repo/biome-config": "workspace:*",
-		"@repo/vitest-config": "workspace:^",
+		"@repo/vitest-config": "workspace:*",
 		"@repo/typescript-config": "workspace:*",
 		"@types/node": "catalog:",
 		"bunchee": "catalog:",
