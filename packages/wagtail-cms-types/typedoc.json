@@ -1,0 +1,9 @@
+{
+	"entryPoints": ["src/types"],
+	"entryPointStrategy": "expand",
+	"out": "public",
+	"plugin": ["typedoc-plugin-zod"],
+	"excludeExternals": true,
+	"excludePrivate": true,
+	"readme": "none"
+}

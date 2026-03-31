@@ -1,0 +1,36 @@
+{
+	"name": "hse-app-template",
+	"version": "0.1.0",
+	"private": true,
+	"scripts": {
+		"dev": "next dev",
+		"build": "next build",
+		"start": "next start",
+		"lint": "biome check --write",
+		"typecheck": "next typegen && tsc --noEmit",
+		"deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+		"upload": "opennextjs-cloudflare build && opennextjs-cloudflare upload",
+		"preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+		"cf-typegen": "wrangler types --env-interface CloudflareEnv ./cloudflare-env.d.ts"
+	},
+	"dependencies": {
+		"@hseireland/hse-frontend": "catalog:",
+		"@hseireland/hse-frontend-react": "catalog:",
+		"@opennextjs/cloudflare": "catalog:",
+		"@repo/wagtail-api-client": "workspace:*",
+		"@repo/wagtail-cms-types": "workspace:*",
+		"next": "catalog:",
+		"react": "catalog:",
+		"react-dom": "catalog:"
+	},
+	"devDependencies": {
+		"@repo/biome-config": "workspace:*",
+		"@repo/typescript-config": "workspace:*",
+		"@types/node": "catalog:",
+		"@types/react": "catalog:",
+		"@types/react-dom": "catalog:",
+		"sass-embedded": "catalog:",
+		"typescript": "catalog:",
+		"wrangler": "catalog:"
+	}
+}

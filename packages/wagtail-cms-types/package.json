@@ -1,0 +1,43 @@
+{
+	"name": "@repo/wagtail-cms-types",
+	"version": "0.0.0",
+	"private": true,
+	"description": "TypeScript types for Wagtail CMS",
+	"exports": {
+		"./blocks": "./src/types/blocks/index.ts",
+		"./core": "./src/types/core/index.ts",
+		"./fields": "./src/types/fields/index.ts",
+		"./page-models": "./src/types/page-models/index.ts",
+		"./settings": "./src/types/settings/index.ts",
+		"./snippets": "./src/types/snippets/index.ts"
+	},
+	"scripts": {
+		"dev": "concurrently \"pnpm run build:watch\" \"pnpm run serve:live\"",
+		"build": "typedoc",
+		"build:watch": "typedoc --watch",
+		"serve:live": "npx live-server public --port=3002 --wait=2000",
+		"lint": "biome check --write",
+		"typecheck": "tsc --noEmit",
+		"test": "vitest run",
+		"test:ci": "vitest run --coverage",
+		"clean": "rm -rf node_modules"
+	},
+	"devDependencies": {
+		"@repo/biome-config": "workspace:*",
+		"@repo/typescript-config": "workspace:*",
+		"@repo/vitest-config": "workspace:^",
+		"@types/node": "catalog:",
+		"@vitest/coverage-v8": "catalog:",
+		"concurrently": "^9.0.2",
+		"live-server": "^1.2.2",
+		"serve": "^14.2.4",
+		"typedoc": "^0.28.13",
+		"typedoc-plugin-zod": "^1.4.3",
+		"typescript": "catalog:",
+		"vitest": "catalog:",
+		"vitest-sonar-reporter": "catalog:"
+	},
+	"dependencies": {
+		"zod": "catalog:"
+	}
+}

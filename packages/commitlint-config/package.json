@@ -1,0 +1,11 @@
+{
+  "name": "@repo/commitlint-config",
+  "version": "1.0.0",
+  "main": ".commitlintrc.js",
+  "license": "MIT",
+  "scripts": {},
+  "devDependencies": {
+    "@commitlint/cli": "^20.2.0",
+    "@commitlint/config-conventional": "^20.2.0"
+  }
+}

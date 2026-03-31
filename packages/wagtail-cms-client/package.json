@@ -1,0 +1,58 @@
+{
+	"name": "@repo/wagtail-api-client",
+	"version": "0.0.0",
+	"type": "module",
+	"private": true,
+	"description": "Wagtail API Client for Next.js",
+	"files": [
+		"dist"
+	],
+	"main": "./dist/es/index.js",
+	"module": "./dist/es/index.js",
+	"types": "./dist/es/index.d.ts",
+	"exports": {
+		".": {
+			"import": {
+				"types": "./dist/es/index.d.ts",
+				"default": "./dist/es/index.js"
+			},
+			"require": {
+				"types": "./dist/cjs/index.d.cts",
+				"default": "./dist/cjs/index.cjs"
+			}
+		}
+	},
+	"scripts": {
+		"build": "bunchee",
+		"dev": "bunchee --watch",
+		"lint": "biome check --write",
+		"typecheck": "tsc --noEmit",
+		"generate-docs": "typedoc --out public src",
+		"test": "vitest run",
+		"test:ci": "vitest run --coverage",
+		"clean": "rm -rf node_modules && rm -rf dist"
+	},
+	"devDependencies": {
+		"@repo/biome-config": "workspace:*",
+		"@repo/logger": "workspace:*",
+		"@repo/typescript-config": "workspace:*",
+		"@repo/vitest-config": "workspace:^",
+		"@repo/wagtail-cms-types": "workspace:*",
+		"@semantic-release/changelog": "^6.0.3",
+		"@semantic-release/git": "^10.0.1",
+		"@semantic-release/gitlab": "^13.0.3",
+		"@semantic-release/npm": "^12.0.0",
+		"@types/node": "catalog:",
+		"@vitest/coverage-v8": "catalog:",
+		"bunchee": "catalog:",
+		"jsdom": "catalog:",
+		"tsup": "catalog:",
+		"typedoc": "^0.25.13",
+		"typescript": "catalog:",
+		"vitest": "catalog:",
+		"vitest-sonar-reporter": "catalog:"
+	},
+	"dependencies": {
+		"zod": "catalog:"
+	}
+}

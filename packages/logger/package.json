@@ -1,0 +1,45 @@
+{
+	"name": "@repo/logger",
+	"version": "0.0.0",
+	"type": "module",
+	"private": true,
+	"description": "Logger utility for the monorepo. Can be extended in client build with 3rd party log drain service.",
+	"files": [
+		"dist"
+	],
+	"main": "./dist/es/index.js",
+	"module": "./dist/es/index.js",
+	"types": "./dist/es/index.d.ts",
+	"exports": {
+		".": {
+			"import": {
+				"types": "./dist/es/index.d.ts",
+				"default": "./dist/es/index.js"
+			},
+			"require": {
+				"types": "./dist/cjs/index.d.cts",
+				"default": "./dist/cjs/index.cjs"
+			}
+		}
+	},
+	"scripts": {
+		"build": "bunchee",
+		"dev": "bunchee --watch",
+		"lint": "biome check --write",
+		"typecheck": "tsc --noEmit",
+		"test": "vitest run",
+		"test:ci": "vitest run --coverage",
+		"clean": "rm -rf node_modules && rm -rf dist"
+	},
+	"devDependencies": {
+		"@repo/biome-config": "workspace:*",
+		"@repo/vitest-config": "workspace:^",
+		"@repo/typescript-config": "workspace:*",
+		"@types/node": "catalog:",
+		"bunchee": "catalog:",
+		"typescript": "catalog:",
+		"vitest": "catalog:",
+		"@vitest/coverage-v8": "catalog:",
+		"vitest-sonar-reporter": "catalog:"
+	}
+}

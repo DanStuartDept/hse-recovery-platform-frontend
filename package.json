@@ -1,0 +1,29 @@
+{
+  "name": "hse-recovery-platform-frontend",
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "test": "turbo run test",
+    "test:ci": "turbo run test:ci",
+    "typecheck": "turbo run typecheck"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^20.2.0",
+    "@commitlint/config-conventional": "^20.2.0",
+    "@repo/commitlint-config": "workspace:*",
+    "@repo/vitest-config": "workspace:*",
+    "@biomejs/biome": "2.4.9",
+    "prettier": "^3.8.1",
+    "turbo": "^2.8.20",
+    "typescript": "5.9.2",
+    "vitest": "catalog:"
+  },
+  "engines": {
+    "node": ">=24",
+    "pnpm": ">=9.12"
+  },
+  "packageManager": "pnpm@10.15.1"
+}

@@ -1,0 +1,15 @@
+{
+	"servers": {
+		"storybook-mcp": {
+			"url": "http://localhost:6006/mcp",
+			"type": "http"
+		},
+		"playwright": {
+			"command": "npx",
+			"args": [
+				"@playwright/mcp@latest"
+			]
+		}
+	},
+	"inputs": []
+}
