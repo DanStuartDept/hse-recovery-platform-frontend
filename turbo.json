@@ -12,17 +12,25 @@
       ],
       "outputs": [
         ".next/**",
-        "!.next/cache/**"
+        "!.next/cache/**",
+        "dist/**"
       ]
     },
     "lint": {
-      "dependsOn": [
-        "^lint"
+      "dependsOn": [],
+      "inputs": [
+        "src/**",
+        "*.json",
+        "*.ts",
+        "*.js"
       ]
     },
     "typecheck": {
-      "dependsOn": [
-        "^typecheck"
+      "dependsOn": [],
+      "inputs": [
+        "src/**",
+        "*.json",
+        "*.ts"
       ]
     },
     "test": {
