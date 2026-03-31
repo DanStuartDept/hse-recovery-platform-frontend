@@ -21,7 +21,7 @@ export const ClientOptionsSchema = z.object({
 	baseURL: z.string(),
 	mediaBaseURL: z.string().optional(),
 	apiPath: z.string(),
-	init: z.any().optional(),
+	init: z.custom<RequestInit>().optional(),
 });
 
 export type ClientOptions = z.infer<typeof ClientOptionsSchema>;

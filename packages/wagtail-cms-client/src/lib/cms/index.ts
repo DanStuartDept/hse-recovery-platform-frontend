@@ -72,7 +72,9 @@ export async function fetchContent<T>(
 	}
 	const query = buildQueryString(queries);
 
-	const fullUrl = `${baseURL}${apiPath}/${content}/?${query}`;
+	const fullUrl = query
+		? `${baseURL}${apiPath}/${content}/?${query}`
+		: `${baseURL}${apiPath}/${content}/`;
 
 	return fetchRequest(fullUrl, init);
 }

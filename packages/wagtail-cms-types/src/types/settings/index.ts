@@ -1,13 +1,14 @@
 import { z } from "zod";
-import { FieldTypeCtaSchema, FieldTypeImageSchema } from "../fields";
+import {
+	FieldTypeCtaSchema,
+	FieldTypeImageSchema,
+	NavItemSchema,
+} from "../fields";
 
 /**
  * Basic navigation item schema.
  */
-export const CMSSiteSettingsNavItemSchema = z.object({
-	title: z.string(),
-	url: z.string(),
-});
+export const CMSSiteSettingsNavItemSchema = NavItemSchema;
 
 export type CMSSiteSettingsNavItem = z.infer<
 	typeof CMSSiteSettingsNavItemSchema

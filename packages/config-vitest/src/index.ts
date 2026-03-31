@@ -4,6 +4,7 @@ import { defineConfig } from "vitest/config";
 
 const coverageExclusions = [
 	"node_modules/",
+	"**/node_modules/**",
 	"src/test-setup.js",
 	"src/vitest.setup.ts",
 	"**/*.test.{ts,tsx}",
@@ -18,7 +19,6 @@ const coverageExclusions = [
 	"**/*.config.{js,ts,mjs,mts}",
 	"**/*.stories.{ts,tsx,js,jsx,mdx}",
 	"**/*.d.ts",
-	"**/node_modules/**",
 ];
 
 interface VitestConfigOptions {
@@ -36,8 +36,11 @@ export function createVitestConfig(options: VitestConfigOptions = {}) {
 		environment = "jsdom",
 	} = options;
 
+	const plugins =
+		environment === "jsdom" ? [react(), tsconfigPaths()] : [tsconfigPaths()];
+
 	return defineConfig({
-		plugins: [react(), tsconfigPaths()],
+		plugins,
 		test: {
 			environment,
 			globals: true,

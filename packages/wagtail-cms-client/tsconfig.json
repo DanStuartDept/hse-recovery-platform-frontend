@@ -4,9 +4,6 @@
 	"compilerOptions": {
 		"lib": ["ES2019"],
 		"jsx": "react-jsx",
-		"paths": {
-			"@repo/ui": ["../ui/src/*"]
-		},
 		"types": ["node", "vitest/globals"]
 	},
 	"exclude": ["dist", "build", "node_modules"]

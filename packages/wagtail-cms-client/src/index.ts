@@ -15,8 +15,6 @@ import type {
 } from "@repo/wagtail-cms-types/core";
 import { FetchError, fetchContent, fetchRequest } from "./lib/index.js";
 
-export * from "@repo/wagtail-cms-types/core";
-
 export * from "./lib/index.js";
 
 /**
@@ -56,6 +54,16 @@ export class CMSClient {
 	}
 
 	/**
+	 * Handles errors from fetch operations, returning a NotFoundContents response.
+	 */
+	private handleFetchError(error: unknown, message: string): NotFoundContents {
+		if (error instanceof FetchError) {
+			return { message, data: error };
+		}
+		return { message: "An unknown error occurred:", data: error };
+	}
+
+	/**
 	 * Fetches an endpoint using the provided path and handles response and error cases.
 	 *
 	 * @param path - The path of the endpoint to fetch.
@@ -75,16 +83,7 @@ export class CMSClient {
 		try {
 			return (await fetchRequest(url, init)) as T;
 		} catch (error) {
-			if (error instanceof FetchError) {
-				return {
-					message: "Path not found",
-					data: error,
-				};
-			}
-			return {
-				message: "An unknown error occurred:",
-				data: error,
-			};
+			return this.handleFetchError(error, "Path not found");
 		}
 	}
 
@@ -148,16 +147,7 @@ export class CMSClient {
 				init,
 			)) as CMSContent;
 		} catch (error) {
-			if (error instanceof FetchError) {
-				return {
-					message: `Page not found: ${idOrSlug}`,
-					data: error,
-				};
-			}
-			return {
-				message: "An unknown error occurred:",
-				data: error,
-			};
+			return this.handleFetchError(error, `Page not found: ${idOrSlug}`);
 		}
 	}
 
@@ -181,16 +171,7 @@ export class CMSClient {
 		try {
 			return (await fetchRequest(url, init)) as T;
 		} catch (error) {
-			if (error instanceof FetchError) {
-				return {
-					message: `Page not found: ${path}`,
-					data: error,
-				};
-			}
-			return {
-				message: "An unknown error occurred:",
-				data: error,
-			};
+			return this.handleFetchError(error, `Page not found: ${path}`);
 		}
 	}
 
@@ -215,16 +196,7 @@ export class CMSClient {
 		try {
 			return (await fetchRequest(url, init)) as T;
 		} catch (error) {
-			if (error instanceof FetchError) {
-				return {
-					message: "Preview not found",
-					data: error,
-				};
-			}
-			return {
-				message: "An unknown error occurred:",
-				data: error,
-			};
+			return this.handleFetchError(error, "Preview not found");
 		}
 	}
 
@@ -249,16 +221,7 @@ export class CMSClient {
 				init,
 			)) as CMSContent;
 		} catch (error) {
-			if (error instanceof FetchError) {
-				return {
-					message: "Image not found",
-					data: error,
-				};
-			}
-			return {
-				message: "An unknown error occurred:",
-				data: error,
-			};
+			return this.handleFetchError(error, "Image not found");
 		}
 	}
 
@@ -283,16 +246,7 @@ export class CMSClient {
 				init,
 			)) as CMSContent;
 		} catch (error) {
-			if (error instanceof FetchError) {
-				return {
-					message: "Document not found",
-					data: error,
-				};
-			}
-			return {
-				message: "An unknown error occurred:",
-				data: error,
-			};
+			return this.handleFetchError(error, "Document not found");
 		}
 	}
 

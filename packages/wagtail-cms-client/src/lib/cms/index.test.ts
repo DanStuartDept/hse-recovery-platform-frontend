@@ -56,7 +56,7 @@ describe("fetchContent", () => {
 
 		expect(mockBuildQueryString).toHaveBeenCalledWith(undefined);
 		expect(mockFetchRequest).toHaveBeenCalledWith(
-			"https://api.example.com/api/v2/pages/?",
+			"https://api.example.com/api/v2/pages/",
 			undefined,
 		);
 		expect(result).toBe(mockResponse);
@@ -212,6 +212,18 @@ describe("fetchContent", () => {
 		});
 	});
 
+	it("should not append trailing ? when no query params", async () => {
+		const mockResponse = { items: [], meta: { total_count: 0 } };
+		mockFetchRequest.mockResolvedValue(mockResponse);
+		mockBuildQueryString.mockReturnValue("");
+
+		await fetchContent("https://example.com", "/api/v2", "pages");
+		expect(mockFetchRequest).toHaveBeenCalledWith(
+			"https://example.com/api/v2/pages/",
+			undefined,
+		);
+	});
+
 	it("should propagate errors from fetchRequest", async () => {
 		const error = new Error("Network error");
 		mockFetchRequest.mockRejectedValue(error);
@@ -239,7 +251,7 @@ describe("fetchContent", () => {
 		for (const content of contentTypes) {
 			await fetchContent(baseURL, apiPath, content);
 			expect(mockFetchRequest).toHaveBeenCalledWith(
-				`https://api.example.com/api/v2/${content}/?`,
+				`https://api.example.com/api/v2/${content}/`,
 				undefined,
 			);
 		}
