@@ -30,7 +30,6 @@
 		"@vitest/coverage-v8": "catalog:",
 		"concurrently": "^9.0.2",
 		"live-server": "^1.2.2",
-		"serve": "^14.2.4",
 		"typedoc": "^0.28.13",
 		"typedoc-plugin-zod": "^1.4.3",
 		"typescript": "catalog:",
