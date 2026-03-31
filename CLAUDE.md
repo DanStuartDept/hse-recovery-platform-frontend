@@ -1,0 +1,94 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
+## Commands
+
+All commands run from the repo root via Turborepo:
+
+```bash
+pnpm install          # install all workspace deps
+pnpm build            # build all packages/apps in dependency order
+pnpm dev              # start all dev servers (persistent, no cache)
+pnpm test             # vitest run (all packages, requires ^build)
+pnpm test:ci          # vitest run --coverage
+pnpm lint             # biome check --write (auto-fixes .ts/.tsx)
+pnpm typecheck        # tsc --noEmit across workspace
+pnpm format           # prettier --write (Markdown files only)
+```
+
+Filter to a single workspace:
+
+```bash
+turbo run dev --filter=hse-app-template
+turbo run test --filter=@repo/wagtail-api-client
+```
+
+Run a single test file (from a package directory):
+
+```bash
+cd packages/wagtail-cms-client && pnpm vitest run src/lib/fetchContent.test.ts
+```
+
+App-specific (from `apps/hse-app-template`):
+
+```bash
+pnpm run deploy       # opennextjs-cloudflare build + deploy to Cloudflare Workers
+pnpm run preview      # build + local Cloudflare Workers preview
+pnpm run cf-typegen   # regenerate cloudflare-env.d.ts from wrangler.jsonc
+```
+
+## Architecture
+
+This is a **pnpm + Turborepo monorepo** with a Next.js 16 app deployed to **Cloudflare Workers** via `@opennextjs/cloudflare`, integrating with a **Wagtail CMS** backend.
+
+### Workspace layout
+
+| npm name | Path | Role |
+|---|---|---|
+| `hse-app-template` | `apps/hse-app-template` | Next.js 16 / React 19 App Router app |
+| `@repo/wagtail-api-client` | `packages/wagtail-cms-client` | Wagtail REST client (`CMSClient` + `fetchContent`) |
+| `@repo/wagtail-cms-types` | `packages/wagtail-cms-types` | Zod-based CMS types (source-only, no build step) |
+| `@repo/logger` | `packages/logger` | Thin console wrapper |
+| `@repo/vitest-config` | `packages/config-vitest` | Shared `createVitestConfig()` factory |
+| `@repo/biome-config` | `packages/biome-config` | Shared Biome rule sets |
+| `@repo/typescript-config` | `packages/config-typescript` | Shared tsconfig bases |
+| `@repo/commitlint-config` | `packages/commitlint-config` | Conventional commits config |
+
+### Key architectural decisions
+
+- **Server Components by default**. Add `"use client"` only when hooks, interactivity, or browser APIs are needed.
+- **Cloudflare Workers runtime** -- no Node.js APIs at runtime. Access bindings (KV, D1, R2) via `getCloudflareContext()`. Types generated into `cloudflare-env.d.ts`.
+- **CMS content flow**: `CMSClient` (from `@repo/wagtail-api-client`) fetches data; all response shapes are validated/typed via Zod schemas in `@repo/wagtail-cms-types` (sub-path exports: `/core`, `/blocks`, `/fields`, `/page-models`, `/settings`, `/snippets`).
+- **Design system**: `@hseireland/hse-frontend` (CSS/tokens) + `@hseireland/hse-frontend-react` (React components). Use these before writing custom components.
+- **Forms**: `react-hook-form` + `@hookform/resolvers` + Zod schemas.
+
+### Dependency conventions
+
+- Internal packages: `"workspace:*"` protocol.
+- Pinned external versions: defined in `pnpm-workspace.yaml` `catalog:`, referenced as `"catalog:"` in package.json.
+- HSE design system packages come from GitHub Packages (`@hseireland:registry=https://npm.pkg.github.com` in `.npmrc`).
+
+### Library build conventions
+
+- `@repo/wagtail-api-client` and `@repo/logger`: built with **bunchee** to dual ESM (`dist/es/`) + CJS (`dist/cjs/`) output. TypeScript imports use `.js` extensions.
+- `@repo/wagtail-cms-types`: **source-only** -- `exports` map points directly at `.ts` files (no build step).
+
+## Code style
+
+- **Biome v2** for linting + formatting (no ESLint). Tabs, indent-width 2, line-width 120.
+- `pnpm lint` auto-fixes; run before committing.
+- Commits follow **Conventional Commits** (enforced by commitlint).
+- TypeScript strict mode everywhere. Avoid `any`.
+- Shared tsconfig bases from `@repo/typescript-config` (`base.json`, `nextjs.json`, `vite.json`, `react-library.json`).
+
+## Testing
+
+- **Vitest** with `@vitest/coverage-v8`. Use `createVitestConfig()` from `@repo/vitest-config`.
+- Default test environment: `jsdom`. Pass `environment: 'node'` for server-only packages.
+- App path alias: `@/*` maps to `./src/*`.
+
+## Requirements
+
+- Node.js >= 24
+- pnpm 10.33.0 (pinned via `packageManager` field)
