@@ -162,7 +162,7 @@ describe("fetchContent", () => {
 			await expect(
 				fetchContent(baseURL, apiPath, content, queries),
 			).rejects.toThrow(
-				"Filtering by tree position is supported only for pages. Please remove the 'child_of', 'ancestor_of' or 'decendant_of'  query.",
+				"Filtering by tree position is supported only for pages. Please remove the 'child_of', 'ancestor_of' or 'descendant_of' query.",
 			);
 
 			expect(mockFetchRequest).not.toHaveBeenCalled();
@@ -177,20 +177,20 @@ describe("fetchContent", () => {
 			await expect(
 				fetchContent(baseURL, apiPath, content, queries),
 			).rejects.toThrow(
-				"Filtering by tree position is supported only for pages. Please remove the 'child_of', 'ancestor_of' or 'decendant_of'  query.",
+				"Filtering by tree position is supported only for pages. Please remove the 'child_of', 'ancestor_of' or 'descendant_of' query.",
 			);
 		});
 
-		it("should throw error for decendant_of with non-pages content", async () => {
+		it("should throw error for descendant_of with non-pages content", async () => {
 			const baseURL = "https://api.example.com";
 			const apiPath = "/api/v2";
 			const content = "images";
-			const queries: CMSQueries = { decendant_of: 1 };
+			const queries: CMSQueries = { descendant_of: 1 };
 
 			await expect(
 				fetchContent(baseURL, apiPath, content, queries),
 			).rejects.toThrow(
-				"Filtering by tree position is supported only for pages. Please remove the 'child_of', 'ancestor_of' or 'decendant_of'  query.",
+				"Filtering by tree position is supported only for pages. Please remove the 'child_of', 'ancestor_of' or 'descendant_of' query.",
 			);
 		});
 
