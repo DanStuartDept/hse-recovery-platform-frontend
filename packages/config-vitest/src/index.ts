@@ -2,38 +2,24 @@ import react from "@vitejs/plugin-react";
 import tsconfigPaths from "vite-tsconfig-paths";
 import { defineConfig } from "vitest/config";
 
-// const setupFileExists = Boolean(setupFilePath)
-
-// Shared Vitest configuration
-// Can be extended by individual package or app configurations
-// via the createVitestConfig function below
-
-export const sharedConfig = defineConfig({
-	plugins: [react(), tsconfigPaths()],
-	test: {
-		environment: "jsdom",
-		globals: true,
-		coverage: {
-			exclude: [
-				"node_modules/",
-				"src/test-setup.js",
-				"src/vitest.setup.ts",
-				"**/*.test.{ts,tsx}",
-				"**/*.spec.{ts,tsx}",
-				"**/tests/**",
-				"**/__tests__/**",
-				"**/coverage/**",
-				"**/.next/**",
-				"**/dist/**",
-				"**/build/**",
-				"**/storybook-static/**",
-				"**/*.config.{js,ts,mjs,mts}",
-				"**/*.stories.{ts,tsx,js,jsx,mdx}",
-				"**/*.d.ts",
-			],
-		},
-	},
-});
+const coverageExclusions = [
+	"node_modules/",
+	"**/node_modules/**",
+	"src/test-setup.js",
+	"src/vitest.setup.ts",
+	"**/*.test.{ts,tsx}",
+	"**/*.spec.{ts,tsx}",
+	"**/tests/**",
+	"**/__tests__/**",
+	"**/coverage/**",
+	"**/.next/**",
+	"**/dist/**",
+	"**/build/**",
+	"**/storybook-static/**",
+	"**/*.config.{js,ts,mjs,mts}",
+	"**/*.stories.{ts,tsx,js,jsx,mdx}",
+	"**/*.d.ts",
+];
 
 interface VitestConfigOptions {
 	include?: string[];
@@ -50,8 +36,11 @@ export function createVitestConfig(options: VitestConfigOptions = {}) {
 		environment = "jsdom",
 	} = options;
 
+	const plugins =
+		environment === "jsdom" ? [react(), tsconfigPaths()] : [tsconfigPaths()];
+
 	return defineConfig({
-		plugins: [react(), tsconfigPaths()],
+		plugins,
 		test: {
 			environment,
 			globals: true,
@@ -61,25 +50,7 @@ export function createVitestConfig(options: VitestConfigOptions = {}) {
 				provider: "v8",
 				reporter: ["text", "text-summary", "json", "html", "lcov"],
 				include,
-				exclude: [
-					"node_modules/",
-					"src/test-setup.js",
-					"src/vitest.setup.ts",
-					"**/*.test.{ts,tsx}",
-					"**/*.spec.{ts,tsx}",
-					"**/tests/**",
-					"**/__tests__/**",
-					"**/coverage/**",
-					"**/.next/**",
-					"**/dist/**",
-					"**/build/**",
-					"**/storybook-static/**",
-					"**/*.config.{js,ts,mjs,mts}",
-					"**/*.stories.{ts,tsx,js,jsx,mdx}",
-					"**/*.d.ts",
-					"**/node_modules/**",
-					...exclude,
-				],
+				exclude: [...coverageExclusions, ...exclude],
 			},
 			reporters: [
 				"default",
@@ -90,5 +61,3 @@ export function createVitestConfig(options: VitestConfigOptions = {}) {
 		},
 	});
 }
-
-export default sharedConfig;

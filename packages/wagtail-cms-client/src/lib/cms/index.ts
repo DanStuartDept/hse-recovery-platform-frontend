@@ -63,16 +63,18 @@ export async function fetchContent<T>(
 
 	// Filter by tree position is supported only for pages
 	if (
-		(queries?.child_of || queries?.ancestor_of || queries?.decendant_of) &&
+		(queries?.child_of || queries?.ancestor_of || queries?.descendant_of) &&
 		content !== "pages"
 	) {
 		throw new Error(
-			"Filtering by tree position is supported only for pages. Please remove the 'child_of', 'ancestor_of' or 'decendant_of'  query.",
+			"Filtering by tree position is supported only for pages. Please remove the 'child_of', 'ancestor_of' or 'descendant_of' query.",
 		);
 	}
 	const query = buildQueryString(queries);
 
-	const fullUrl = `${baseURL}${apiPath}/${content}/?${query}`;
+	const fullUrl = query
+		? `${baseURL}${apiPath}/${content}/?${query}`
+		: `${baseURL}${apiPath}/${content}/`;
 
 	return fetchRequest(fullUrl, init);
 }

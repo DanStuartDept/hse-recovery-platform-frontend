@@ -54,7 +54,7 @@ export async function fetchRequest<T>(
 
 		if (!response.ok) {
 			throw new FetchError(
-				`Request failed with response: ${JSON.stringify(response, null, 2)}`,
+				`Request failed: ${response.status} ${response.statusText} (${response.url})`,
 				"REQUEST_FAILED",
 			);
 		}

@@ -54,7 +54,7 @@ export type CMSBlockComponentsKeys = z.infer<
 export const BaseCMSBlockTypeSchema = z.object({
 	id: z.string(),
 	type: CMSBlockComponentsKeysSchema,
-	value: z.any(),
+	value: z.unknown(),
 	settings: BlockDisplaySettingsTypeSchema.optional(),
 	client: z.unknown().optional(),
 });

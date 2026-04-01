@@ -56,7 +56,7 @@ describe("fetchContent", () => {
 
 		expect(mockBuildQueryString).toHaveBeenCalledWith(undefined);
 		expect(mockFetchRequest).toHaveBeenCalledWith(
-			"https://api.example.com/api/v2/pages/?",
+			"https://api.example.com/api/v2/pages/",
 			undefined,
 		);
 		expect(result).toBe(mockResponse);
@@ -162,7 +162,7 @@ describe("fetchContent", () => {
 			await expect(
 				fetchContent(baseURL, apiPath, content, queries),
 			).rejects.toThrow(
-				"Filtering by tree position is supported only for pages. Please remove the 'child_of', 'ancestor_of' or 'decendant_of'  query.",
+				"Filtering by tree position is supported only for pages. Please remove the 'child_of', 'ancestor_of' or 'descendant_of' query.",
 			);
 
 			expect(mockFetchRequest).not.toHaveBeenCalled();
@@ -177,20 +177,20 @@ describe("fetchContent", () => {
 			await expect(
 				fetchContent(baseURL, apiPath, content, queries),
 			).rejects.toThrow(
-				"Filtering by tree position is supported only for pages. Please remove the 'child_of', 'ancestor_of' or 'decendant_of'  query.",
+				"Filtering by tree position is supported only for pages. Please remove the 'child_of', 'ancestor_of' or 'descendant_of' query.",
 			);
 		});
 
-		it("should throw error for decendant_of with non-pages content", async () => {
+		it("should throw error for descendant_of with non-pages content", async () => {
 			const baseURL = "https://api.example.com";
 			const apiPath = "/api/v2";
 			const content = "images";
-			const queries: CMSQueries = { decendant_of: 1 };
+			const queries: CMSQueries = { descendant_of: 1 };
 
 			await expect(
 				fetchContent(baseURL, apiPath, content, queries),
 			).rejects.toThrow(
-				"Filtering by tree position is supported only for pages. Please remove the 'child_of', 'ancestor_of' or 'decendant_of'  query.",
+				"Filtering by tree position is supported only for pages. Please remove the 'child_of', 'ancestor_of' or 'descendant_of' query.",
 			);
 		});
 
@@ -210,6 +210,18 @@ describe("fetchContent", () => {
 			expect(mockFetchRequest).toHaveBeenCalled();
 			expect(result).toBe(mockResponse);
 		});
+	});
+
+	it("should not append trailing ? when no query params", async () => {
+		const mockResponse = { items: [], meta: { total_count: 0 } };
+		mockFetchRequest.mockResolvedValue(mockResponse);
+		mockBuildQueryString.mockReturnValue("");
+
+		await fetchContent("https://example.com", "/api/v2", "pages");
+		expect(mockFetchRequest).toHaveBeenCalledWith(
+			"https://example.com/api/v2/pages/",
+			undefined,
+		);
 	});
 
 	it("should propagate errors from fetchRequest", async () => {
@@ -239,7 +251,7 @@ describe("fetchContent", () => {
 		for (const content of contentTypes) {
 			await fetchContent(baseURL, apiPath, content);
 			expect(mockFetchRequest).toHaveBeenCalledWith(
-				`https://api.example.com/api/v2/${content}/?`,
+				`https://api.example.com/api/v2/${content}/`,
 				undefined,
 			);
 		}

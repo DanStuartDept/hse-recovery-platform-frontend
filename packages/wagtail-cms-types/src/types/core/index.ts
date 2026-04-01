@@ -21,7 +21,7 @@ export const ClientOptionsSchema = z.object({
 	baseURL: z.string(),
 	mediaBaseURL: z.string().optional(),
 	apiPath: z.string(),
-	init: z.any().optional(),
+	init: z.custom<RequestInit>().optional(),
 });
 
 export type ClientOptions = z.infer<typeof ClientOptionsSchema>;
@@ -38,7 +38,7 @@ export const CMSQueriesSchema = z
 		slug: z.string().optional(),
 		child_of: z.number().optional(),
 		ancestor_of: z.number().optional(),
-		decendant_of: z.number().optional(),
+		descendant_of: z.number().optional(),
 		site: z.string().optional(),
 		search: z.string().optional(),
 		search_operator: z.string().optional(),

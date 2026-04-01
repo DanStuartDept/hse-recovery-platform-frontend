@@ -12,14 +12,8 @@
 	"types": "./dist/es/index.d.ts",
 	"exports": {
 		".": {
-			"import": {
-				"types": "./dist/es/index.d.ts",
-				"default": "./dist/es/index.js"
-			},
-			"require": {
-				"types": "./dist/cjs/index.d.cts",
-				"default": "./dist/cjs/index.cjs"
-			}
+			"types": "./dist/es/index.d.ts",
+			"default": "./dist/es/index.js"
 		}
 	},
 	"scripts": {
@@ -34,20 +28,12 @@
 	},
 	"devDependencies": {
 		"@repo/biome-config": "workspace:*",
-		"@repo/logger": "workspace:*",
 		"@repo/typescript-config": "workspace:*",
-		"@repo/vitest-config": "workspace:^",
+		"@repo/vitest-config": "workspace:*",
 		"@repo/wagtail-cms-types": "workspace:*",
-		"@semantic-release/changelog": "^6.0.3",
-		"@semantic-release/git": "^10.0.1",
-		"@semantic-release/gitlab": "^13.0.3",
-		"@semantic-release/npm": "^12.0.0",
 		"@types/node": "catalog:",
 		"@vitest/coverage-v8": "catalog:",
 		"bunchee": "catalog:",
-		"jsdom": "catalog:",
-		"tsup": "catalog:",
-		"typedoc": "^0.25.13",
 		"typescript": "catalog:",
 		"vitest": "catalog:",
 		"vitest-sonar-reporter": "catalog:"

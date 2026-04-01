@@ -85,3 +85,14 @@ export const FieldTypeVideoSchema = z.object({
 });
 
 export type FieldTypeVideo = z.infer<typeof FieldTypeVideoSchema>;
+
+/**
+ * Basic navigation item schema for links with title and URL.
+ * Used across page models and site settings for consistent navigation structures.
+ */
+export const NavItemSchema = z.object({
+	title: z.string(),
+	url: z.string(),
+});
+
+export type NavItem = z.infer<typeof NavItemSchema>;

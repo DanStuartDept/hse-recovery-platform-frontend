@@ -18,7 +18,7 @@ describe("buildQueryString", () => {
 
 		const queryString = buildQueryString(queries);
 		expect(queryString).toBe(
-			"type=article&limit=10&search=example&fields=title,content",
+			"type=article&limit=10&search=example&fields=title%2Ccontent",
 		);
 	});
 
@@ -32,7 +32,7 @@ describe("buildQueryString", () => {
 
 		const queryString = buildQueryString(queries);
 		expect(queryString).toBe(
-			"type=article&search=example&fields=title,content",
+			"type=article&search=example&fields=title%2Ccontent",
 		);
 	});
 
@@ -46,7 +46,7 @@ describe("buildQueryString", () => {
 
 		const queryString = buildQueryString(queries);
 		expect(queryString).toBe(
-			"type=article&search=example&fields=title,content",
+			"type=article&search=example&fields=title%2Ccontent",
 		);
 	});
 
@@ -57,6 +57,18 @@ describe("buildQueryString", () => {
 		};
 
 		const queryString = buildQueryString(queries);
-		expect(queryString).toBe("type=article&tags=tag1,tag2,tag3");
+		expect(queryString).toBe("type=article&tags=tag1%2Ctag2%2Ctag3");
+	});
+
+	it("should encode special characters in values", () => {
+		const queries: CMSQueries = { search: "foo bar&baz=qux" };
+		const result = buildQueryString(queries);
+		expect(result).toBe("search=foo+bar%26baz%3Dqux");
+	});
+
+	it("should encode special characters in array values", () => {
+		const queries: CMSQueries = { fields: ["title&id", "body content"] };
+		const result = buildQueryString(queries);
+		expect(result).toBe("fields=title%26id%2Cbody+content");
 	});
 });

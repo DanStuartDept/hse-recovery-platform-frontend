@@ -1,11 +1,11 @@
 import { type Mock, vi } from "vitest";
 
 interface NavigationMockObject {
-  notFound: Mock;
-  redirect: Mock;
-  useRouter: Mock;
-  usePathname: Mock;
-  useSearchParams: Mock;
+	notFound: Mock;
+	redirect: Mock;
+	useRouter: Mock;
+	usePathname: Mock;
+	useSearchParams: Mock;
 }
 
 /**
@@ -13,20 +13,20 @@ interface NavigationMockObject {
  * Centralized to eliminate duplication
  */
 function createNavigationMockObject(): NavigationMockObject {
-  return {
-    notFound: vi.fn(),
-    redirect: vi.fn(),
-    useRouter: vi.fn(() => ({
-      push: vi.fn(),
-      replace: vi.fn(),
-      back: vi.fn(),
-      forward: vi.fn(),
-      refresh: vi.fn(),
-      prefetch: vi.fn(),
-    })),
-    usePathname: vi.fn(() => "/"),
-    useSearchParams: vi.fn(() => new URLSearchParams()),
-  };
+	return {
+		notFound: vi.fn(),
+		redirect: vi.fn(),
+		useRouter: vi.fn(() => ({
+			push: vi.fn(),
+			replace: vi.fn(),
+			back: vi.fn(),
+			forward: vi.fn(),
+			refresh: vi.fn(),
+			prefetch: vi.fn(),
+		})),
+		usePathname: vi.fn(() => "/"),
+		useSearchParams: vi.fn(() => new URLSearchParams()),
+	};
 }
 
 /**
@@ -34,7 +34,7 @@ function createNavigationMockObject(): NavigationMockObject {
  * Use this in vi.mock() calls
  */
 export function mockNextNavigation() {
-  return vi.mock("next/navigation", () => createNavigationMockObject());
+	return vi.mock("next/navigation", () => createNavigationMockObject());
 }
 
 /**
@@ -42,5 +42,5 @@ export function mockNextNavigation() {
  * Use this when you need direct access to the mock functions
  */
 export function createNavigationMocks() {
-  return createNavigationMockObject();
+	return createNavigationMockObject();
 }

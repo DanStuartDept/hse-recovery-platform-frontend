@@ -12,14 +12,8 @@
 	"types": "./dist/es/index.d.ts",
 	"exports": {
 		".": {
-			"import": {
-				"types": "./dist/es/index.d.ts",
-				"default": "./dist/es/index.js"
-			},
-			"require": {
-				"types": "./dist/cjs/index.d.cts",
-				"default": "./dist/cjs/index.cjs"
-			}
+			"types": "./dist/es/index.d.ts",
+			"default": "./dist/es/index.js"
 		}
 	},
 	"scripts": {
@@ -33,7 +27,7 @@
 	},
 	"devDependencies": {
 		"@repo/biome-config": "workspace:*",
-		"@repo/vitest-config": "workspace:^",
+		"@repo/vitest-config": "workspace:*",
 		"@repo/typescript-config": "workspace:*",
 		"@types/node": "catalog:",
 		"bunchee": "catalog:",

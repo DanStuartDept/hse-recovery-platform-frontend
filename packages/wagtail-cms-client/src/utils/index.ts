@@ -5,20 +5,19 @@ export function buildQueryString(queries: CMSQueries | undefined): string {
 		return "";
 	}
 
-	const queryArray: string[] = [];
+	const params = new URLSearchParams();
 
 	for (const key in queries) {
 		if (Object.hasOwn(queries, key) && queries[key] !== undefined) {
 			const value = queries[key];
 
 			if (Array.isArray(value)) {
-				// If the value is an array, join the values with a comma
-				queryArray.push(`${key}=${value.join(",")}`);
+				params.set(key, value.join(","));
 			} else if (value !== "") {
-				queryArray.push(`${key}=${value}`);
+				params.set(key, String(value));
 			}
 		}
 	}
 
-	return queryArray.join("&");
+	return params.toString();
 }

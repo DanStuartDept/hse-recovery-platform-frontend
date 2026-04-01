@@ -104,6 +104,7 @@ describe("fetchRequest", () => {
 			ok: false,
 			status: 404,
 			statusText: "Not Found",
+			url: "https://api.example.com/not-found",
 		};
 		mockFetch.mockResolvedValue(mockResponse);
 
@@ -116,11 +117,8 @@ describe("fetchRequest", () => {
 		} catch (error) {
 			expect(error).toBeInstanceOf(FetchError);
 			expect((error as FetchError).code).toBe("REQUEST_FAILED");
-			expect((error as FetchError).message).toContain(
-				"Request failed with response:",
-			);
-			expect((error as FetchError).message).toContain(
-				JSON.stringify(mockResponse, null, 2),
+			expect((error as FetchError).message).toBe(
+				"Request failed: 404 Not Found (https://api.example.com/not-found)",
 			);
 		}
 	});
@@ -198,6 +196,20 @@ describe("fetchRequest", () => {
 				"An unexpected error occurred",
 			);
 		}
+	});
+
+	it("should include status, statusText, and url in error message", async () => {
+		mockFetch.mockResolvedValue({
+			ok: false,
+			status: 404,
+			statusText: "Not Found",
+			url: "https://example.com/api/pages/",
+			json: vi.fn(),
+		});
+
+		await expect(
+			fetchRequest("https://example.com/api/pages/"),
+		).rejects.toThrow(/404 Not Found/);
 	});
 
 	it("should work without init parameter", async () => {
