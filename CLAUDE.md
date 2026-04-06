@@ -41,6 +41,7 @@ This is a **pnpm + Turborepo monorepo** with a Next.js 16 app integrating with a
 | `hse-app-template` | `apps/hse-app-template` | Next.js 16 / React 19 App Router app |
 | `@repo/wagtail-api-client` | `packages/wagtail-cms-client` | Wagtail REST client (`CMSClient` + `fetchContent`) |
 | `@repo/wagtail-cms-types` | `packages/wagtail-cms-types` | Zod-based CMS types (source-only, no build step) |
+| `@repo/wagtail-cms-mapping` | `packages/wagtail-cms-mapping` | CMS-to-component mapping (source-only, factory pattern) |
 | `@repo/logger` | `packages/logger` | Thin console wrapper |
 | `@repo/vitest-config` | `packages/config-vitest` | Shared `createVitestConfig()` factory |
 | `@repo/biome-config` | `packages/biome-config` | Shared Biome rule sets |
@@ -50,7 +51,7 @@ This is a **pnpm + Turborepo monorepo** with a Next.js 16 app integrating with a
 ### Key architectural decisions
 
 - **Server Components by default**. Add `"use client"` only when hooks, interactivity, or browser APIs are needed.
-- **CMS content flow**: `CMSClient` (from `@repo/wagtail-api-client`) fetches data; all response shapes are validated/typed via Zod schemas in `@repo/wagtail-cms-types` (sub-path exports: `/core`, `/blocks`, `/fields`, `/page-models`, `/settings`, `/snippets`).
+- **CMS content flow**: `CMSClient` (from `@repo/wagtail-api-client`) fetches data; response shapes validated via Zod schemas in `@repo/wagtail-cms-types`; `createCMSRenderer` (from `@repo/wagtail-cms-mapping`) maps data to React components.
 - **Design system**: `@hseireland/hse-frontend` (CSS/tokens) + `@hseireland/hse-frontend-react` (React components). Use these before writing custom components.
 - **Forms**: `react-hook-form` + `@hookform/resolvers` + Zod schemas.
 
@@ -64,6 +65,7 @@ This is a **pnpm + Turborepo monorepo** with a Next.js 16 app integrating with a
 
 - `@repo/wagtail-api-client` and `@repo/logger`: built with **bunchee** to dual ESM (`dist/es/`) + CJS (`dist/cjs/`) output. TypeScript imports use `.js` extensions.
 - `@repo/wagtail-cms-types`: **source-only** -- `exports` map points directly at `.ts` files (no build step).
+- `@repo/wagtail-cms-mapping`: **source-only** -- `exports` map points directly at `.ts`/`.tsx` files (no build step). Factory pattern maps CMS data to React components.
 
 ## Code style
 
