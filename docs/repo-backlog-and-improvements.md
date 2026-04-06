@@ -1,6 +1,6 @@
 # Repo Backlog and Improvements
 
-Tracked improvements and recommendations for the HSE Recovery Platform frontend monorepo.
+Tracked improvements and recommendations for the HSE Multisite Frontend monorepo.
 
 ## Summary
 

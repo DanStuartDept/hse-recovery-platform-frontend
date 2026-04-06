@@ -2,7 +2,7 @@
 
 ## Overview
 
-`hse-recovery-platform-frontend` is a **pnpm + Turborepo monorepo** that builds a Next.js application. It integrates with a **Wagtail CMS** backend via a shared typed client and type definitions.
+`hse-multisite-frontend` is a **pnpm + Turborepo monorepo** that builds a Next.js application. It integrates with a **Wagtail CMS** backend via a shared typed client and type definitions.
 
 ## Packages
 

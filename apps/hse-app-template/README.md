@@ -1,6 +1,6 @@
 # hse-app-template
 
-Next.js 16 application template for the HSE Recovery Platform. Uses the [HSE Ireland design system](https://github.com/HSEIreland) and fetches content via the Wagtail API client.
+Next.js 16 application template for the HSE Multisite Frontend. Uses the [HSE Ireland design system](https://github.com/HSEIreland) and fetches content via the Wagtail API client.
 
 ## Development
 

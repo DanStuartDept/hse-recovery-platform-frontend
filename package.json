@@ -1,5 +1,5 @@
 {
-  "name": "hse-recovery-platform-frontend",
+  "name": "hse-multisite-frontend",
   "private": true,
   "scripts": {
     "build": "turbo run build",

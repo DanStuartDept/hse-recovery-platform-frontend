@@ -1,6 +1,6 @@
-# HSE Recovery Platform — Frontend
+# HSE Multisite Frontend
 
-A **pnpm + Turborepo monorepo** containing the HSE Recovery Platform frontend. The primary Next.js application integrates with a **Wagtail CMS** backend.
+A **pnpm + Turborepo monorepo** containing the HSE Multisite frontend. The primary Next.js application integrates with a **Wagtail CMS** backend.
 
 ## Prerequisites
 
