@@ -67,3 +67,15 @@ pnpm typecheck        # tsc --noEmit (app runs next typegen first)
 
 - Extend shared configs from `@repo/typescript-config` (`base.json`, `nextjs.json`, etc.).
 - Strict mode everywhere. Avoid `any`.
+
+## Scoped Instructions
+
+Additional instructions activate based on file patterns — see `.github/instructions/`.
+
+## Agents
+
+Specialized agents are available in `.github/agents/`. Invoke them by name in Copilot chat (e.g., `@a11y-reviewer`, `@cms-specialist`).
+
+## Skills
+
+Portable skills in `.github/skills/` teach domain-specific workflows (CMS content fetching, HSE design system, conventional commits).
