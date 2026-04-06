@@ -55,4 +55,27 @@ export type BlockValuesProps =
   | import("./{block_key}").Block{BlockName}ValuesProps;
 ```
 
-<!-- TODO: wagtail-cms-mapping — when @repo/wagtail-cms-mapping exists, add a step here to map this block key to an @hseireland/hse-frontend-react component -->
+## Step 4: Create block component in the mapping package
+
+**File:** `packages/wagtail-cms-mapping/src/blocks/block-{block_key}.tsx`
+
+Create a React component that accepts `value: Block{BlockName}ValuesProps` and renders the appropriate `@hseireland/hse-frontend-react` component.
+
+## Step 5: Register in defaultBlockRegistry
+
+**File:** `packages/wagtail-cms-mapping/src/blocks/index.ts`
+
+Add the new block key and component to `defaultBlockRegistry`:
+
+```typescript
+import { Block{BlockName} } from "./block-{block_key}";
+
+export const defaultBlockRegistry: CMSBlockRegistry = {
+  // ... existing entries
+  "{BLOCK_KEY}": Block{BlockName},
+};
+```
+
+## Step 6: Export from the blocks index
+
+Ensure the component is exported from `packages/wagtail-cms-mapping/src/blocks/index.ts` so it can be imported directly when needed.

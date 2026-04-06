@@ -12,14 +12,14 @@ This skill teaches how content flows from the Wagtail CMS backend to rendered Re
 ```
 Wagtail CMS Backend (REST API v2)
         ↓
-@repo/wagtail-api-client (CMSClient class)
+@repo/wagtail-api-client (CMSClient — fetch + ISR cache)
         ↓
-@repo/wagtail-cms-types (Zod validation)
+@repo/wagtail-cms-types (Zod validation + TypeScript types)
+        ↓
+@repo/wagtail-cms-mapping (block → component, page → layout)
         ↓
 Next.js App (Server Components → React rendering)
 ```
-
-<!-- TODO: wagtail-cms-mapping — a mapping layer will sit between Client and Rendering steps when the @repo/wagtail-cms-mapping package is created -->
 
 ## Layer 1: Types (`@repo/wagtail-cms-types`)
 
@@ -28,24 +28,24 @@ Source-only package — no build step. Exports raw `.ts` files via sub-path expo
 | Import path | Contents |
 |---|---|
 | `@repo/wagtail-cms-types/core` | `ClientOptions`, `CMSPageType`, `CMSQueries`, `CMSContent`, `CMSPageContent`, `CMSContents` |
-| `@repo/wagtail-cms-types/blocks` | `CMSBlockComponentsKeys` (22 block types), `BaseCMSBlockType`, `BlockValuesProps` |
+| `@repo/wagtail-cms-types/blocks` | `CMSBlockComponentsKeys` (18 block types), `BaseCMSBlockType`, `BlockValuesProps` |
 | `@repo/wagtail-cms-types/fields` | `FieldTypeCta`, `FieldTypeImage`, `FieldTypeVideo`, `FieldTypeHeadingLevel`, `NavItem` |
-| `@repo/wagtail-cms-types/page-models` | `CMSPageWithBlocks`, `CMSPageProps` (union of all 6 page types) |
+| `@repo/wagtail-cms-types/page-models` | `CMSPageWithBlocks`, `CMSPageProps` (union of all 5 page types) |
 | `@repo/wagtail-cms-types/settings` | `CMSSiteSettingsItem` (header, footer, social, alerts, search, SEO) |
 | `@repo/wagtail-cms-types/snippets` | `SnippetContentBlock` (reusable content blocks) |
 
 ### Page Types
 
-Six page models defined in `CMSPageType`:
-- `appbase.HomePage`, `appbase.LandingPage`, `appbase.ContentPage`, `appbase.SearchPage`
-- `news.NewsListingPage`, `news.NewsContentPage`
+Five page models defined in `CMSPageType` (under the `hsebase` app label):
+- `hsebase.ContentPage`, `hsebase.LandingPage`, `hsebase.CuratedHubPage`
+- `hsebase.OrganisationListingPage`, `hsebase.OrganisationLandingPage`
 
 All extend `CMSPageWithBlocks` which provides `header: Block[]` and `body: Block[]`.
 
 ### Block Types
 
-22 block types in `CMSBlockComponentsKeys`:
-`content_block`, `alert`, `page_header`, `text`, `text_picture`, `picture`, `group`, `title_and_text`, `row`, `accordion`, `cta`, `cta_panel`, `card`, `text_and_icon`, `cover`, `quote`, `section_listing`, `hero_image_banner`, `youtube`, `team_member`, `timeline`, `demo_ui_banner`
+18 block types in `CMSBlockComponentsKeys`:
+`text`, `rich_text_block`, `richtext`, `image`, `inset_text`, `quote`, `top_tasks`, `top_task`, `links_list_group_v2`, `action_link`, `expander`, `expander_group`, `details`, `button_list`, `content_block_chooser`, `brightcove_video`, `related_information`, `teaser_links`
 
 Each block has: `{ id, type, value, settings?, client? }` where `type` is the discriminant.
 
@@ -126,18 +126,37 @@ All fetch requests include `next: { revalidate: 360 }` by default (6-minute ISR)
 
 Responses include `meta.total_count` for total results. Combine `limit` + `offset` for pagination.
 
-## Layer 3: Rendering (Next.js App)
+## Layer 3: Mapping (`@repo/wagtail-cms-mapping`)
 
-Fetch in Server Components, validate with Zod, render blocks by discriminating on `type`.
+Maps CMS page types to layout templates and block types to React components via a registry-based factory. Sub-path exports: `.`, `./blocks`, `./pages`, `./types`.
 
-### Common Pattern: Fetch Page by Path
+### Factory Pattern
+
+```typescript
+import { createCMSRenderer } from "@repo/wagtail-cms-mapping";
+
+const { renderBlocks, renderPage } = createCMSRenderer();
+// Pass optional overrides to swap components for a specific route:
+// createCMSRenderer({ blocks: { text: MyCustomText } })
+```
+
+- `renderPage(page)` — looks up the page type in `defaultPageRegistry` and renders the registered layout
+- `renderBlocks(blocks)` — maps each block through `defaultBlockRegistry` to the registered component
+
+## Layer 4: Rendering (Next.js App)
+
+Fetch in Server Components, then delegate rendering to the mapping layer.
+
+### Common Pattern: Fetch and Render a Page
 
 ```typescript
 // app/[...slug]/page.tsx (Server Component)
 import { CMSClient } from "@repo/wagtail-api-client";
 import type { CMSPageProps } from "@repo/wagtail-cms-types/page-models";
+import { createCMSRenderer } from "@repo/wagtail-cms-mapping";
 
 const client = new CMSClient({ baseURL: "...", apiPath: "/api/cms/v2" });
+const { renderPage } = createCMSRenderer();
 
 export default async function Page({ params }: { params: Promise<{ slug: string[] }> }) {
   const { slug } = await params;
@@ -146,25 +165,24 @@ export default async function Page({ params }: { params: Promise<{ slug: string[
 
   if ("error" in page) return notFound();
 
-  return <PageRenderer page={page} />;
+  return renderPage(page);
 }
 ```
 
-### Common Pattern: Render Block Union
+### Common Pattern: Render Blocks Only
 
 ```typescript
-function BlockRenderer({ block }: { block: BaseCMSBlockType }) {
-  switch (block.type) {
-    case "text":
-      return <TextBlock value={block.value} />;
-    case "hero_image_banner":
-      return <HeroBanner value={block.value} />;
-    case "accordion":
-      return <Accordion value={block.value} />;
-    // ... handle each block type
-    default:
-      console.warn(`Unknown block type: ${block.type}`);
-      return null;
-  }
+import { createCMSRenderer } from "@repo/wagtail-cms-mapping";
+
+const { renderBlocks } = createCMSRenderer();
+
+// Render just the body blocks within a custom layout
+export default async function CustomLayout({ page }) {
+  return (
+    <main>
+      <h1>{page.title}</h1>
+      {renderBlocks(page.body)}
+    </main>
+  );
 }
 ```

@@ -87,4 +87,35 @@ export default async function {PageTypeName}Page({ params }: { params: Promise<{
 }
 ```
 
-<!-- TODO: wagtail-cms-mapping — when @repo/wagtail-cms-mapping exists, add a step here to register the page type to a layout template mapping -->
+## Step 5: Create page layout in the mapping package
+
+**File:** `packages/wagtail-cms-mapping/src/pages/{name}.tsx`
+
+Create a layout component that accepts the typed page props and renders the page structure using design system components. Use `createCMSRenderer()` internally to render `page.body` blocks.
+
+## Step 6: Register in defaultPageRegistry
+
+**File:** `packages/wagtail-cms-mapping/src/pages/index.ts`
+
+Add the new page type and layout to `defaultPageRegistry`:
+
+```typescript
+import { {PageTypeName}Layout } from "./{name}";
+
+export const defaultPageRegistry: CMSPageRegistry = {
+  // ... existing entries
+  "{APP_LABEL}.{PAGE_TYPE_NAME}": {PageTypeName}Layout,
+};
+```
+
+## Step 7: Add type guard
+
+**File:** `packages/wagtail-cms-mapping/src/types/index.ts`
+
+Add a type guard so the mapping layer can narrow the page union:
+
+```typescript
+export function is{PageTypeName}(page: CMSPageProps): page is CMS{AppLabel}{PageTypeName}Props {
+  return page.meta.type === "{APP_LABEL}.{PAGE_TYPE_NAME}";
+}
+```
