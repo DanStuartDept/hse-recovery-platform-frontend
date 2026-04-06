@@ -4,7 +4,7 @@
 	"private": true,
 	"description": "Maps Wagtail CMS data to React components via a factory pattern with overridable defaults",
 	"exports": {
-		".": "./src/index.ts",
+		".": "./src/index.tsx",
 		"./blocks": "./src/blocks/index.ts",
 		"./pages": "./src/pages/index.ts",
 		"./types": "./src/types/index.ts"
