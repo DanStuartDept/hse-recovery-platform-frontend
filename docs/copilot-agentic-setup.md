@@ -46,10 +46,10 @@ Reference: [github/awesome-copilot](https://github.com/github/awesome-copilot/) 
 | Agent | Purpose | Starting point from awesome-copilot |
 |-------|---------|-------------------------------------|
 | a11y-reviewer | WCAG 2.1 AA compliance checks — legal requirement for public-sector health | `accessibility.agent.md` |
-| nextjs-developer | Next.js 16 App Router, Server Components, Cloudflare Workers runtime | `expert-nextjs-developer.agent.md` |
+| nextjs-developer | Next.js 16 App Router, Server Components | `expert-nextjs-developer.agent.md` |
 | react-expert | React 19 patterns, hooks, HSE design system component usage | `expert-react-frontend-engineer.agent.md` |
 | gh-actions-expert | Authoring and debugging CI/CD workflows for the monorepo | `github-actions-expert.agent.md` |
-| security-reviewer | Security review focused on auth, data handling, CSP, Cloudflare Workers | `se-security-reviewer.agent.md` |
+| security-reviewer | Security review focused on auth, data handling, CSP | `se-security-reviewer.agent.md` |
 | cms-specialist | Wagtail headless CMS integration, content modelling, API client usage | N/A (custom) |
 
 ---
@@ -58,7 +58,7 @@ Reference: [github/awesome-copilot](https://github.com/github/awesome-copilot/) 
 
 | File | Scope | Content |
 |------|-------|---------|
-| `copilot-instructions.md` | Always-on | Monorepo layout, data flow, Cloudflare runtime constraints, design system, Biome/Vitest tooling |
+| `copilot-instructions.md` | Always-on | Monorepo layout, data flow, design system, Biome/Vitest tooling |
 | `typescript.instructions.md` | `**/*.ts,**/*.tsx` | Strict mode, no `any`, Biome formatting, import conventions |
 | `nextjs.instructions.md` | `apps/**` | Server Components by default, `use client` only when needed, no Node.js APIs at runtime |
 | `cms-packages.instructions.md` | `packages/wagtail-*/**` | Zod schema conventions, CMS client patterns, sub-path export structure |

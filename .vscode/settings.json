@@ -1,7 +1,4 @@
 {
-	"files.associations": {
-		"wrangler.json": "jsonc"
-	},
 	"json.format.enable": true,
 	"editor.formatOnSave": true,
 	"editor.defaultFormatter": "fronterior.biome-monorepo",

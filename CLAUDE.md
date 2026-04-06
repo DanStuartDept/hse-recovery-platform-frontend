@@ -30,17 +30,9 @@ Run a single test file (from a package directory):
 cd packages/wagtail-cms-client && pnpm vitest run src/lib/fetchContent.test.ts
 ```
 
-App-specific (from `apps/hse-app-template`):
-
-```bash
-pnpm run deploy       # opennextjs-cloudflare build + deploy to Cloudflare Workers
-pnpm run preview      # build + local Cloudflare Workers preview
-pnpm run cf-typegen   # regenerate cloudflare-env.d.ts from wrangler.jsonc
-```
-
 ## Architecture
 
-This is a **pnpm + Turborepo monorepo** with a Next.js 16 app deployed to **Cloudflare Workers** via `@opennextjs/cloudflare`, integrating with a **Wagtail CMS** backend.
+This is a **pnpm + Turborepo monorepo** with a Next.js 16 app integrating with a **Wagtail CMS** backend.
 
 ### Workspace layout
 
@@ -58,7 +50,6 @@ This is a **pnpm + Turborepo monorepo** with a Next.js 16 app deployed to **Clou
 ### Key architectural decisions
 
 - **Server Components by default**. Add `"use client"` only when hooks, interactivity, or browser APIs are needed.
-- **Cloudflare Workers runtime** -- no Node.js APIs at runtime. Access bindings (KV, D1, R2) via `getCloudflareContext()`. Types generated into `cloudflare-env.d.ts`.
 - **CMS content flow**: `CMSClient` (from `@repo/wagtail-api-client`) fetches data; all response shapes are validated/typed via Zod schemas in `@repo/wagtail-cms-types` (sub-path exports: `/core`, `/blocks`, `/fields`, `/page-models`, `/settings`, `/snippets`).
 - **Design system**: `@hseireland/hse-frontend` (CSS/tokens) + `@hseireland/hse-frontend-react` (React components). Use these before writing custom components.
 - **Forms**: `react-hook-form` + `@hookform/resolvers` + Zod schemas.

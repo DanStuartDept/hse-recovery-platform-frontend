@@ -41,7 +41,7 @@ Findings from a code reuse, quality, and efficiency audit of the monorepo. Items
 | 33 | [TypeScript version mismatch root vs catalog](#33-typescript-version-mismatch-root-vs-catalog) | Low-effort fix | Root `package.json` |
 | 34 | [Redundant dev deps in `wagtail-cms-types`](#34-redundant-dev-deps-in-wagtail-cms-types) | Low-effort fix | `wagtail-cms-types` |
 | 35 | [React plugin loaded for non-React test configs](#35-react-plugin-loaded-for-non-react-test-configs) | Low | `config-vitest` |
-| 36 | [Template app has boilerplate metadata and wrangler name](#36-template-app-has-boilerplate-metadata-and-wrangler-name) | Low-effort fix | `hse-app-template` |
+| 36 | [Template app has boilerplate metadata](#36-template-app-has-boilerplate-metadata) | Low-effort fix | `hse-app-template` |
 | 37 | [Unused CSS module declarations](#37-unused-css-module-declarations) | Low-effort fix | `hse-app-template` |
 | 38 | [Test setup file exists but is never referenced](#38-test-setup-file-exists-but-is-never-referenced) | Low | `config-vitest` |
 
@@ -240,7 +240,7 @@ Produces `any` types, violating the "no `any`" policy.
 
 **Fix:** Either add `.parse()` / `.safeParse()` calls at the API response boundary in `fetchRequest` or `fetchContent`, or switch to plain TypeScript types if runtime validation isn't planned. Runtime validation is recommended — it catches malformed CMS responses before they cause rendering errors.
 
-**Needs more research:** Determine the best place to add validation (in `fetchRequest`, in `CMSClient` methods, or in the mapping layer) and the performance implications on Cloudflare Workers.
+**Needs more research:** Determine the best place to add validation (in `fetchRequest`, in `CMSClient` methods, or in the mapping layer).
 
 ### 22. Hardcoded `next.revalidate: 360` in generic API client
 
@@ -278,7 +278,7 @@ References `"@repo/ui": ["../ui/src/*"]` — no `packages/ui` directory exists.
 
 **Files:** `packages/config-typescript/nextjs.json`, `react-app.json`
 
-Targeting ES5 forces unnecessary transpilation. The project requires Node >= 24 and targets Cloudflare Workers.
+Targeting ES5 forces unnecessary transpilation. The project requires Node >= 24.
 
 **Fix:** Update to `"ES2022"` or `"ESNext"`.
 
@@ -346,13 +346,13 @@ Both `live-server` and `serve` are installed for viewing docs locally. `serve` i
 
 **Fix:** Make the React plugin opt-in — only include when environment is `jsdom`.
 
-### 36. Template app has boilerplate metadata and wrangler name
+### 36. Template app has boilerplate metadata
 
-**Files:** `apps/hse-app-template/src/app/layout.tsx`, `apps/hse-app-template/wrangler.jsonc`
+**Files:** `apps/hse-app-template/src/app/layout.tsx`
 
-Metadata reads "Create Next App". Worker name is `"my-next-app"`. Wrangler config also has a duplicated comment block.
+Metadata reads "Create Next App".
 
-**Fix:** Update to HSE-specific values. Remove duplicate comment.
+**Fix:** Update to HSE-specific values.
 
 ### 37. Unused CSS module declarations
 
@@ -376,9 +376,8 @@ Imports `@testing-library/jest-dom/vitest` but no vitest config passes it via `s
 
 | Topic | Question |
 |-------|----------|
-| Zod runtime validation | Where is the best place to add `.parse()` / `.safeParse()` — in `fetchRequest`, in `CMSClient` methods, or in the mapping layer? What are the performance implications on Cloudflare Workers? |
+| Zod runtime validation | Where is the best place to add `.parse()` / `.safeParse()` — in `fetchRequest`, in `CMSClient` methods, or in the mapping layer? |
 | `CMSClient` return type design | The `T \| NotFoundContents` union has no type discriminator. Should this use a discriminated union with a `success` flag, or throw errors instead of returning them? |
 | `CMSClient` scalability | The class is 363 lines and growing. Should resource-specific methods (pages, images, documents) be split into separate modules? |
-| `initOpenNextCloudflareForDev()` | Called unconditionally at module scope in `next.config.ts`. Should it be guarded with a `NODE_ENV` check? |
-| `@repo/logger` future | Should this become a real structured logger (pino, winston) wired to Cloudflare Workers analytics, or should it be removed until monitoring (backlog item 16) is tackled? |
+| `@repo/logger` future | Should this become a real structured logger (pino, winston), or should it be removed until monitoring (backlog item 16) is tackled? |
 | `decendant_of` spelling | Need to verify against the actual Wagtail Pages API — could be a Wagtail-side typo that we need to match |

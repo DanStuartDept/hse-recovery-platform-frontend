@@ -2,13 +2,13 @@
 
 ## Overview
 
-`hse-recovery-platform-frontend` is a **pnpm + Turborepo monorepo** that builds a Next.js application deployed to **Cloudflare Workers** via `@opennextjs/cloudflare`. It integrates with a **Wagtail CMS** backend via a shared typed client and type definitions.
+`hse-recovery-platform-frontend` is a **pnpm + Turborepo monorepo** that builds a Next.js application. It integrates with a **Wagtail CMS** backend via a shared typed client and type definitions.
 
 ## Packages
 
 | Name (npm) | Path | Purpose |
 |---|---|---|
-| `hse-app-template` | `apps/hse-app-template` | Next.js 16 app — primary UI, deployed to Cloudflare |
+| `hse-app-template` | `apps/hse-app-template` | Next.js 16 app — primary UI |
 | `@repo/wagtail-api-client` | `packages/wagtail-cms-client` | Wagtail REST API client (`CMSClient` class + `fetchContent` helpers) |
 | `@repo/wagtail-cms-types` | `packages/wagtail-cms-types` | Zod-based TypeScript types for all Wagtail content (no build — exports raw `.ts`) |
 | `@repo/logger` | `packages/logger` | Thin console wrapper |
@@ -30,18 +30,9 @@ pnpm lint             # biome check --write across workspace
 pnpm typecheck        # tsc --noEmit (app runs next typegen first)
 ```
 
-App-specific (from `apps/hse-app-template`):
-
-```bash
-pnpm run deploy       # opennextjs-cloudflare build + deploy to Cloudflare
-pnpm run preview      # build + local Cloudflare Workers preview
-pnpm run cf-typegen   # regenerate cloudflare-env.d.ts from wrangler.jsonc
-```
-
 ## Architecture
 
 - **Next.js App Router** (Next.js 16 / React 19). Use Server Components by default; add `"use client"` only when interactivity, hooks, or browser APIs are required.
-- **Cloudflare Workers runtime** — no Node.js APIs at runtime. Use `getCloudflareContext()` to access bindings (KV, D1, R2, etc.). Cloudflare types are generated into `cloudflare-env.d.ts`.
 - **Wagtail CMS integration**: fetch content via `CMSClient` from `@repo/wagtail-api-client`. All response shapes are typed through `@repo/wagtail-cms-types` (sub-path exports: `/core`, `/blocks`, `/fields`, `/page-models`, `/settings`, `/snippets`).
 - **Design system**: `@hseireland/hse-frontend` (CSS/tokens) and `@hseireland/hse-frontend-react` (React components) are the HSE Ireland UI library — use their components before writing custom ones.
 - **Forms**: `react-hook-form` + `@hookform/resolvers` + Zod schemas.

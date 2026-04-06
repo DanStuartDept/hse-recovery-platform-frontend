@@ -35,7 +35,7 @@ Tracked improvements and recommendations for the HSE Recovery Platform frontend 
 No GitHub Actions workflows exist yet. This is the safety net for everything else — without CI, quality gates are unenforced.
 
 - PR workflow: install, lint, typecheck, test with coverage reporting
-- Deploy workflow: Cloudflare Workers deployment per app
+- Deploy workflow: deployment per app
 - Turborepo remote caching for faster CI runs
 - Per-app workflows generated automatically when new apps are created via the cookiecutter
 
@@ -49,7 +49,7 @@ Legal launch blocker for a public-sector Irish health service under the ePrivacy
 - Consent-gated script loading — no GTM or analytics firing before consent is granted
 - Cookie audit/register
 - Privacy policy page template
-- Consent persistence mechanism (consider Cloudflare KV given the Workers runtime)
+- Consent persistence mechanism
 - Data protection considerations: even basic analytics on a health service site can imply sensitive data (e.g., visits to specific health topic pages)
 
 ---
@@ -61,7 +61,7 @@ Required for a public-sector healthcare application, especially with third-party
 - Content Security Policy — must accommodate GTM, OneTrust, and any analytics scripts
 - Standard security headers: `Strict-Transport-Security`, `X-Frame-Options`, `X-Content-Type-Options`, etc.
 - Subresource Integrity for third-party scripts where possible
-- Cloudflare Workers response header configuration
+- Response header configuration
 
 ---
 
@@ -116,21 +116,19 @@ Critical for a public health service where uptime expectations are high.
 
 ## 8. Caching and Revalidation Strategy
 
-CMS-driven site on Cloudflare Workers needs a deliberate caching approach.
+CMS-driven site needs a deliberate caching approach.
 
 - `fetch()` cache and `revalidate` settings for CMS API calls
-- Potential use of Cloudflare KV as a cache layer for CMS responses
 - Cache invalidation when content is published in Wagtail (webhook-triggered revalidation via `revalidateTag` or `revalidatePath`)
-- Understand ISR / on-demand revalidation constraints on Cloudflare Workers vs Vercel
 - Per-environment cache configuration (aggressive in prod, minimal in dev/preview)
 
 ---
 
 ## 9. Image Optimisation
 
-`next/image` does not work out of the box on Cloudflare Workers — the default Next.js image optimisation is not available. This is a production blocker.
+Image optimisation strategy needs to be decided.
 
-- Evaluate options: Cloudflare Image Resizing, custom loader pointing at Wagtail's rendition API, or third-party image CDN
+- Evaluate options: custom loader pointing at Wagtail's rendition API, or third-party image CDN
 - Configure the chosen loader in the Next.js config
 - Ensure the template app ships with a working image solution
 
@@ -166,7 +164,7 @@ The template should include:
 - Error boundaries and not-found handling (per #7)
 - Image optimisation (per #9)
 - SEO metadata (per #10)
-- Environment config for Wagtail API base URL, third-party script IDs (Cloudflare Workers compatible)
+- Environment config for Wagtail API base URL, third-party script IDs
 - Loading states / Suspense boundaries for CMS fetch latency
 
 The goal: when someone runs the cookiecutter, they get a working headless CMS site out of the box.
@@ -188,7 +186,7 @@ Core editorial workflow — without this, content editors cannot preview unpubli
 
 ## 13. App Cookiecutter (Makefile)
 
-A `make new-app` style command that clones `apps/hse-app-template` into a new app workspace — copies the directory, renames package.json fields, README, wrangler config, etc. Simple enough for non-FE devs (e.g., DevOps) to run.
+A `make new-app` style command that clones `apps/hse-app-template` into a new app workspace — copies the directory, renames package.json fields, README, etc. Simple enough for non-FE devs (e.g., DevOps) to run.
 
 - Should also automate related setup like GitHub Actions workflows for build/deploy of the new app
 - Create Copilot prompts so developers can offload the process to their AI assistant, with the Makefile as the source of truth
@@ -224,9 +222,9 @@ The `@repo/commitlint-config` package exists but Conventional Commits are not en
 
 The `@repo/logger` package exists but has no production backend.
 
-- Runtime error tracking (Sentry or similar) for Cloudflare Workers
+- Runtime error tracking (Sentry or similar)
 - Structured logging connected to an observability backend
-- Cloudflare Workers analytics / performance monitoring
+- Performance monitoring
 - Core Web Vitals reporting
 
 ---

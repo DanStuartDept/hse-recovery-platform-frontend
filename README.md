@@ -1,6 +1,6 @@
 # HSE Recovery Platform — Frontend
 
-A **pnpm + Turborepo monorepo** containing the HSE Recovery Platform frontend. The primary Next.js application is deployed to **Cloudflare Workers** via [`@opennextjs/cloudflare`](https://opennext.js.org/cloudflare) and integrates with a **Wagtail CMS** backend.
+A **pnpm + Turborepo monorepo** containing the HSE Recovery Platform frontend. The primary Next.js application integrates with a **Wagtail CMS** backend.
 
 ## Prerequisites
 
@@ -19,7 +19,7 @@ pnpm install
 
 ### Apps
 
-- **`apps/hse-app-template`** (`hse-app-template`): [Next.js](https://nextjs.org/) 16 application (React 19, App Router), deployed to Cloudflare Workers. Uses the [HSE Ireland design system](https://github.com/HSEIreland) and fetches content via the Wagtail API client.
+- **`apps/hse-app-template`** (`hse-app-template`): [Next.js](https://nextjs.org/) 16 application (React 19, App Router). Uses the [HSE Ireland design system](https://github.com/HSEIreland) and fetches content via the Wagtail API client.
 
 ### Packages
 
@@ -46,13 +46,6 @@ turbo run dev --filter=hse-app-template
 
 The app is available at [http://localhost:3000](http://localhost:3000).
 
-To preview the app on the Cloudflare Workers runtime locally:
-
-```sh
-cd apps/hse-app-template
-pnpm run preview
-```
-
 ## Building
 
 Build all packages and apps in dependency order:
@@ -76,26 +69,11 @@ pnpm format        # prettier --write (Markdown files only)
 pnpm typecheck     # tsc --noEmit across workspace
 ```
 
-## Deployment
-
-Deploy the app to Cloudflare Workers (from the repo root or `apps/hse-app-template`):
-
-```sh
-cd apps/hse-app-template
-pnpm run deploy
-```
-
-To regenerate Cloudflare environment types after updating `wrangler.jsonc`:
-
-```sh
-pnpm run cf-typegen
-```
-
 ## Tools
 
 - [Turborepo](https://turborepo.com/) — monorepo task orchestration
 - [Next.js](https://nextjs.org/) 16 — App Router, React 19
-- [@opennextjs/cloudflare](https://opennext.js.org/cloudflare) — Cloudflare Workers adapter
+
 - [Biome](https://biomejs.dev/) v2 — linting and formatting (no ESLint)
 - [Vitest](https://vitest.dev/) 3 — unit testing
 - [Zod](https://zod.dev/) — runtime validation and type generation
