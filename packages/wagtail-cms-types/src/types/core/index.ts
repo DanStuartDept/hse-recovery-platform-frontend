@@ -4,12 +4,11 @@ import { z } from "zod";
  * Union type schema of all available page types in the CMS.
  */
 export const CMSPageTypeSchema = z.enum([
-	"appbase.HomePage",
-	"appbase.LandingPage",
-	"appbase.ContentPage",
-	"appbase.SearchPage",
-	"news.NewsListingPage",
-	"news.NewsContentPage",
+	"hsebase.ContentPage",
+	"hsebase.LandingPage",
+	"hsebase.CuratedHubPage",
+	"hsebase.OrganisationListingPage",
+	"hsebase.OrganisationLandingPage",
 ]);
 
 export type CMSPageType = z.infer<typeof CMSPageTypeSchema>;

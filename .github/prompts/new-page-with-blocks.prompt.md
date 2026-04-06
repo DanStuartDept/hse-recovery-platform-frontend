@@ -34,19 +34,27 @@ Follow the **New Page Model** workflow:
 
 ## Phase 3: Wire Up Blocks to Page Rendering
 
-In the page's route component, add the new block types to the block renderer:
+Block-to-component and page-to-template mapping is handled by `@repo/wagtail-cms-mapping`. After completing Phase 1 and Phase 2, register the new block components and page layout in the mapping package using the factory pattern:
 
 ```typescript
-function BlockRenderer({ block }: { block: CMSBlockType }) {
-  switch (block.type) {
-    // ... existing cases
-    case "{BLOCK_KEY}":
-      return <{BlockComponent} value={block.value} />;
-    default:
-      console.warn(`Unknown block type: ${block.type}`);
-      return null;
-  }
+import { createCMSRenderer } from "@repo/wagtail-cms-mapping";
+
+const { renderBlocks, renderPage } = createCMSRenderer();
+
+// In the route component — renders the full page with the registered layout
+export default async function Page({ params }) {
+  const page = await client.findPageByPath<CMSPageProps>(path);
+  if ("error" in page) return notFound();
+  return renderPage(page);
 }
 ```
 
-<!-- TODO: wagtail-cms-mapping — when @repo/wagtail-cms-mapping exists, block-to-component mapping and page-to-template mapping will be handled in that package instead of inline in the route component -->
+For each new block in `NEW_BLOCKS`:
+1. Create the block component in `packages/wagtail-cms-mapping/src/blocks/block-{block_key}.tsx`
+2. Add to `defaultBlockRegistry` in `packages/wagtail-cms-mapping/src/blocks/index.ts`
+3. Export from the blocks index
+
+For the new page type:
+1. Create the layout in `packages/wagtail-cms-mapping/src/pages/{name}.tsx`
+2. Add to `defaultPageRegistry` in `packages/wagtail-cms-mapping/src/pages/index.ts`
+3. Add a type guard in `packages/wagtail-cms-mapping/src/types/index.ts`

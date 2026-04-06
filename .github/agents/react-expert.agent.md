@@ -34,25 +34,21 @@ If you need custom styling, use `@hseireland/hse-frontend` SCSS tokens — never
 
 ### CMS Block Rendering
 
-Pages contain `header: Block[]` and `body: Block[]`. Render by discriminating on `block.type`:
+Pages contain `header: Block[]` and `body: Block[]`. Use the factory from `@repo/wagtail-cms-mapping` to render — it handles block-to-component and page-to-layout mapping automatically:
 
 ```typescript
-import type { CMSBlockType } from "@repo/wagtail-cms-types/blocks";
+import { createCMSRenderer } from "@repo/wagtail-cms-mapping";
 
-function BlockRenderer({ block }: { block: CMSBlockType }) {
-  switch (block.type) {
-    case "hero_image_banner":
-      return <HeroBanner value={block.value} />;
-    case "text":
-      return <TextBlock value={block.value} />;
-    case "accordion":
-      return <AccordionBlock value={block.value} />;
-    default:
-      console.warn(`Unknown block type: ${block.type}`);
-      return null;
-  }
-}
+const { renderBlocks, renderPage } = createCMSRenderer();
+
+// In a page component: render the full page (picks the right layout)
+renderPage(page);
+
+// Or render just the body blocks
+renderBlocks(page.body);
 ```
+
+Pass optional overrides to `createCMSRenderer()` to swap in custom block components or page layouts for a specific route.
 
 ### Forms
 

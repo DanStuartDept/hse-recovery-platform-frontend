@@ -58,18 +58,15 @@ Refer to `.github/skills/cms-content-fetching/SKILL.md` for the complete data fl
 
 ### Page Types
 
-Six page types in `CMSPageType`:
-- `appbase.HomePage`, `appbase.LandingPage`, `appbase.ContentPage`, `appbase.SearchPage`
-- `news.NewsListingPage`, `news.NewsContentPage`
+Five page types in `CMSPageType` (under the `hsebase` app label):
+- `hsebase.ContentPage`, `hsebase.LandingPage`, `hsebase.CuratedHubPage`
+- `hsebase.OrganisationListingPage`, `hsebase.OrganisationLandingPage`
 
 All extend `CMSPageWithBlocks` → `{ id, title, meta, breadcrumb?, header: Block[], body: Block[] }`.
 
-`ContentPage` adds: `lead_text`, `disable_navigation`, `side_nav`.
-`NewsContentPage` adds: `published_date`, `featured_image`, `lead_text`.
-
 ### Block Types
 
-22 types in `CMSBlockComponentsKeys`: `content_block`, `alert`, `page_header`, `text`, `text_picture`, `picture`, `group`, `title_and_text`, `row`, `accordion`, `cta`, `cta_panel`, `card`, `text_and_icon`, `cover`, `quote`, `section_listing`, `hero_image_banner`, `youtube`, `team_member`, `timeline`, `demo_ui_banner`.
+18 types in `CMSBlockComponentsKeys`: `text`, `rich_text_block`, `richtext`, `image`, `inset_text`, `quote`, `top_tasks`, `top_task`, `links_list_group_v2`, `action_link`, `expander`, `expander_group`, `details`, `button_list`, `content_block_chooser`, `brightcove_video`, `related_information`, `teaser_links`.
 
 Each block: `{ id, type, value, settings?, client? }`.
 
@@ -80,6 +77,14 @@ Each block: `{ id, type, value, settings?, client? }`.
 ### Snippets
 
 `SnippetContentBlock`: reusable content with `{ id, title, body: Block[] }`.
+
+## CMS Packages
+
+| Package | Role |
+|---|---|
+| `@repo/wagtail-cms-types` | Zod schemas and inferred TypeScript types for all CMS content |
+| `@repo/wagtail-api-client` | `CMSClient` — fetches and validates content from Wagtail REST API |
+| `@repo/wagtail-cms-mapping` | Maps CMS page types → layout templates and block types → React components via `createCMSRenderer()` |
 
 ## CMSClient Usage
 
