@@ -45,6 +45,9 @@ catalogs:
     react-dom:
       specifier: 19.2.4
       version: 19.2.4
+    sass-embedded:
+      specifier: ^1.93.2
+      version: 1.98.0
     typescript:
       specifier: ^5.9.3
       version: 5.9.3
@@ -129,6 +132,9 @@ importers:
       '@types/react-dom':
         specifier: 'catalog:'
         version: 19.2.3(@types/react@19.2.4)
+      sass-embedded:
+        specifier: 'catalog:'
+        version: 1.98.0
       typescript:
         specifier: 'catalog:'
         version: 5.9.3
@@ -3402,8 +3408,7 @@ snapshots:
   '@biomejs/cli-win32-x64@2.4.9':
     optional: true
 
-  '@bufbuild/protobuf@2.11.0':
-    optional: true
+  '@bufbuild/protobuf@2.11.0': {}
 
   '@commitlint/cli@20.5.0(@types/node@20.19.37)(conventional-commits-filter@5.0.0)(conventional-commits-parser@6.3.0)(typescript@5.9.3)':
     dependencies:
@@ -4452,8 +4457,7 @@ snapshots:
 
   color-name@1.1.4: {}
 
-  colorjs.io@0.5.2:
-    optional: true
+  colorjs.io@0.5.2: {}
 
   colors@1.4.0: {}
 
@@ -4855,8 +4859,7 @@ snapshots:
     dependencies:
       safer-buffer: 2.1.2
 
-  immutable@5.1.5:
-    optional: true
+  immutable@5.1.5: {}
 
   import-fresh@3.3.1:
     dependencies:
@@ -5539,7 +5542,6 @@ snapshots:
       sass-embedded-unknown-all: 1.98.0
       sass-embedded-win32-arm64: 1.98.0
       sass-embedded-win32-x64: 1.98.0
-    optional: true
 
   sass@1.98.0:
     dependencies:
@@ -5741,10 +5743,8 @@ snapshots:
   sync-child-process@1.0.2:
     dependencies:
       sync-message-port: 1.2.0
-    optional: true
 
-  sync-message-port@1.2.0:
-    optional: true
+  sync-message-port@1.2.0: {}
 
   terser@5.16.9:
     dependencies:
@@ -5869,8 +5869,7 @@ snapshots:
 
   uuid@3.4.0: {}
 
-  varint@6.0.0:
-    optional: true
+  varint@6.0.0: {}
 
   vary@1.1.2: {}
 
