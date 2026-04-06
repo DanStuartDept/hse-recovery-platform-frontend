@@ -19,7 +19,7 @@ export type BlockContentBlockValuesProps = z.infer<
  * Used for rendering reusable content snippets within page layouts.
  */
 export const BlockContentBlockPropsSchema = BaseCMSBlockTypeSchema.extend({
-	type: z.literal("content_block"),
+	type: z.literal("content_block_chooser"),
 	value: BlockContentBlockValuesPropsSchema,
 });
 
