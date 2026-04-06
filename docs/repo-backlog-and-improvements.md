@@ -10,7 +10,7 @@ Tracked improvements and recommendations for the HSE Multisite Frontend monorepo
 | 2 | [GDPR / Cookie Consent](#2-gdpr--cookie-consent) | Must | L | — |
 | 3 | [Security Headers / CSP](#3-security-headers--csp) | Must | S | — |
 | 4 | [Accessibility (WCAG)](#4-accessibility-wcag) | Must | M | #1 |
-| 5 | [`@repo/wagtail-cms-mapping` Package](#5-repowagtail-cms-mapping-package) | Must | L | — |
+| 5 | ~~[`@repo/wagtail-cms-mapping` Package](#5-repowagtail-cms-mapping-package)~~ | ~~Must~~ | ~~L~~ | Done |
 | 6 | [`@repo/hse-custom-ui` Package](#6-repohse-custom-ui-package) | Must | M | — |
 | 7 | [Error Handling and Resilience](#7-error-handling-and-resilience) | Must | M | — |
 | 8 | [Caching and Revalidation Strategy](#8-caching-and-revalidation-strategy) | Must | L | — |
@@ -23,7 +23,7 @@ Tracked improvements and recommendations for the HSE Multisite Frontend monorepo
 | 15 | [Test Coverage](#15-test-coverage) | Should | M (ongoing) | #1 |
 | 16 | [Monitoring and Error Tracking](#16-monitoring-and-error-tracking) | Should | M | — |
 | 17 | [Internationalisation (i18n)](#17-internationalisation-i18n) | Could | L | — |
-| 18 | [Copilot Agentic Workflow](#18-copilot-agentic-workflow) | Should (parallel) | L | — |
+| 18 | ~~[Copilot Agentic Workflow](#18-copilot-agentic-workflow)~~ | ~~Should (parallel)~~ | ~~L~~ | Done |
 | 19 | [Design System Integration](#19-design-system-integration) | Should (ongoing) | S | — |
 
 **Priority key**: Must = launch blocker | Should = important, not blocking | Could = deferred, but acknowledged
@@ -78,17 +78,16 @@ Legal obligation under the EU Web Accessibility Directive (transposed into Irish
 
 ---
 
-## 5. `@repo/wagtail-cms-mapping` Package
+## 5. `@repo/wagtail-cms-mapping` Package ✅
 
-Bridge between CMS data and the UI layer. Centralises all mapping logic rather than scattering it across apps.
+**Done.** Factory-based CMS-to-component mapping with HSE design system defaults and per-app override support. Source-only package (no build step).
 
-- **Page models -> layout templates**: Map each Wagtail page type to its layout/template component
-- **StreamField blocks -> UI components**: Map block types to `@hseireland/hse-frontend-react` components (and `@repo/hse-custom-ui` where needed)
-- **Site settings -> global UI**: Map Wagtail site settings API data (header/footer menus) to header and footer UI components
-
-Data flow: `wagtail-cms-types` (Zod schemas) -> `wagtail-api-client` (fetch + validate) -> `wagtail-cms-mapping` (map to components/templates) -> app (render)
-
-Keep mappings declarative where possible (registry/map object) so new page types and blocks can be added without modifying control flow. Decide whether this is source-only or built with bunchee.
+- `createCMSRenderer()` factory with optional block/page overrides
+- 14 block components mapped to 18 block types (including aliases)
+- 5 page layout components for all hsebase page types
+- Type guards, `generateRichText` utility, breadcrumb and page title shared components
+- 28 tests covering factory logic, registry completeness, type guards, and utilities
+- Header/footer settings mapping is out of scope — will be addressed separately
 
 ---
 
@@ -239,13 +238,16 @@ HSE Ireland has obligations to provide content in Irish (Gaeilge) under the Offi
 
 ---
 
-## 18. Copilot Agentic Workflow
+## 18. Copilot Agentic Workflow ✅
 
-Parallel workstream — does not block feature delivery but accelerates team productivity once patterns are established.
+**Done.** Agents, path-scoped instructions, cross-package prompts, and skills are in place.
 
-Full details in [docs/copilot-agentic-setup.md](copilot-agentic-setup.md).
-
-Summary: set up Copilot agents (a11y, Next.js, React, GH Actions, security, CMS), path-scoped instructions, cross-package prompts (new-page-model, new-streamfield-block, integrate-component, etc.), and skills for the most common workflows. Build incrementally as codebase patterns stabilise.
+- 5 agents: a11y-reviewer, nextjs-developer, react-expert, gh-actions-expert, cms-specialist
+- Path-scoped instructions for CMS packages, TypeScript conventions
+- Prompts: new-page-model, new-streamfield-block, integrate-component, new-page-with-blocks, scaffold-app, scaffold-component
+- Skills: cms-content-fetching, hse-design-system, conventional-commits
+- CLAUDE.md project instructions for Claude Code
+- Will evolve incrementally as codebase patterns change
 
 ---
 
