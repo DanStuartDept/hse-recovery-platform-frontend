@@ -131,6 +131,8 @@ Content:
 
 Six agents with role-specific expertise. Each uses YAML frontmatter with `name`, `description`, and `tools`.
 
+**Thin wrapper pattern**: Agents define persona, tone, and review checklists — then reference skills for domain knowledge. This keeps knowledge in one place (skills) that both Copilot and Claude can read.
+
 ### Tone policy
 - **Strict** (a11y-reviewer, security-reviewer): "must fix", "violation", "security risk"
 - **Collaborative** (all others): "prefer", "consider", "recommended"
@@ -138,12 +140,13 @@ Six agents with role-specific expertise. Each uses YAML frontmatter with `name`,
 ### 2.1 `a11y-reviewer.agent.md`
 
 **Adapted from**: `awesome-copilot/agents/accessibility.agent.md`
+**References skills**: `hse-design-system/SKILL.md` (component a11y baseline)
 
 **Customizations**:
 - Strip Angular/Vue framework examples — React 19 only.
 - Add HSE-specific legal requirements (WCAG 2.1 AA, Irish Accessibility Directive).
 - Add HSE policies: no overlays, no design system customization, plain English reading age 9, no PDFs, semantic HTML.
-- Reference `@hseireland/hse-frontend-react` components as the baseline — flag when custom components lack a11y that design system provides for free.
+- Reference `hse-design-system` skill for component baseline — flag when custom components lack a11y that design system provides for free.
 - Reference Storybook MCP (`http://localhost:6006/mcp`) for checking component accessibility.
 - Testing tools: Axe DevTools, Lighthouse, NVDA, VoiceOver, TalkBack.
 - Quarterly audit cadence noted.
@@ -154,6 +157,7 @@ Six agents with role-specific expertise. Each uses YAML frontmatter with `name`,
 ### 2.2 `nextjs-developer.agent.md`
 
 **Adapted from**: `awesome-copilot/agents/expert-nextjs-developer.agent.md`
+**References skills**: `cms-content-fetching/SKILL.md` (CMS data flow), `hse-design-system/SKILL.md` (UI components)
 
 **Customizations**:
 - Pin to Next.js 16 / React 19 App Router.
@@ -169,6 +173,7 @@ Six agents with role-specific expertise. Each uses YAML frontmatter with `name`,
 ### 2.3 `react-expert.agent.md`
 
 **Adapted from**: `awesome-copilot/agents/expert-react-frontend-engineer.agent.md`
+**References skills**: `hse-design-system/SKILL.md` (component catalogue), `cms-content-fetching/SKILL.md` (block rendering)
 
 **Customizations**:
 - Focus on React 19 patterns used in this project: Server Components, hooks, `react-hook-form` + Zod.
@@ -204,6 +209,7 @@ Six agents with role-specific expertise. Each uses YAML frontmatter with `name`,
 ### 2.6 `cms-specialist.agent.md`
 
 **Custom agent** — no upstream template.
+**References skills**: `cms-content-fetching/SKILL.md` (primary knowledge source)
 
 **Content**:
 - Wagtail headless CMS integration expert.
@@ -372,6 +378,44 @@ Specialized agents are available in `.github/agents/`. Invoke them by name in Co
 
 Portable skills in `.github/skills/` teach domain-specific workflows (CMS content fetching, HSE design system, conventional commits).
 ```
+
+---
+
+## 6. Cross-Tool Portability Strategy
+
+### Principle: Skills as the shared knowledge layer
+
+Agent files are **thin persona wrappers** — they define role, tone, and tool access, then reference skills for domain knowledge. This avoids duplicating CMS knowledge, a11y policies, and design system details across Copilot agents, Claude Code, and other tools.
+
+### How it works
+
+```
+.github/skills/                        ← Shared knowledge (portable, cross-tool)
+  cms-content-fetching/SKILL.md        ← CMS data flow, Wagtail API, CMSClient usage
+  hse-design-system/SKILL.md           ← Component catalogue, SCSS tokens, decision guide
+  conventional-commit/SKILL.md         ← Commit format
+
+.github/agents/                        ← Thin Copilot wrappers (persona + tone + skill refs)
+  cms-specialist.agent.md              ← "You are a CMS expert. Refer to skills/cms-content-fetching/SKILL.md"
+  a11y-reviewer.agent.md               ← "You are an a11y reviewer. Strict tone. Refer to skills/hse-design-system/SKILL.md for components"
+
+CLAUDE.md                              ← Already references architecture; can point to skills/
+```
+
+### What goes where
+
+| Content type | Lives in | Referenced by |
+|---|---|---|
+| Domain knowledge (CMS flow, Wagtail API, component catalogue) | Skills (`SKILL.md`) | Agents, CLAUDE.md, other tools |
+| Persona, tone, review checklists | Agents (`.agent.md`) | Copilot only |
+| Code conventions, formatting rules | Instructions (`.instructions.md`) + `CLAUDE.md` | Tool-specific (some duplication accepted) |
+| Workflow steps (cross-package changes) | Prompts (`.prompt.md`) | Copilot; Claude uses skills for the same knowledge |
+
+### Accepted duplication
+
+`copilot-instructions.md` and `CLAUDE.md` will continue to share similar content (architecture, conventions). This is a small, stable surface — keeping them in sync manually is simpler than adding a build/sync step.
+
+Scoped instructions (`.instructions.md` with `applyTo` globs) have no Claude equivalent (Claude uses directory-based `CLAUDE.md` files). This duplication is accepted since the content is concise and changes infrequently.
 
 ---
 
