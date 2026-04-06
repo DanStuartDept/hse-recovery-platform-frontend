@@ -4,7 +4,10 @@ import { PageTitle } from "../components/page-title";
 import type { PageLayoutProps } from "../types/index";
 import { isOrganisationListingPage } from "../types/index";
 
-export function OrganisationListingPage({ page, renderBlocks }: PageLayoutProps) {
+export function OrganisationListingPage({
+	page,
+	renderBlocks,
+}: PageLayoutProps) {
 	const olp = isOrganisationListingPage(page) ? page : undefined;
 	const totalItems = olp?.organisation_links_count ?? 0;
 	return (

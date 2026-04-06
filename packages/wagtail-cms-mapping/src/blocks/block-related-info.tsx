@@ -11,7 +11,9 @@ type RelatedInfoValue = {
 	}>;
 };
 
-export function BlockRelatedInfo({ value }: BlockComponentProps<RelatedInfoValue>) {
+export function BlockRelatedInfo({
+	value,
+}: BlockComponentProps<RelatedInfoValue>) {
 	return (
 		<div className="block-related_information">
 			<div className="campain-links-list">
@@ -20,7 +22,10 @@ export function BlockRelatedInfo({ value }: BlockComponentProps<RelatedInfoValue
 					{value.links.map((link) => (
 						<li key={link.text}>
 							<Link
-								href={(link.internal_page && link.internal_page.url) || link.external_url}
+								href={
+									(link.internal_page && link.internal_page.url) ||
+									link.external_url
+								}
 								target={link.new_window ? "_blank" : undefined}
 							>
 								{link.text}

@@ -8,7 +8,9 @@ export function LandingPage({ page, renderBlocks }: PageLayoutProps) {
 	const lp = isLandingPage(page) ? page : undefined;
 	return (
 		<>
-			{page.breadcrumb && page.breadcrumb.length > 0 && <Breadcrumb items={page.breadcrumb} />}
+			{page.breadcrumb && page.breadcrumb.length > 0 && (
+				<Breadcrumb items={page.breadcrumb} />
+			)}
 			<main>
 				<Container>
 					<PageTitle title={page.title} richLead={lp?.lead_text} />

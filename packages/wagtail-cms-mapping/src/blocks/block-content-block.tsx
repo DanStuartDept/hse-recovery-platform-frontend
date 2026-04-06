@@ -3,7 +3,10 @@ import type { BlockComponentProps } from "../types/index";
 
 type ContentBlockValue = { body?: CMSBlockType[] };
 
-export function BlockContentBlock({ value, renderBlocks }: BlockComponentProps<ContentBlockValue>) {
+export function BlockContentBlock({
+	value,
+	renderBlocks,
+}: BlockComponentProps<ContentBlockValue>) {
 	if (!value.body || !renderBlocks) return null;
 	return <>{renderBlocks(value.body)}</>;
 }

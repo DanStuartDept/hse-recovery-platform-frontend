@@ -9,7 +9,9 @@ type ActionLinkValue = {
 	internal_page: { title: string; url: string } | null;
 };
 
-export function BlockActionLink({ value }: BlockComponentProps<ActionLinkValue>) {
+export function BlockActionLink({
+	value,
+}: BlockComponentProps<ActionLinkValue>) {
 	if (value.internal_page) {
 		return (
 			<ActionLink asElement={Link} href={value.internal_page.url}>

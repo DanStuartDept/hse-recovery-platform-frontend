@@ -3,6 +3,7 @@ import type { CMSPageProps } from "@repo/wagtail-cms-types/page-models";
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { createCMSRenderer } from "./index";
+import type { BlockComponentProps, PageLayoutProps } from "./types/index";
 
 function makeBlock(type: string, value: unknown = {}): CMSBlockType {
 	return { id: `block-${type}`, type: type as CMSBlockType["type"], value };
@@ -22,7 +23,10 @@ function makePageMeta(type: string) {
 	};
 }
 
-function makePage(type: string, extra: Record<string, unknown> = {}): CMSPageProps {
+function makePage(
+	type: string,
+	extra: Record<string, unknown> = {},
+): CMSPageProps {
 	return {
 		id: 1,
 		title: "Test Page",
@@ -52,9 +56,11 @@ describe("createCMSRenderer", () => {
 	});
 
 	it("uses override block component when provided", () => {
-		const CustomText = ({ value }: { value: unknown }) => <div data-testid="custom-text">{String(value)}</div>;
+		const CustomText = ({ value }: BlockComponentProps) => (
+			<div data-testid="custom-text">{String(value)}</div>
+		);
 		const { renderBlock } = createCMSRenderer({
-			blocks: { text: CustomText as any },
+			blocks: { text: CustomText },
 		});
 		const result = renderBlock(makeBlock("text", "hello"));
 		render(<>{result}</>);
@@ -62,9 +68,11 @@ describe("createCMSRenderer", () => {
 	});
 
 	it("uses override page component when provided", () => {
-		const CustomPage = ({ page }: { page: CMSPageProps }) => <div data-testid="custom-page">{page.title}</div>;
+		const CustomPage = ({ page }: PageLayoutProps) => (
+			<div data-testid="custom-page">{page.title}</div>
+		);
 		const { renderPage } = createCMSRenderer({
-			pages: { "hsebase.ContentPage": CustomPage as any },
+			pages: { "hsebase.ContentPage": CustomPage },
 		});
 		const result = renderPage(makePage("hsebase.ContentPage"));
 		render(<>{result}</>);
@@ -72,19 +80,26 @@ describe("createCMSRenderer", () => {
 	});
 
 	it("uses custom fallbackBlock for unknown block types", () => {
-		const CustomFallback = ({ type }: { type: string }) => <div data-testid="custom-fallback">{type}</div>;
+		const CustomFallback = ({ type }: BlockComponentProps) => (
+			<div data-testid="custom-fallback">{type}</div>
+		);
 		const { renderBlock } = createCMSRenderer({
-			fallbackBlock: CustomFallback as any,
+			fallbackBlock: CustomFallback,
 		});
+		// biome-ignore lint/suspicious/noExplicitAny: testing unmapped block type
 		const result = renderBlock(makeBlock("unknown_type" as any));
 		render(<>{result}</>);
-		expect(screen.getByTestId("custom-fallback")).toHaveTextContent("unknown_type");
+		expect(screen.getByTestId("custom-fallback")).toHaveTextContent(
+			"unknown_type",
+		);
 	});
 
 	it("uses custom fallbackPage for unknown page types", () => {
-		const CustomFallback = ({ page }: { page: CMSPageProps }) => <div data-testid="fallback-page">{page.title}</div>;
+		const CustomFallback = ({ page }: PageLayoutProps) => (
+			<div data-testid="fallback-page">{page.title}</div>
+		);
 		const { renderPage } = createCMSRenderer({
-			fallbackPage: CustomFallback as any,
+			fallbackPage: CustomFallback,
 		});
 		const result = renderPage(makePage("hsebase.UnknownPage"));
 		render(<>{result}</>);

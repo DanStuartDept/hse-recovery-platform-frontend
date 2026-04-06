@@ -15,7 +15,9 @@ export function PageTitle({ title, lead, richLead }: PageTitleProps) {
 					<p>{generateRichText(lead)}</p>
 				</div>
 			)}
-			{richLead && <div className="hse-lede-text">{generateRichText(richLead)}</div>}
+			{richLead && (
+				<div className="hse-lede-text">{generateRichText(richLead)}</div>
+			)}
 		</>
 	);
 }

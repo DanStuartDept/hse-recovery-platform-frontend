@@ -97,7 +97,9 @@ describe("CMSOrganisationListingPagePropsSchema", () => {
 			organisation_links: [],
 			organisation_links_count: 0,
 		};
-		expect(CMSOrganisationListingPagePropsSchema.safeParse(page).success).toBe(true);
+		expect(CMSOrganisationListingPagePropsSchema.safeParse(page).success).toBe(
+			true,
+		);
 	});
 
 	it("rejects a page missing organisation_links", () => {
@@ -106,7 +108,9 @@ describe("CMSOrganisationListingPagePropsSchema", () => {
 			meta: { ...basePage.meta, type: "hsebase.OrganisationListingPage" },
 			organisation_links_count: 0,
 		};
-		expect(CMSOrganisationListingPagePropsSchema.safeParse(page).success).toBe(false);
+		expect(CMSOrganisationListingPagePropsSchema.safeParse(page).success).toBe(
+			false,
+		);
 	});
 
 	it("rejects a page missing organisation_links_count", () => {
@@ -115,6 +119,8 @@ describe("CMSOrganisationListingPagePropsSchema", () => {
 			meta: { ...basePage.meta, type: "hsebase.OrganisationListingPage" },
 			organisation_links: [],
 		};
-		expect(CMSOrganisationListingPagePropsSchema.safeParse(page).success).toBe(false);
+		expect(CMSOrganisationListingPagePropsSchema.safeParse(page).success).toBe(
+			false,
+		);
 	});
 });

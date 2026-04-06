@@ -1,4 +1,7 @@
-import type { CMSBlockComponentsKeys, CMSBlockType } from "@repo/wagtail-cms-types/blocks";
+import type {
+	CMSBlockComponentsKeys,
+	CMSBlockType,
+} from "@repo/wagtail-cms-types/blocks";
 import type { CMSPageType } from "@repo/wagtail-cms-types/core";
 import type {
 	CMSContentPageProps,
@@ -23,9 +26,14 @@ export type PageLayoutProps = {
 	renderBlocks: (blocks: CMSBlockType[]) => React.ReactNode[];
 };
 
-export type BlockRegistry = Partial<Record<CMSBlockComponentsKeys, ComponentType<BlockComponentProps<any>>>>;
+export type BlockRegistry = Partial<
+	// biome-ignore lint/suspicious/noExplicitAny: registry stores heterogeneous block components with different value types
+	Record<CMSBlockComponentsKeys, ComponentType<BlockComponentProps<any>>>
+>;
 
-export type PageRegistry = Partial<Record<CMSPageType, ComponentType<PageLayoutProps>>>;
+export type PageRegistry = Partial<
+	Record<CMSPageType, ComponentType<PageLayoutProps>>
+>;
 
 export type CMSRendererOptions = {
 	blocks?: BlockRegistry;
@@ -46,12 +54,18 @@ export function isContentPage(page: CMSPageProps): page is CMSContentPageProps {
 export function isLandingPage(page: CMSPageProps): page is CMSLandingPageProps {
 	return page.meta.type === "hsebase.LandingPage";
 }
-export function isCuratedHubPage(page: CMSPageProps): page is CMSCuratedHubPageProps {
+export function isCuratedHubPage(
+	page: CMSPageProps,
+): page is CMSCuratedHubPageProps {
 	return page.meta.type === "hsebase.CuratedHubPage";
 }
-export function isOrganisationListingPage(page: CMSPageProps): page is CMSOrganisationListingPageProps {
+export function isOrganisationListingPage(
+	page: CMSPageProps,
+): page is CMSOrganisationListingPageProps {
 	return page.meta.type === "hsebase.OrganisationListingPage";
 }
-export function isOrganisationLandingPage(page: CMSPageProps): page is CMSOrganisationLandingPageProps {
+export function isOrganisationLandingPage(
+	page: CMSPageProps,
+): page is CMSOrganisationLandingPageProps {
 	return page.meta.type === "hsebase.OrganisationLandingPage";
 }

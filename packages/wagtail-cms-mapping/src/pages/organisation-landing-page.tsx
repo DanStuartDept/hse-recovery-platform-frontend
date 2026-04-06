@@ -4,11 +4,16 @@ import { PageTitle } from "../components/page-title";
 import type { PageLayoutProps } from "../types/index";
 import { isOrganisationLandingPage } from "../types/index";
 
-export function OrganisationLandingPage({ page, renderBlocks }: PageLayoutProps) {
+export function OrganisationLandingPage({
+	page,
+	renderBlocks,
+}: PageLayoutProps) {
 	const olp = isOrganisationLandingPage(page) ? page : undefined;
 	return (
 		<>
-			{page.breadcrumb && page.breadcrumb.length > 0 && <Breadcrumb items={page.breadcrumb} />}
+			{page.breadcrumb && page.breadcrumb.length > 0 && (
+				<Breadcrumb items={page.breadcrumb} />
+			)}
 			<main>
 				<Container>
 					<PageTitle title={page.title} richLead={olp?.lead_text} />

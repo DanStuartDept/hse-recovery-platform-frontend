@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { NavItemSchema } from "../fields";
 import { BaseCMSBlockTypeSchema } from "../blocks";
+import { NavItemSchema } from "../fields";
 import { type CMSPageWithBlocks, CMSPageWithBlocksSchema } from "./index";
 
 export const CMSContentPagePropsSchema = CMSPageWithBlocksSchema.extend({
@@ -20,17 +20,25 @@ export const CMSCuratedHubPagePropsSchema = CMSPageWithBlocksSchema.extend({
 	lead_text: z.string().optional(),
 	bottom_content: z.array(BaseCMSBlockTypeSchema).optional(),
 });
-export type CMSCuratedHubPageProps = z.infer<typeof CMSCuratedHubPagePropsSchema>;
+export type CMSCuratedHubPageProps = z.infer<
+	typeof CMSCuratedHubPagePropsSchema
+>;
 
-export const CMSOrganisationLandingPagePropsSchema = CMSPageWithBlocksSchema.extend({
-	lead_text: z.string().optional(),
-	bottom_content: z.array(BaseCMSBlockTypeSchema).optional(),
-});
-export type CMSOrganisationLandingPageProps = z.infer<typeof CMSOrganisationLandingPagePropsSchema>;
+export const CMSOrganisationLandingPagePropsSchema =
+	CMSPageWithBlocksSchema.extend({
+		lead_text: z.string().optional(),
+		bottom_content: z.array(BaseCMSBlockTypeSchema).optional(),
+	});
+export type CMSOrganisationLandingPageProps = z.infer<
+	typeof CMSOrganisationLandingPagePropsSchema
+>;
 
-export const CMSOrganisationListingPagePropsSchema = CMSPageWithBlocksSchema.extend({
-	lead_text: z.string().optional(),
-	organisation_links: z.array(BaseCMSBlockTypeSchema),
-	organisation_links_count: z.number(),
-});
-export type CMSOrganisationListingPageProps = z.infer<typeof CMSOrganisationListingPagePropsSchema>;
+export const CMSOrganisationListingPagePropsSchema =
+	CMSPageWithBlocksSchema.extend({
+		lead_text: z.string().optional(),
+		organisation_links: z.array(BaseCMSBlockTypeSchema),
+		organisation_links_count: z.number(),
+	});
+export type CMSOrganisationListingPageProps = z.infer<
+	typeof CMSOrganisationListingPagePropsSchema
+>;

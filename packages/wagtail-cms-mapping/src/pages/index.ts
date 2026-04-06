@@ -13,4 +13,10 @@ export const defaultPageRegistry: PageRegistry = {
 	"hsebase.OrganisationLandingPage": OrganisationLandingPage,
 };
 
-export { ContentPage, CuratedHubPage, LandingPage, OrganisationLandingPage, OrganisationListingPage };
+export {
+	ContentPage,
+	CuratedHubPage,
+	LandingPage,
+	OrganisationLandingPage,
+	OrganisationListingPage,
+};

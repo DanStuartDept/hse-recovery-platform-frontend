@@ -9,7 +9,9 @@ type BrightcoveValue = {
 	video_description: string;
 };
 
-export function BlockBrightcove({ value }: BlockComponentProps<BrightcoveValue>) {
+export function BlockBrightcove({
+	value,
+}: BlockComponentProps<BrightcoveValue>) {
 	return (
 		<div className="hse-video">
 			{value.display_video_title && <h4>{value.video_title}</h4>}

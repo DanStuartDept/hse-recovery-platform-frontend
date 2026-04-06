@@ -2,7 +2,12 @@ import type { CMSBlockType } from "@repo/wagtail-cms-types/blocks";
 import type { CMSPageProps } from "@repo/wagtail-cms-types/page-models";
 import { defaultBlockRegistry } from "./blocks/index";
 import { defaultPageRegistry } from "./pages/index";
-import type { BlockComponentProps, CMSRenderer, CMSRendererOptions, PageLayoutProps } from "./types/index";
+import type {
+	BlockComponentProps,
+	CMSRenderer,
+	CMSRendererOptions,
+	PageLayoutProps,
+} from "./types/index";
 
 // Inline fallbacks so we don't need to import from files that don't exist yet
 function DefaultFallbackBlock({ type, value }: BlockComponentProps) {
@@ -52,7 +57,9 @@ export function createCMSRenderer(options?: CMSRendererOptions): CMSRenderer {
 	function renderPage(page: CMSPageProps): React.ReactNode {
 		const Layout = pageRegistry[page.meta.type];
 		if (!Layout) {
-			return <FallbackPage key={page.id} page={page} renderBlocks={renderBlocks} />;
+			return (
+				<FallbackPage key={page.id} page={page} renderBlocks={renderBlocks} />
+			);
 		}
 		return <Layout key={page.id} page={page} renderBlocks={renderBlocks} />;
 	}

@@ -4,11 +4,17 @@ import type { BlockComponentProps } from "../types/index";
 
 type DetailsValue = { title: string; body: CMSBlockType[] };
 
-export function BlockDetails({ type, value, renderBlocks }: BlockComponentProps<DetailsValue>) {
+export function BlockDetails({
+	type,
+	value,
+	renderBlocks,
+}: BlockComponentProps<DetailsValue>) {
 	return (
 		<Details expander={type === "expander"}>
 			<Details.Summary>{value.title}</Details.Summary>
-			<Details.Text>{renderBlocks ? renderBlocks(value.body) : null}</Details.Text>
+			<Details.Text>
+				{renderBlocks ? renderBlocks(value.body) : null}
+			</Details.Text>
 		</Details>
 	);
 }
