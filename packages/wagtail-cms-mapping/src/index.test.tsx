@@ -88,7 +88,7 @@ describe("createCMSRenderer", () => {
 		const { renderPage } = createCMSRenderer({
 			fallbackPage: CustomFallback as any,
 		});
-		const result = renderPage(makePage("hsebase.ContentPage"));
+		const result = renderPage(makePage("hsebase.UnknownPage"));
 		render(<>{result}</>);
 		expect(screen.getByTestId("fallback-page")).toHaveTextContent("Test Page");
 	});
