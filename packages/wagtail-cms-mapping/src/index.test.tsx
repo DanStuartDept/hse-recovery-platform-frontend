@@ -1,8 +1,8 @@
-import { describe, expect, it } from "vitest";
-import { render, screen } from "@testing-library/react";
-import { createCMSRenderer } from "./index";
 import type { CMSBlockType } from "@repo/wagtail-cms-types/blocks";
 import type { CMSPageProps } from "@repo/wagtail-cms-types/page-models";
+import { render, screen } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
+import { createCMSRenderer } from "./index";
 
 function makeBlock(type: string, value: unknown = {}): CMSBlockType {
 	return { id: `block-${type}`, type: type as CMSBlockType["type"], value };
@@ -10,20 +10,26 @@ function makeBlock(type: string, value: unknown = {}): CMSBlockType {
 
 function makePageMeta(type: string) {
 	return {
-		slug: "test", type, locale: "en",
+		slug: "test",
+		type,
+		locale: "en",
 		html_url: "https://example.com/test/",
 		detail_url: "https://example.com/api/pages/1/",
 		first_published_at: "2024-01-01T00:00:00Z",
 		last_published_at: "2024-01-01T00:00:00Z",
-		search_description: "", parent: null,
+		search_description: "",
+		parent: null,
 	};
 }
 
 function makePage(type: string, extra: Record<string, unknown> = {}): CMSPageProps {
 	return {
-		id: 1, title: "Test Page",
+		id: 1,
+		title: "Test Page",
 		meta: makePageMeta(type) as CMSPageProps["meta"],
-		header: [], body: [], ...extra,
+		header: [],
+		body: [],
+		...extra,
 	} as CMSPageProps;
 }
 
@@ -46,9 +52,7 @@ describe("createCMSRenderer", () => {
 	});
 
 	it("uses override block component when provided", () => {
-		const CustomText = ({ value }: { value: unknown }) => (
-			<div data-testid="custom-text">{String(value)}</div>
-		);
+		const CustomText = ({ value }: { value: unknown }) => <div data-testid="custom-text">{String(value)}</div>;
 		const { renderBlock } = createCMSRenderer({
 			blocks: { text: CustomText as any },
 		});
@@ -58,9 +62,7 @@ describe("createCMSRenderer", () => {
 	});
 
 	it("uses override page component when provided", () => {
-		const CustomPage = ({ page }: { page: CMSPageProps }) => (
-			<div data-testid="custom-page">{page.title}</div>
-		);
+		const CustomPage = ({ page }: { page: CMSPageProps }) => <div data-testid="custom-page">{page.title}</div>;
 		const { renderPage } = createCMSRenderer({
 			pages: { "hsebase.ContentPage": CustomPage as any },
 		});
@@ -70,9 +72,7 @@ describe("createCMSRenderer", () => {
 	});
 
 	it("uses custom fallbackBlock for unknown block types", () => {
-		const CustomFallback = ({ type }: { type: string }) => (
-			<div data-testid="custom-fallback">{type}</div>
-		);
+		const CustomFallback = ({ type }: { type: string }) => <div data-testid="custom-fallback">{type}</div>;
 		const { renderBlock } = createCMSRenderer({
 			fallbackBlock: CustomFallback as any,
 		});
@@ -82,9 +82,7 @@ describe("createCMSRenderer", () => {
 	});
 
 	it("uses custom fallbackPage for unknown page types", () => {
-		const CustomFallback = ({ page }: { page: CMSPageProps }) => (
-			<div data-testid="fallback-page">{page.title}</div>
-		);
+		const CustomFallback = ({ page }: { page: CMSPageProps }) => <div data-testid="fallback-page">{page.title}</div>;
 		const { renderPage } = createCMSRenderer({
 			fallbackPage: CustomFallback as any,
 		});

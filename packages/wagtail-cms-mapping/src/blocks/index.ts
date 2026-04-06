@@ -1,19 +1,19 @@
 import type { BlockRegistry } from "../types/index";
-import { BlockText } from "./block-text";
-import { BlockImage } from "./block-image";
-import { BlockInsetText } from "./block-inset-text";
-import { BlockQuote } from "./block-quote";
-import { BlockPromo } from "./block-promo";
-import { BlockLinksList } from "./block-links-list";
 import { BlockActionLink } from "./block-action-link";
-import { BlockDetails } from "./block-details";
-import { BlockDetailsGroup } from "./block-details-group";
+import { BlockBrightcove } from "./block-brightcove";
 import { BlockButton } from "./block-button";
 import { BlockContentBlock } from "./block-content-block";
-import { BlockBrightcove } from "./block-brightcove";
+import { BlockDetails } from "./block-details";
+import { BlockDetailsGroup } from "./block-details-group";
+import { BlockFallback } from "./block-fallback";
+import { BlockImage } from "./block-image";
+import { BlockInsetText } from "./block-inset-text";
+import { BlockLinksList } from "./block-links-list";
+import { BlockPromo } from "./block-promo";
+import { BlockQuote } from "./block-quote";
 import { BlockRelatedInfo } from "./block-related-info";
 import { BlockTeaserLinks } from "./block-teaser-links";
-import { BlockFallback } from "./block-fallback";
+import { BlockText } from "./block-text";
 
 export const defaultBlockRegistry: BlockRegistry = {
 	text: BlockText,
@@ -37,19 +37,19 @@ export const defaultBlockRegistry: BlockRegistry = {
 };
 
 export {
-	BlockText,
-	BlockImage,
-	BlockInsetText,
-	BlockQuote,
-	BlockPromo,
-	BlockLinksList,
 	BlockActionLink,
-	BlockDetails,
-	BlockDetailsGroup,
+	BlockBrightcove,
 	BlockButton,
 	BlockContentBlock,
-	BlockBrightcove,
+	BlockDetails,
+	BlockDetailsGroup,
+	BlockFallback,
+	BlockImage,
+	BlockInsetText,
+	BlockLinksList,
+	BlockPromo,
+	BlockQuote,
 	BlockRelatedInfo,
 	BlockTeaserLinks,
-	BlockFallback,
+	BlockText,
 };

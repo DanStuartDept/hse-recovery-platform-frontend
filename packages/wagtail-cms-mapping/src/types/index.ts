@@ -1,8 +1,4 @@
-import type { ComponentType } from "react";
-import type {
-	CMSBlockComponentsKeys,
-	CMSBlockType,
-} from "@repo/wagtail-cms-types/blocks";
+import type { CMSBlockComponentsKeys, CMSBlockType } from "@repo/wagtail-cms-types/blocks";
 import type { CMSPageType } from "@repo/wagtail-cms-types/core";
 import type {
 	CMSContentPageProps,
@@ -12,6 +8,7 @@ import type {
 	CMSOrganisationListingPageProps,
 	CMSPageProps,
 } from "@repo/wagtail-cms-types/page-models";
+import type { ComponentType } from "react";
 
 export type BlockComponentProps<TValue = unknown> = {
 	id: string;
@@ -26,9 +23,7 @@ export type PageLayoutProps = {
 	renderBlocks: (blocks: CMSBlockType[]) => React.ReactNode[];
 };
 
-export type BlockRegistry = Partial<
-	Record<CMSBlockComponentsKeys, ComponentType<BlockComponentProps<any>>>
->;
+export type BlockRegistry = Partial<Record<CMSBlockComponentsKeys, ComponentType<BlockComponentProps<any>>>>;
 
 export type PageRegistry = Partial<Record<CMSPageType, ComponentType<PageLayoutProps>>>;
 

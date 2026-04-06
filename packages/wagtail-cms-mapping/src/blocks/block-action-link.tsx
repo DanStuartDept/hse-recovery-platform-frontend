@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { ActionLink } from "@hseireland/hse-frontend-react";
+import Link from "next/link";
 import type { BlockComponentProps } from "../types/index";
 
 type ActionLinkValue = {

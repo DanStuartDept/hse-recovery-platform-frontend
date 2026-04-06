@@ -1,5 +1,5 @@
-import type { BlockComponentProps } from "../types/index";
 import type { FieldTypeImage } from "@repo/wagtail-cms-types/fields";
+import type { BlockComponentProps } from "../types/index";
 
 export function BlockImage({ value }: BlockComponentProps<FieldTypeImage>) {
 	return (

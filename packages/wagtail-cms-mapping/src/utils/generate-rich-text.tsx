@@ -1,10 +1,5 @@
+import parse, { type DOMNode, domToReact, Element, type HTMLReactParserOptions } from "html-react-parser";
 import Link from "next/link";
-import parse, {
-	type DOMNode,
-	Element,
-	type HTMLReactParserOptions,
-	domToReact,
-} from "html-react-parser";
 
 const options: HTMLReactParserOptions = {
 	replace: (domNode: DOMNode) => {
@@ -17,17 +12,9 @@ const options: HTMLReactParserOptions = {
 					if (path.startsWith("/publications")) {
 						path = path.replace("/publications", "");
 					}
-					return (
-						<Link href={path}>
-							{domToReact(domNode.children as DOMNode[], options)}
-						</Link>
-					);
+					return <Link href={path}>{domToReact(domNode.children as DOMNode[], options)}</Link>;
 				}
-				return (
-					<Link href={href}>
-						{domToReact(domNode.children as DOMNode[], options)}
-					</Link>
-				);
+				return <Link href={href}>{domToReact(domNode.children as DOMNode[], options)}</Link>;
 			}
 		}
 	},

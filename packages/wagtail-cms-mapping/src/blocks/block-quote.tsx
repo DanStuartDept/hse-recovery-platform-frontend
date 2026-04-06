@@ -1,8 +1,8 @@
 import {
-	BlockQuote as DSBlockQuote,
 	BlockQuoteCaption,
 	BlockQuoteHeading,
 	BlockQuoteText,
+	BlockQuote as DSBlockQuote,
 } from "@hseireland/hse-frontend-react";
 import type { BlockComponentProps } from "../types/index";
 

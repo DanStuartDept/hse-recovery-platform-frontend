@@ -20,7 +20,15 @@ export function BlockBrightcove({ value }: BlockComponentProps<BrightcoveValue>)
 					src={`https://players.brightcove.net/${value.account_id}/default_default/index.html?videoId=${value.video_id}`}
 					allow="encrypted-media"
 					allowFullScreen
-					style={{ position: "absolute", top: "0px", right: "0px", bottom: "0px", left: "0px", width: "100%", height: "100%" }}
+					style={{
+						position: "absolute",
+						top: "0px",
+						right: "0px",
+						bottom: "0px",
+						left: "0px",
+						width: "100%",
+						height: "100%",
+					}}
 				/>
 			</div>
 		</div>

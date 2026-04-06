@@ -1,13 +1,11 @@
-import { describe, expect, it, vi } from "vitest";
+import type { CMSPageProps } from "@repo/wagtail-cms-types/page-models";
 import { render, screen } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
 import { ContentPage } from "./content-page";
 import { LandingPage } from "./landing-page";
 import { OrganisationListingPage } from "./organisation-listing-page";
-import type { CMSPageProps } from "@repo/wagtail-cms-types/page-models";
 
-const mockRenderBlocks = vi.fn((blocks) =>
-	blocks.map((b: any) => <div key={b.id} data-testid={`block-${b.id}`} />),
-);
+const mockRenderBlocks = vi.fn((blocks) => blocks.map((b: any) => <div key={b.id} data-testid={`block-${b.id}`} />));
 
 function makePageMeta(type: string) {
 	return {

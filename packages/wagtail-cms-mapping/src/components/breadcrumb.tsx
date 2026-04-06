@@ -1,6 +1,6 @@
-import Link from "next/link";
 import { Breadcrumb as DSBreadcrumb } from "@hseireland/hse-frontend-react";
 import type { CMSPageBreadcrumb } from "@repo/wagtail-cms-types/core";
+import Link from "next/link";
 
 export type BreadcrumbProps = {
 	items?: CMSPageBreadcrumb[];

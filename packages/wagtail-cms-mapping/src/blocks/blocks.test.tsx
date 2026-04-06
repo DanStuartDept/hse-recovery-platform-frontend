@@ -1,11 +1,11 @@
-import { describe, expect, it } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { BlockText } from "./block-text";
-import { BlockQuote } from "./block-quote";
-import { BlockInsetText } from "./block-inset-text";
-import { BlockFallback } from "./block-fallback";
+import { describe, expect, it } from "vitest";
 import { BlockBrightcove } from "./block-brightcove";
+import { BlockFallback } from "./block-fallback";
+import { BlockInsetText } from "./block-inset-text";
+import { BlockQuote } from "./block-quote";
 import { BlockRelatedInfo } from "./block-related-info";
+import { BlockText } from "./block-text";
 
 describe("BlockText", () => {
 	it("renders string value as rich text", () => {
