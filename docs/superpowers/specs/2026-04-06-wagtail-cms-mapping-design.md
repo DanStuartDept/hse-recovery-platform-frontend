@@ -306,6 +306,38 @@ The package will include a `README.md` covering:
 - `@testing-library/jest-dom`
 - `vitest`
 
+## Documentation and agentic dev file updates
+
+### CLAUDE.md
+
+Add `@repo/wagtail-cms-mapping` to the workspace layout table.
+
+### Critical — files with existing TODO placeholders
+
+| File | Update needed |
+|---|---|
+| `.github/prompts/new-streamfield-block.prompt.md` | Add step for registering block in mapping package registry |
+| `.github/prompts/new-page-model.prompt.md` | Add step for registering page in mapping package registry |
+| `.github/prompts/new-page-with-blocks.prompt.md` | Update all workflow steps to use factory pattern |
+| `.github/prompts/integrate-component.prompt.md` | Point block registration at mapping package |
+| `.github/skills/cms-content-fetching/SKILL.md` | Update data flow diagram, block/page type lists, rendering examples to use factory |
+| `.github/instructions/cms-packages.instructions.md` | Add `@repo/wagtail-cms-mapping` section, update block/page enums |
+
+### High — should update
+
+| File | Update needed |
+|---|---|
+| `.github/copilot-instructions.md` | Add `@repo/wagtail-cms-mapping` to package table |
+| `.github/agents/cms-specialist.agent.md` | Replace block type enum (18 types) and page type enum (5 types with `hsebase` prefix) |
+| `.github/agents/react-expert.agent.md` | Replace switch-based block rendering example with factory pattern |
+
+### Medium — may need updates
+
+| File | Update needed |
+|---|---|
+| `.github/instructions/typescript.instructions.md` | Add source-only pattern note for mapping package |
+| `.github/agents/nextjs-developer.agent.md` | Update CMS import examples to include mapping package |
+
 ## Out of scope
 
 - Header/footer settings mapping — will be designed separately
