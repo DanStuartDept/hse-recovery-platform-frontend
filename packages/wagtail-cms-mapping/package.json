@@ -1,0 +1,42 @@
+{
+	"name": "@repo/wagtail-cms-mapping",
+	"version": "0.0.0",
+	"private": true,
+	"description": "Maps Wagtail CMS data to React components via a factory pattern with overridable defaults",
+	"exports": {
+		".": "./src/index.ts",
+		"./blocks": "./src/blocks/index.ts",
+		"./pages": "./src/pages/index.ts",
+		"./types": "./src/types/index.ts"
+	},
+	"scripts": {
+		"build": "echo 'Source-only package — no build step'",
+		"lint": "biome check --write",
+		"typecheck": "tsc --noEmit",
+		"test": "vitest run",
+		"test:ci": "vitest run --coverage",
+		"clean": "rm -rf node_modules"
+	},
+	"dependencies": {
+		"@repo/wagtail-cms-types": "workspace:*",
+		"@hseireland/hse-frontend-react": "catalog:",
+		"html-react-parser": "^5.2.2",
+		"next": "catalog:",
+		"react": "catalog:",
+		"zod": "catalog:"
+	},
+	"devDependencies": {
+		"@repo/biome-config": "workspace:*",
+		"@repo/typescript-config": "workspace:*",
+		"@repo/vitest-config": "workspace:*",
+		"@testing-library/jest-dom": "catalog:",
+		"@testing-library/react": "^16.2.0",
+		"@types/node": "catalog:",
+		"@types/react": "catalog:",
+		"@vitest/coverage-v8": "catalog:",
+		"react-dom": "catalog:",
+		"typescript": "catalog:",
+		"vitest": "catalog:",
+		"vitest-sonar-reporter": "catalog:"
+	}
+}
