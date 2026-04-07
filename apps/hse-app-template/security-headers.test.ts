@@ -14,16 +14,29 @@ describe("security headers", () => {
 
 	it("has no empty header values", () => {
 		for (const header of securityHeaders) {
-			expect(header.value.length, `${header.key} has empty value`).toBeGreaterThan(0);
+			expect(
+				header.value.length,
+				`${header.key} has empty value`,
+			).toBeGreaterThan(0);
 		}
 	});
 });
 
 describe("content security policy", () => {
 	it("includes required directives", () => {
-		const required = ["default-src", "script-src", "style-src", "img-src", "connect-src", "frame-ancestors"];
+		const required = [
+			"default-src",
+			"script-src",
+			"style-src",
+			"img-src",
+			"connect-src",
+			"frame-ancestors",
+		];
 		for (const directive of required) {
-			expect(contentSecurityPolicy, `missing directive: ${directive}`).toContain(directive);
+			expect(
+				contentSecurityPolicy,
+				`missing directive: ${directive}`,
+			).toContain(directive);
 		}
 	});
 
@@ -39,8 +52,13 @@ describe("content security policy", () => {
 		const directives = contentSecurityPolicy.split(";").map((d) => d.trim());
 		for (const directive of directives) {
 			const parts = directive.split(/\s+/);
-			expect(parts.length, `directive "${directive}" has no sources`).toBeGreaterThanOrEqual(2);
-			expect(parts[0], `"${parts[0]}" is not a valid directive name`).toMatch(/^[a-z][\w-]*$/);
+			expect(
+				parts.length,
+				`directive "${directive}" has no sources`,
+			).toBeGreaterThanOrEqual(2);
+			expect(parts[0], `"${parts[0]}" is not a valid directive name`).toMatch(
+				/^[a-z][\w-]*$/,
+			);
 		}
 	});
 
