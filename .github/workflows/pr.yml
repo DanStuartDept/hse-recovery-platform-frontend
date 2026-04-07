@@ -18,6 +18,9 @@ jobs:
     name: Lint
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
       - uses: ./.github/actions/setup
 
       - name: Run lint
@@ -61,6 +64,9 @@ jobs:
     name: Typecheck
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
       - uses: ./.github/actions/setup
 
       - name: Run typecheck
@@ -104,6 +110,9 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
       - uses: ./.github/actions/setup
 
       - name: Run tests with coverage
@@ -147,6 +156,9 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
       - uses: ./.github/actions/setup
 
       - name: Run build
