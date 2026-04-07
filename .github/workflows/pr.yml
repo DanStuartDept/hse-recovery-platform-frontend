@@ -22,6 +22,8 @@ jobs:
         with:
           fetch-depth: 2
       - uses: ./.github/actions/setup
+        with:
+          node-auth-token: ${{ secrets.NPM_TOKEN }}
 
       - name: Run lint
         id: lint
@@ -68,6 +70,8 @@ jobs:
         with:
           fetch-depth: 2
       - uses: ./.github/actions/setup
+        with:
+          node-auth-token: ${{ secrets.NPM_TOKEN }}
 
       - name: Run typecheck
         id: typecheck
@@ -114,6 +118,8 @@ jobs:
         with:
           fetch-depth: 2
       - uses: ./.github/actions/setup
+        with:
+          node-auth-token: ${{ secrets.NPM_TOKEN }}
 
       - name: Run tests with coverage
         id: test
@@ -160,6 +166,8 @@ jobs:
         with:
           fetch-depth: 2
       - uses: ./.github/actions/setup
+        with:
+          node-auth-token: ${{ secrets.NPM_TOKEN }}
 
       - name: Run build
         id: build
