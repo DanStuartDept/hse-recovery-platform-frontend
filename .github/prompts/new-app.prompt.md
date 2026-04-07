@@ -40,6 +40,9 @@ Ensure the new app uses:
 - `@repo/typescript-config/nextjs.json` for tsconfig
 - `@repo/biome-config` for Biome
 - `@repo/vitest-config` for Vitest (`createVitestConfig()`)
+- `@repo/app-config` for environment variable configuration (add as a dependency)
+
+Copy `apps/hse-app-template/.env.example` to the new app's directory and customise as needed.
 
 ## Step 5: Install dependencies
 

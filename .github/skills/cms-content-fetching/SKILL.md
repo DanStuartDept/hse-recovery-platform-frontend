@@ -72,14 +72,13 @@ export type MyPage = z.infer<typeof MyPageSchema>;
 ### Configuration
 
 ```typescript
+import { config } from "@repo/app-config";
 import { CMSClient } from "@repo/wagtail-api-client";
 
-const client = new CMSClient({
-  baseURL: process.env.CMS_BASE_URL,    // e.g. "https://cms.example.com"
-  apiPath: "/api/cms/v2",                // Wagtail API path
-  mediaBaseURL: process.env.MEDIA_URL,   // Optional separate media domain
-});
+const client = new CMSClient(config.cms);
 ```
+
+`config.cms` provides `{ baseURL, apiPath }` from validated environment variables. See `@repo/app-config` for the full config shape.
 
 ### Key Methods
 
@@ -151,11 +150,12 @@ Fetch in Server Components, then delegate rendering to the mapping layer.
 
 ```typescript
 // app/[...slug]/page.tsx (Server Component)
+import { config } from "@repo/app-config";
 import { CMSClient } from "@repo/wagtail-api-client";
 import type { CMSPageProps } from "@repo/wagtail-cms-types/page-models";
 import { createCMSRenderer } from "@repo/wagtail-cms-mapping";
 
-const client = new CMSClient({ baseURL: "...", apiPath: "/api/cms/v2" });
+const client = new CMSClient(config.cms);
 const { renderPage } = createCMSRenderer();
 
 export default async function Page({ params }: { params: Promise<{ slug: string[] }> }) {
