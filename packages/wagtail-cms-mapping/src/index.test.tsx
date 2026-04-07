@@ -110,6 +110,13 @@ describe("createCMSRenderer", () => {
 		);
 	});
 
+	it("throws when renderBlock is called before renderPage", () => {
+		const { renderBlock } = createCMSRenderer({ apiClient: mockApiClient });
+		expect(() => renderBlock(makeBlock("text"))).toThrow(
+			"renderBlock called before renderPage",
+		);
+	});
+
 	it("uses custom fallbackPage for unknown page types", () => {
 		const CustomFallback = ({ page }: PageLayoutProps) => (
 			<div data-testid="fallback-page">{page.title}</div>
