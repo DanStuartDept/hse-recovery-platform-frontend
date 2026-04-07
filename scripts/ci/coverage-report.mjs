@@ -51,3 +51,6 @@ for (const pkg of packages) {
 		`| ${pkg.name} | ${pkg.statements}% | ${pkg.branches}% | ${pkg.functions}% | ${pkg.lines}% |`,
 	);
 }
+
+const avg = (key) => (packages.reduce((sum, p) => sum + p[key], 0) / packages.length).toFixed(1);
+console.log(`| **Total** | **${avg("statements")}%** | **${avg("branches")}%** | **${avg("functions")}%** | **${avg("lines")}%** |`);
