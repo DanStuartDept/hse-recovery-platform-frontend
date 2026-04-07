@@ -16,6 +16,7 @@
 		"@hseireland/hse-frontend": "catalog:",
 		"@hseireland/hse-frontend-react": "catalog:",
 		"@repo/app-config": "workspace:*",
+		"@repo/logger": "workspace:*",
 		"@repo/wagtail-api-client": "workspace:*",
 		"@repo/wagtail-cms-types": "workspace:*",
 		"next": "catalog:",
@@ -25,10 +26,17 @@
 	"devDependencies": {
 		"@repo/biome-config": "workspace:*",
 		"@repo/typescript-config": "workspace:*",
+		"@repo/vitest-config": "workspace:*",
+		"@testing-library/jest-dom": "catalog:",
+		"@testing-library/react": "^16.3.2",
+		"@testing-library/user-event": "^14.6.1",
 		"@types/node": "catalog:",
 		"@types/react": "catalog:",
 		"@types/react-dom": "catalog:",
+		"@vitest/coverage-v8": "catalog:",
+		"jsdom": "catalog:",
 		"sass-embedded": "catalog:",
-		"typescript": "catalog:"
+		"typescript": "catalog:",
+		"vitest-sonar-reporter": "catalog:"
 	}
 }

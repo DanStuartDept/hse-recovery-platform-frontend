@@ -1,8 +1,7 @@
-import { defineConfig } from "vitest/config";
+import { createVitestConfig } from "@repo/vitest-config";
 
-export default defineConfig({
-	test: {
-		environment: "node",
-		include: ["**/*.test.ts"],
-	},
+export default createVitestConfig({
+	include: ["src/**/*.{ts,tsx}"],
+	exclude: ["src/vitest.setup.ts"],
+	setupFile: "src/vitest.setup.ts",
 });
