@@ -19,7 +19,7 @@ Tracked improvements and recommendations for the HSE Multisite Frontend monorepo
 | 11 | [Expand `hse-app-template`](#11-expand-hse-app-template) | Must | XL | #2, #5, #6, #7, #8, #9, #10 |
 | 12 | [CMS Preview / Draft Mode](#12-cms-preview--draft-mode) | Must | M | #11 |
 | 13 | [App Cookiecutter (Makefile)](#13-app-cookiecutter-makefile) | Should | M | #11 |
-| 14 | [Git Hooks (Husky + commitlint)](#14-git-hooks-husky--commitlint) | Should | S | — |
+| 14 | ~~[Git Hooks (Husky + commitlint)](#14-git-hooks-husky--commitlint)~~ | ~~Should~~ | ~~S~~ | Done |
 | 15 | [Test Coverage](#15-test-coverage) | Should | M (ongoing) | #1 |
 | 16 | [Monitoring and Error Tracking](#16-monitoring-and-error-tracking) | Should | M | — |
 | 17 | [Internationalisation (i18n)](#17-internationalisation-i18n) | Could | L | — |
@@ -196,7 +196,9 @@ A `make new-app` style command that clones `apps/hse-app-template` into a new ap
 
 ---
 
-## 14. Git Hooks (Husky + commitlint)
+## 14. Git Hooks (Husky + commitlint) ✅
+
+**Done.** Husky + lint-staged enforcing Conventional Commits (commitlint commit-msg hook) and code quality (pre-commit hook running Biome on staged files via lint-staged, plus turbo typecheck and test).
 
 The `@repo/commitlint-config` package exists but Conventional Commits are not enforced at the Git level. No Husky or lint-staged installed.
 
