@@ -12,7 +12,7 @@ Tracked improvements and recommendations for the HSE Multisite Frontend monorepo
 | 4 | [Accessibility (WCAG)](#4-accessibility-wcag) | Must | M | #1 |
 | 5 | ~~[`@repo/wagtail-cms-mapping` Package](#5-repowagtail-cms-mapping-package)~~ | ~~Must~~ | ~~L~~ | Done |
 | 6 | [`@repo/hse-custom-ui` Package](#6-repohse-custom-ui-package) | Must | M | — |
-| 7 | [Error Handling and Resilience](#7-error-handling-and-resilience) | Must | M | — |
+| 7 | [Error Handling and Resilience](#7-error-handling-and-resilience) | Must | M | In progress |
 | 8 | [Caching and Revalidation Strategy](#8-caching-and-revalidation-strategy) | Must | L | — |
 | 9 | [Image Optimisation](#9-image-optimisation) | Must | M | — |
 | 10 | [SEO Metadata from CMS](#10-seo-metadata-from-cms) | Must | M | — |
@@ -105,11 +105,11 @@ Shared package for custom UI components that don't exist in `@hseireland/hse-fro
 
 ## 7. Error Handling and Resilience
 
-Critical for a public health service where uptime expectations are high.
+**Partial.** Error pages (`not-found.tsx`, `error.tsx`, `global-error.tsx`) implemented. Remaining: CMS degraded mode, Zod validation error surfacing.
 
-- Next.js `error.tsx` boundaries per route segment
-- Global `global-error.tsx` for the root layout
-- `not-found.tsx` for 404 pages (when Wagtail returns 404 for unpublished/deleted pages)
+- ~~Next.js `error.tsx` boundaries per route segment~~
+- ~~Global `global-error.tsx` for the root layout~~
+- ~~`not-found.tsx` for 404 pages (when Wagtail returns 404 for unpublished/deleted pages)~~
 - Fallback UI when the Wagtail CMS API is unreachable (degraded mode)
 - Consider how Zod validation failures on CMS responses are surfaced (invalid data from the API should not crash the page)
 
