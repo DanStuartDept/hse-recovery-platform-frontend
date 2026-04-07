@@ -6,9 +6,9 @@ Tracked improvements and recommendations for the HSE Multisite Frontend monorepo
 
 | # | Item | Priority | Size | Depends on |
 |---|------|----------|------|------------|
-| 1 | [CI/CD Pipeline](#1-cicd-pipeline) | Must | M | — |
+| 1 | ~~[CI/CD Pipeline](#1-cicd-pipeline)~~ | ~~Must~~ | ~~M~~ | Done |
 | 2 | [GDPR / Cookie Consent](#2-gdpr--cookie-consent) | Must | L | — |
-| 3 | [Security Headers / CSP](#3-security-headers--csp) | Must | S | — |
+| 3 | ~~[Security Headers / CSP](#3-security-headers--csp)~~ | ~~Must~~ | ~~S~~ | Done |
 | 4 | [Accessibility (WCAG)](#4-accessibility-wcag) | Must | M | #1 |
 | 5 | ~~[`@repo/wagtail-cms-mapping` Package](#5-repowagtail-cms-mapping-package)~~ | ~~Must~~ | ~~L~~ | Done |
 | 6 | [`@repo/hse-custom-ui` Package](#6-repohse-custom-ui-package) | Must | M | — |
@@ -30,12 +30,11 @@ Tracked improvements and recommendations for the HSE Multisite Frontend monorepo
 
 ---
 
-## 1. CI/CD Pipeline
+## 1. CI/CD Pipeline ✅
 
-No GitHub Actions workflows exist yet. This is the safety net for everything else — without CI, quality gates are unenforced.
+**Done.** PR workflow with parallel lint, typecheck, test (with per-package coverage), and build jobs. Consolidated CI report posted as a PR comment. Reusable composite setup action. Turbo `--affected` for incremental checks.
 
-- PR workflow: install, lint, typecheck, test with coverage reporting
-- Deploy workflow: deployment per app
+- Deploy workflow: deployment per app (deferred until apps are production-ready)
 - Turborepo remote caching for faster CI runs
 - Per-app workflows generated automatically when new apps are created via the cookiecutter
 
@@ -54,14 +53,15 @@ Legal launch blocker for a public-sector Irish health service under the ePrivacy
 
 ---
 
-## 3. Security Headers / CSP
+## 3. Security Headers / CSP ✅
 
-Required for a public-sector healthcare application, especially with third-party scripts (GTM, OneTrust) injecting content.
+**Done.** Security headers configured in `apps/hse-app-template/next.config.ts` via the `headers()` function, applied to all routes.
 
-- Content Security Policy — must accommodate GTM, OneTrust, and any analytics scripts
-- Standard security headers: `Strict-Transport-Security`, `X-Frame-Options`, `X-Content-Type-Options`, etc.
-- Subresource Integrity for third-party scripts where possible
-- Response header configuration
+- Content Security Policy with per-directive source arrays (script, style, img, connect, frame, font)
+- CSP covers known integrations: GTM, OneTrust, Piwik Pro, HSE domains
+- Standard security headers: `Strict-Transport-Security`, `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`
+- `frame-ancestors 'none'` in CSP + `X-Frame-Options: DENY` for clickjacking protection
+- Subresource Integrity for third-party scripts where possible (deferred — depends on how GTM/OneTrust are loaded)
 
 ---
 
