@@ -37,9 +37,9 @@ jobs:
           {
             echo "### Lint"
             if [ $exit_code -eq 0 ]; then
-              echo "✅ All packages passed"
+              echo "✅ Passed"
             else
-              echo "❌ Lint failed"
+              echo "❌ Failed"
               echo ""
               echo "<details><summary>Output</summary>"
               echo ""
@@ -85,9 +85,9 @@ jobs:
           {
             echo "### Typecheck"
             if [ $exit_code -eq 0 ]; then
-              echo "✅ All packages passed"
+              echo "✅ Passed"
             else
-              echo "❌ Typecheck failed"
+              echo "❌ Failed"
               echo ""
               echo "<details><summary>Output</summary>"
               echo ""
@@ -181,9 +181,9 @@ jobs:
           {
             echo "### Build"
             if [ $exit_code -eq 0 ]; then
-              echo "✅ All apps built successfully"
+              echo "✅ Passed"
             else
-              echo "❌ Build failed"
+              echo "❌ Failed"
               echo ""
               echo "<details><summary>Output</summary>"
               echo ""
