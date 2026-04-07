@@ -1,1 +1,2 @@
-# configured in a later step
+pnpm lint-staged
+turbo run typecheck test
