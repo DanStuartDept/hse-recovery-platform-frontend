@@ -1,0 +1,30 @@
+name: "Setup"
+description: "Install pnpm, setup Node.js, install dependencies"
+
+inputs:
+  node-auth-token:
+    description: "Token for authenticating to GitHub Packages registry"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Fetch base branch for turbo --affected
+      shell: bash
+      run: git fetch origin main:main --depth=1
+
+    - name: Install pnpm
+      uses: pnpm/action-setup@v5
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v6
+      with:
+        node-version-file: ".nvmrc"
+        cache: "pnpm"
+        registry-url: "https://npm.pkg.github.com"
+
+    - name: Install dependencies
+      shell: bash
+      env:
+        NODE_AUTH_TOKEN: ${{ inputs.node-auth-token }}
+      run: pnpm install --frozen-lockfile

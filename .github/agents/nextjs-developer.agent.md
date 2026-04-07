@@ -45,13 +45,11 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
 ### CMS Data Fetching
 
 ```typescript
+import { config } from "@repo/app-config";
 import { CMSClient } from "@repo/wagtail-api-client";
 import type { CMSPageProps } from "@repo/wagtail-cms-types/page-models";
 
-const client = new CMSClient({
-  baseURL: process.env.CMS_BASE_URL!,
-  apiPath: process.env.CMS_API_PATH!,
-});
+const client = new CMSClient(config.cms);
 
 // In a Server Component:
 const page = await client.findPageByPath<CMSPageProps>(path);

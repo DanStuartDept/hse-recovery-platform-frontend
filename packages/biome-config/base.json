@@ -71,7 +71,6 @@
         "noIrregularWhitespace": "error",
         "noMisleadingCharacterClass": "error",
         "noMisleadingInstantiator": "error",
-        "noNonNullAssertedOptionalChain": "error",
         "noPrototypeBuiltins": "error",
         "noRedeclare": "error",
         "noShadowRestrictedNames": "error",

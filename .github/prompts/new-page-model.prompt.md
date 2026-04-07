@@ -66,13 +66,11 @@ export type CMSPageProps =
 Create a Server Component that fetches and renders the page:
 
 ```typescript
+import { config } from "@repo/app-config";
 import { CMSClient } from "@repo/wagtail-api-client";
 import type { CMS{AppLabel}{PageTypeName}Props } from "@repo/wagtail-cms-types/page-models";
 
-const client = new CMSClient({
-  baseURL: process.env.CMS_BASE_URL!,
-  apiPath: process.env.CMS_API_PATH!,
-});
+const client = new CMSClient(config.cms);
 
 export default async function {PageTypeName}Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;

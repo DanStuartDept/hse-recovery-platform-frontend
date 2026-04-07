@@ -89,12 +89,10 @@ Each block: `{ id, type, value, settings?, client? }`.
 ## CMSClient Usage
 
 ```typescript
+import { config } from "@repo/app-config";
 import { CMSClient } from "@repo/wagtail-api-client";
 
-const client = new CMSClient({
-  baseURL: process.env.CMS_BASE_URL!,
-  apiPath: process.env.CMS_API_PATH!,
-});
+const client = new CMSClient(config.cms);
 
 // Fetch page by URL path (most common pattern)
 const page = await client.findPageByPath("/services/mental-health");

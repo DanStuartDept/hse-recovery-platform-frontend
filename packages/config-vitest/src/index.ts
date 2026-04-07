@@ -48,7 +48,7 @@ export function createVitestConfig(options: VitestConfigOptions = {}) {
 			setupFiles: setupFile ? [setupFile] : undefined,
 			coverage: {
 				provider: "v8",
-				reporter: ["text", "text-summary", "json", "html", "lcov"],
+				reporter: ["text", "text-summary", "json", "json-summary", "html", "lcov"],
 				include,
 				exclude: [...coverageExclusions, ...exclude],
 			},
