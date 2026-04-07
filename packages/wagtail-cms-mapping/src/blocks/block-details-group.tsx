@@ -15,9 +15,7 @@ export function BlockDetailsGroup({
 			{value.expanders.map((item) => (
 				<Details expander key={item.title}>
 					<Details.Summary>{item.title}</Details.Summary>
-					<Details.Text>
-						{renderBlocks ? renderBlocks(item.body) : null}
-					</Details.Text>
+					<Details.Text>{renderBlocks(item.body)}</Details.Text>
 				</Details>
 			))}
 		</Details.ExpanderGroup>

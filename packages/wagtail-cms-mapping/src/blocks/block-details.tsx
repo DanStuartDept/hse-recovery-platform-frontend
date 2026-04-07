@@ -12,9 +12,7 @@ export function BlockDetails({
 	return (
 		<Details expander={type === "expander"}>
 			<Details.Summary>{value.title}</Details.Summary>
-			<Details.Text>
-				{renderBlocks ? renderBlocks(value.body) : null}
-			</Details.Text>
+			<Details.Text>{renderBlocks(value.body)}</Details.Text>
 		</Details>
 	);
 }
