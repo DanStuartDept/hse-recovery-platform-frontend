@@ -9,6 +9,7 @@ import {
 import Link from "next/link";
 import type { BlockComponentProps } from "../types/index";
 
+/** A single promo/top-task item from the CMS StreamField. */
 type PromoItem = {
 	type: string;
 	value: {
@@ -20,6 +21,11 @@ type PromoItem = {
 	};
 };
 
+/**
+ * Renders a grid of CMS promo/top-task cards using HSE design system `Promo` components.
+ *
+ * Maps to both `top_tasks` and `top_task` block types in the registry.
+ */
 export function BlockPromo({ value }: BlockComponentProps<PromoItem[]>) {
 	return (
 		<Row className="hse-top-tasks hse-promo-group">

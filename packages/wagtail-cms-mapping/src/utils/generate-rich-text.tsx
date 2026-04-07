@@ -37,6 +37,16 @@ const options: HTMLReactParserOptions = {
 	},
 };
 
+/**
+ * Parses an HTML string from the CMS into React elements.
+ *
+ * Rewrites internal `<a>` tags to Next.js `<Link>` components for
+ * client-side navigation. HSE Publications URLs have their `/publications`
+ * prefix stripped to match frontend routing.
+ *
+ * @param html - Raw HTML string from the Wagtail rich text field.
+ * @returns Parsed React elements ready for rendering.
+ */
 export function generateRichText(html: string) {
 	return parse(html, options);
 }

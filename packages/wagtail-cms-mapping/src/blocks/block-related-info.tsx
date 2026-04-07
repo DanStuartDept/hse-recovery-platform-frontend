@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { BlockComponentProps } from "../types/index";
 
+/** Block value shape for related information — a titled list of internal/external links. */
 type RelatedInfoValue = {
 	title: string;
 	links: Array<{
@@ -11,6 +12,11 @@ type RelatedInfoValue = {
 	}>;
 };
 
+/**
+ * Renders a related-information sidebar block with a list of internal/external links.
+ *
+ * Internal page links are preferred; falls back to external URLs.
+ */
 export function BlockRelatedInfo({
 	value,
 }: BlockComponentProps<RelatedInfoValue>) {

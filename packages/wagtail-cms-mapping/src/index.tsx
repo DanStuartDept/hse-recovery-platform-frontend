@@ -1,24 +1,12 @@
 import type { CMSBlockType } from "@repo/wagtail-cms-types/blocks";
 import type { CMSPageProps } from "@repo/wagtail-cms-types/page-models";
-import { defaultBlockRegistry } from "./blocks/index";
+import { BlockFallback, defaultBlockRegistry } from "./blocks/index";
 import { defaultPageRegistry } from "./pages/index";
 import type {
-	BlockComponentProps,
 	CMSRenderer,
 	CMSRendererOptions,
 	PageLayoutProps,
 } from "./types/index";
-
-// Inline fallbacks so we don't need to import from files that don't exist yet
-function DefaultFallbackBlock({ type, value }: BlockComponentProps) {
-	if (process.env.NEXT_PUBLIC_ENVIRONMENT_NAME !== "local") return null;
-	return (
-		<div>
-			<h2>Missing Block Type: {type}</h2>
-			<pre>{JSON.stringify(value, null, 2)}</pre>
-		</div>
-	);
-}
 
 function DefaultFallbackPage({ page, renderBlocks }: PageLayoutProps) {
 	return (
@@ -29,39 +17,108 @@ function DefaultFallbackPage({ page, renderBlocks }: PageLayoutProps) {
 	);
 }
 
-export function createCMSRenderer(options?: CMSRendererOptions): CMSRenderer {
+/**
+ * Creates a CMS renderer with merged block/page registries and context threading.
+ *
+ * Returns `renderBlock`, `renderBlocks`, and `renderPage` functions that
+ * resolve CMS data to React components using the configured registries.
+ * Every component receives a {@link CMSRenderContext} with page data,
+ * block position metadata, and the API client.
+ *
+ * **Important:** Create a new renderer per request. Do not cache a renderer
+ * instance at module scope — the internal page state is set by `renderPage`
+ * and must not be shared across concurrent requests.
+ *
+ * @example
+ * ```tsx
+ * const { renderPage } = createCMSRenderer({ apiClient });
+ * // In a Server Component:
+ * return renderPage(page);
+ * ```
+ */
+export function createCMSRenderer(options: CMSRendererOptions): CMSRenderer {
+	const { apiClient } = options;
 	const blockRegistry = {
 		...defaultBlockRegistry,
-		...options?.blocks,
+		...options.blocks,
 	};
 	const pageRegistry = {
 		...defaultPageRegistry,
-		...options?.pages,
+		...options.pages,
 	};
-	const FallbackBlock = options?.fallbackBlock ?? DefaultFallbackBlock;
-	const FallbackPage = options?.fallbackPage ?? DefaultFallbackPage;
+	const FallbackBlock = options.fallbackBlock ?? BlockFallback;
+	const FallbackPage = options.fallbackPage ?? DefaultFallbackPage;
+
+	let currentPage: CMSPageProps;
 
 	function renderBlock(block: CMSBlockType): React.ReactNode {
-		const Component = blockRegistry[block.type];
-		if (!Component) {
-			return <FallbackBlock key={block.id} {...block} />;
+		if (!currentPage) {
+			throw new Error(
+				"renderBlock called before renderPage. Call renderPage first to set the page context.",
+			);
 		}
-		return <Component key={block.id} {...block} renderBlocks={renderBlocks} />;
+		const Component = blockRegistry[block.type] ?? FallbackBlock;
+		return (
+			<Component
+				key={block.id}
+				{...block}
+				context={{
+					page: currentPage,
+					apiClient,
+					position: {
+						index: 0,
+						isFirst: true,
+						isLast: true,
+						previous: null,
+						next: null,
+					},
+				}}
+				renderBlocks={renderBlocks}
+			/>
+		);
 	}
 
 	function renderBlocks(blocks: CMSBlockType[] = []): React.ReactNode[] {
-		if (!blocks) return [];
-		return blocks.map(renderBlock);
+		if (!blocks || blocks.length === 0) return [];
+		if (!currentPage) {
+			throw new Error(
+				"renderBlocks called before renderPage. Call renderPage first to set the page context.",
+			);
+		}
+		return blocks.map((block, index) => {
+			const Component = blockRegistry[block.type] ?? FallbackBlock;
+			return (
+				<Component
+					key={block.id}
+					{...block}
+					context={{
+						page: currentPage,
+						apiClient,
+						position: {
+							index,
+							isFirst: index === 0,
+							isLast: index === blocks.length - 1,
+							previous: blocks[index - 1] ?? null,
+							next: blocks[index + 1] ?? null,
+						},
+					}}
+					renderBlocks={renderBlocks}
+				/>
+			);
+		});
 	}
 
 	function renderPage(page: CMSPageProps): React.ReactNode {
-		const Layout = pageRegistry[page.meta.type];
-		if (!Layout) {
-			return (
-				<FallbackPage key={page.id} page={page} renderBlocks={renderBlocks} />
-			);
-		}
-		return <Layout key={page.id} page={page} renderBlocks={renderBlocks} />;
+		currentPage = page;
+		const Layout = pageRegistry[page.meta.type] ?? FallbackPage;
+		return (
+			<Layout
+				key={page.id}
+				page={page}
+				context={{ page, apiClient }}
+				renderBlocks={renderBlocks}
+			/>
+		);
 	}
 
 	return { renderBlock, renderBlocks, renderPage };

@@ -1,6 +1,12 @@
 import type { FieldTypeImage } from "@repo/wagtail-cms-types/fields";
 import type { BlockComponentProps } from "../types/index";
 
+/**
+ * Renders a CMS image block with responsive `<picture>` support.
+ *
+ * Uses the `max_screen_md` rendition as a WebP source when available,
+ * falling back to the original `src` for older browsers.
+ */
 export function BlockImage({ value }: BlockComponentProps<FieldTypeImage>) {
 	return (
 		<figure className="hse-image w-full">

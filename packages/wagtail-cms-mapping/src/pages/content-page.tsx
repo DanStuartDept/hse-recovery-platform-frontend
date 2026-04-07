@@ -4,6 +4,12 @@ import { PageTitle } from "../components/page-title";
 import type { PageLayoutProps } from "../types/index";
 import { isContentPage } from "../types/index";
 
+/**
+ * Page layout for `hsebase.ContentPage`.
+ *
+ * Renders breadcrumbs, a page title with optional lead text,
+ * the main body blocks, and any bottom content blocks.
+ */
 export function ContentPage({ page, renderBlocks }: PageLayoutProps) {
 	const sideNav = isContentPage(page) ? page.side_nav : undefined;
 	return (

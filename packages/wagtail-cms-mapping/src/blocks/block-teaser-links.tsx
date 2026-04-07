@@ -9,6 +9,7 @@ import {
 import Link from "next/link";
 import type { BlockComponentProps } from "../types/index";
 
+/** Block value shape for teaser link cards — a list of links with descriptions. */
 type TeaserLinksValue = {
 	teaser_links: Array<{
 		menu_label: string;
@@ -18,6 +19,7 @@ type TeaserLinksValue = {
 	}>;
 };
 
+/** Renders a grid of teaser link cards using HSE design system `Promo` components. */
 export function BlockTeaserLinks({
 	value,
 }: BlockComponentProps<TeaserLinksValue>) {
