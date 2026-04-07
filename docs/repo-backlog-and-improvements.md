@@ -82,11 +82,13 @@ Legal obligation under the EU Web Accessibility Directive (transposed into Irish
 
 **Done.** Factory-based CMS-to-component mapping with HSE design system defaults and per-app override support. Source-only package (no build step).
 
-- `createCMSRenderer()` factory with optional block/page overrides
+- `createCMSRenderer()` factory with required `apiClient` and optional block/page overrides
+- Rich context threading: every block receives page data, API client, and position metadata via props (Server Component compatible — no React Context)
 - 14 block components mapped to 18 block types (including aliases)
 - 5 page layout components for all hsebase page types
 - Type guards, `generateRichText` utility, breadcrumb and page title shared components
-- 28 tests covering factory logic, registry completeness, type guards, and utilities
+- TSDoc documentation on all exported functions, types, components, and registries
+- 34 tests covering factory logic, context threading, position computation, registry completeness, type guards, and utilities
 - Header/footer settings mapping is out of scope — will be addressed separately
 
 ---
