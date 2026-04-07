@@ -1,0 +1,31 @@
+{
+	"name": "@repo/app-config",
+	"version": "0.0.0",
+	"private": true,
+	"description": "Centralised environment variable validation and typed config for all apps",
+	"exports": {
+		".": "./src/index.ts",
+		"./server": "./src/server.ts"
+	},
+	"scripts": {
+		"build": "echo 'Source-only package — no build step'",
+		"lint": "biome check --write",
+		"typecheck": "tsc --noEmit",
+		"test": "vitest run",
+		"test:ci": "vitest run --coverage",
+		"clean": "rm -rf node_modules"
+	},
+	"dependencies": {
+		"zod": "catalog:"
+	},
+	"devDependencies": {
+		"@repo/biome-config": "workspace:*",
+		"@repo/typescript-config": "workspace:*",
+		"@repo/vitest-config": "workspace:*",
+		"@types/node": "catalog:",
+		"@vitest/coverage-v8": "catalog:",
+		"typescript": "catalog:",
+		"vitest": "catalog:",
+		"vitest-sonar-reporter": "catalog:"
+	}
+}
