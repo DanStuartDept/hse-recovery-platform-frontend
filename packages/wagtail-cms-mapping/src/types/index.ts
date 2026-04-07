@@ -1,3 +1,4 @@
+import type { CMSClient } from "@repo/wagtail-api-client";
 import type {
 	CMSBlockComponentsKeys,
 	CMSBlockType,
@@ -13,16 +14,32 @@ import type {
 } from "@repo/wagtail-cms-types/page-models";
 import type { ComponentType } from "react";
 
+export type BlockPosition = {
+	index: number;
+	isFirst: boolean;
+	isLast: boolean;
+	previous: CMSBlockType | null;
+	next: CMSBlockType | null;
+};
+
+export type CMSRenderContext = {
+	page: CMSPageProps;
+	apiClient: CMSClient;
+	position: BlockPosition;
+};
+
 export type BlockComponentProps<TValue = unknown> = {
 	id: string;
 	type: CMSBlockComponentsKeys;
 	value: TValue;
 	settings?: { fluid?: boolean; fullWidth?: boolean; inRow?: boolean };
-	renderBlocks?: (blocks: CMSBlockType[]) => React.ReactNode[];
+	context: CMSRenderContext;
+	renderBlocks: (blocks: CMSBlockType[]) => React.ReactNode[];
 };
 
 export type PageLayoutProps = {
 	page: CMSPageProps;
+	context: Omit<CMSRenderContext, "position">;
 	renderBlocks: (blocks: CMSBlockType[]) => React.ReactNode[];
 };
 
@@ -36,6 +53,7 @@ export type PageRegistry = Partial<
 >;
 
 export type CMSRendererOptions = {
+	apiClient: CMSClient;
 	blocks?: BlockRegistry;
 	pages?: PageRegistry;
 	fallbackBlock?: ComponentType<BlockComponentProps>;

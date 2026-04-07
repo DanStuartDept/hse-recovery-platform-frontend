@@ -18,6 +18,7 @@
 		"clean": "rm -rf node_modules"
 	},
 	"dependencies": {
+		"@repo/wagtail-api-client": "workspace:*",
 		"@repo/wagtail-cms-types": "workspace:*",
 		"@hseireland/hse-frontend-react": "catalog:",
 		"html-react-parser": "^5.2.2",
