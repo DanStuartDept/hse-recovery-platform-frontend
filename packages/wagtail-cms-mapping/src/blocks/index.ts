@@ -15,6 +15,12 @@ import { BlockRelatedInfo } from "./block-related-info";
 import { BlockTeaserLinks } from "./block-teaser-links";
 import { BlockText } from "./block-text";
 
+/**
+ * Default block registry mapping CMS block type keys to React components.
+ *
+ * Some block types are aliased to the same component (e.g., `text`, `rich_text_block`,
+ * and `richtext` all map to {@link BlockText}).
+ */
 export const defaultBlockRegistry: BlockRegistry = {
 	text: BlockText,
 	rich_text_block: BlockText,

@@ -4,6 +4,11 @@ import { PageTitle } from "../components/page-title";
 import type { PageLayoutProps } from "../types/index";
 import { isOrganisationListingPage } from "../types/index";
 
+/**
+ * Page layout for `hsebase.OrganisationListingPage`.
+ *
+ * Displays a result count header and renders organisation links from the CMS.
+ */
 export function OrganisationListingPage({
 	page,
 	renderBlocks,

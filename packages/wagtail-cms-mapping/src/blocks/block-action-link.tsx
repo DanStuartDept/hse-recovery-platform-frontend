@@ -2,6 +2,7 @@ import { ActionLink } from "@hseireland/hse-frontend-react";
 import Link from "next/link";
 import type { BlockComponentProps } from "../types/index";
 
+/** Block value shape for action links — supports internal page or external URL targets. */
 type ActionLinkValue = {
 	text: string;
 	external_url: string;
@@ -9,6 +10,12 @@ type ActionLinkValue = {
 	internal_page: { title: string; url: string } | null;
 };
 
+/**
+ * Renders a CMS action link using the HSE design system `ActionLink` component.
+ *
+ * Prefers internal page links (Next.js `<Link>`) over external URLs.
+ * External links open in a new window when configured.
+ */
 export function BlockActionLink({
 	value,
 }: BlockComponentProps<ActionLinkValue>) {

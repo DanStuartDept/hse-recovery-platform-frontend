@@ -2,6 +2,7 @@ import { LinksList, LinksListItem } from "@hseireland/hse-frontend-react";
 import Link from "next/link";
 import type { BlockComponentProps } from "../types/index";
 
+/** Block value shape for grouped link lists — multiple groups each with a heading and links. */
 type LinksListValue = {
 	lists: Array<{
 		heading: string;
@@ -9,6 +10,7 @@ type LinksListValue = {
 	}>;
 };
 
+/** Renders grouped navigation link lists using the HSE design system `LinksList` components. */
 export function BlockLinksList({ value }: BlockComponentProps<LinksListValue>) {
 	return (
 		<>

@@ -4,6 +4,12 @@ import { PageTitle } from "../components/page-title";
 import type { PageLayoutProps } from "../types/index";
 import { isOrganisationLandingPage } from "../types/index";
 
+/**
+ * Page layout for `hsebase.OrganisationLandingPage`.
+ *
+ * Renders breadcrumbs, page title with lead text,
+ * body blocks, and optional bottom content.
+ */
 export function OrganisationLandingPage({
 	page,
 	renderBlocks,

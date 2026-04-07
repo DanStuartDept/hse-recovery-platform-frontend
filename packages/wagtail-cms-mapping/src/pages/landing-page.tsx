@@ -4,6 +4,12 @@ import { PageTitle } from "../components/page-title";
 import type { PageLayoutProps } from "../types/index";
 import { isLandingPage } from "../types/index";
 
+/**
+ * Page layout for `hsebase.LandingPage`.
+ *
+ * Renders breadcrumbs, a page title with lead text,
+ * optional top content blocks, body blocks, and optional bottom content blocks.
+ */
 export function LandingPage({ page, renderBlocks }: PageLayoutProps) {
 	const lp = isLandingPage(page) ? page : undefined;
 	return (

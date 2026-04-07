@@ -1,5 +1,6 @@
 import type { BlockComponentProps } from "../types/index";
 
+/** Block value shape for Brightcove video embeds. */
 type BrightcoveValue = {
 	video_id: string;
 	account_id: string;
@@ -9,6 +10,11 @@ type BrightcoveValue = {
 	video_description: string;
 };
 
+/**
+ * Renders a Brightcove video player embed via iframe.
+ *
+ * Optionally displays the video title and description above the player.
+ */
 export function BlockBrightcove({
 	value,
 }: BlockComponentProps<BrightcoveValue>) {

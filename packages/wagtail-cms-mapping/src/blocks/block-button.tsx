@@ -2,6 +2,7 @@ import { Button } from "@hseireland/hse-frontend-react";
 import Link from "next/link";
 import type { BlockComponentProps } from "../types/index";
 
+/** Block value shape for button links — supports internal page or external URL targets. */
 type ButtonValue = {
 	text: string;
 	external_url: string;
@@ -9,6 +10,12 @@ type ButtonValue = {
 	internal_page: { title: string; url: string } | null;
 };
 
+/**
+ * Renders a CMS button block using the HSE design system `Button` component.
+ *
+ * Prefers internal page links (Next.js `<Link>`) over external URLs.
+ * External links open in a new window when configured.
+ */
 export function BlockButton({ value }: BlockComponentProps<ButtonValue>) {
 	if (value.internal_page) {
 		return (
