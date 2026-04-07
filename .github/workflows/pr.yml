@@ -1,0 +1,239 @@
+name: PR
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+env:
+  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+  TURBO_TEAM: ${{ vars.TURBO_TEAM }}
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ./.github/actions/setup
+
+      - name: Run lint
+        id: lint
+        run: |
+          set +e
+          output=$(turbo run lint --affected 2>&1)
+          exit_code=$?
+          echo "$output"
+          echo "exit_code=$exit_code" >> "$GITHUB_OUTPUT"
+
+          {
+            echo "### Lint"
+            if [ $exit_code -eq 0 ]; then
+              echo "✅ All packages passed"
+            else
+              echo "❌ Lint failed"
+              echo ""
+              echo "<details><summary>Output</summary>"
+              echo ""
+              echo '```'
+              echo "$output"
+              echo '```'
+              echo ""
+              echo "</details>"
+            fi
+          } > lint.md
+
+      - name: Upload lint report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: lint-report
+          path: lint.md
+
+      - name: Exit with lint result
+        if: steps.lint.outputs.exit_code != '0'
+        run: exit 1
+
+  typecheck:
+    name: Typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ./.github/actions/setup
+
+      - name: Run typecheck
+        id: typecheck
+        run: |
+          set +e
+          output=$(turbo run typecheck --affected 2>&1)
+          exit_code=$?
+          echo "$output"
+          echo "exit_code=$exit_code" >> "$GITHUB_OUTPUT"
+
+          {
+            echo "### Typecheck"
+            if [ $exit_code -eq 0 ]; then
+              echo "✅ All packages passed"
+            else
+              echo "❌ Typecheck failed"
+              echo ""
+              echo "<details><summary>Output</summary>"
+              echo ""
+              echo '```'
+              echo "$output"
+              echo '```'
+              echo ""
+              echo "</details>"
+            fi
+          } > typecheck.md
+
+      - name: Upload typecheck report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: typecheck-report
+          path: typecheck.md
+
+      - name: Exit with typecheck result
+        if: steps.typecheck.outputs.exit_code != '0'
+        run: exit 1
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ./.github/actions/setup
+
+      - name: Run tests with coverage
+        id: test
+        run: |
+          set +e
+          output=$(turbo run test:ci --affected 2>&1)
+          exit_code=$?
+          echo "$output"
+          echo "exit_code=$exit_code" >> "$GITHUB_OUTPUT"
+
+          {
+            echo "### Test Coverage"
+            if [ $exit_code -eq 0 ]; then
+              node scripts/ci/coverage-report.mjs
+            else
+              echo "❌ Tests failed"
+              echo ""
+              echo "<details><summary>Output</summary>"
+              echo ""
+              echo '```'
+              echo "$output"
+              echo '```'
+              echo ""
+              echo "</details>"
+            fi
+          } > coverage.md
+
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: coverage-report
+          path: coverage.md
+
+      - name: Exit with test result
+        if: steps.test.outputs.exit_code != '0'
+        run: exit 1
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ./.github/actions/setup
+
+      - name: Run build
+        id: build
+        run: |
+          set +e
+          output=$(turbo run build --affected 2>&1)
+          exit_code=$?
+          echo "$output"
+          echo "exit_code=$exit_code" >> "$GITHUB_OUTPUT"
+
+          {
+            echo "### Build"
+            if [ $exit_code -eq 0 ]; then
+              echo "✅ All apps built successfully"
+            else
+              echo "❌ Build failed"
+              echo ""
+              echo "<details><summary>Output</summary>"
+              echo ""
+              echo '```'
+              echo "$output"
+              echo '```'
+              echo ""
+              echo "</details>"
+            fi
+          } > build.md
+
+      - name: Upload build report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: build-report
+          path: build.md
+
+      - name: Exit with build result
+        if: steps.build.outputs.exit_code != '0'
+        run: exit 1
+
+  report:
+    name: Report
+    runs-on: ubuntu-latest
+    if: always()
+    needs: [lint, typecheck, test, build]
+    steps:
+      - name: Download lint report
+        uses: actions/download-artifact@v8
+        with:
+          name: lint-report
+        continue-on-error: true
+
+      - name: Download typecheck report
+        uses: actions/download-artifact@v8
+        with:
+          name: typecheck-report
+        continue-on-error: true
+
+      - name: Download coverage report
+        uses: actions/download-artifact@v8
+        with:
+          name: coverage-report
+        continue-on-error: true
+
+      - name: Download build report
+        uses: actions/download-artifact@v8
+        with:
+          name: build-report
+        continue-on-error: true
+
+      - name: Assemble report
+        run: |
+          {
+            echo "<!-- ci-report -->"
+            echo "## CI Report"
+            echo ""
+            for file in lint.md typecheck.md coverage.md build.md; do
+              if [ -f "$file" ]; then
+                cat "$file"
+                echo ""
+              fi
+            done
+          } > report.md
+
+      - name: Post PR comment
+        uses: peter-evans/create-or-update-comment@v5
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body-path: report.md
+          body-includes: "<!-- ci-report -->"
+          edit-mode: replace
