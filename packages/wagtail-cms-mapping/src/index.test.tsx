@@ -232,6 +232,26 @@ describe("context.page", () => {
 	});
 });
 
+describe("context on page layouts", () => {
+	it("provides context with page and apiClient but without position", () => {
+		let capturedContext: PageLayoutProps["context"] | null = null;
+		const SpyPage = ({ context }: PageLayoutProps) => {
+			capturedContext = context;
+			return null;
+		};
+		const { renderPage } = createCMSRenderer({
+			apiClient: mockApiClient,
+			pages: { "hsebase.ContentPage": SpyPage },
+		});
+		const page = makePage("hsebase.ContentPage");
+		render(<>{renderPage(page)}</>);
+		expect(capturedContext).not.toBeNull();
+		expect(capturedContext!.page).toBe(page);
+		expect(capturedContext!.apiClient).toBe(mockApiClient);
+		expect(capturedContext).not.toHaveProperty("position");
+	});
+});
+
 describe("context.apiClient", () => {
 	it("passes the same apiClient instance to block components", () => {
 		let capturedClient: unknown = null;

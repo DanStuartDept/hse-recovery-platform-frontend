@@ -13,6 +13,6 @@ export function BlockContentBlock({
 	value,
 	renderBlocks,
 }: BlockComponentProps<ContentBlockValue>) {
-	if (!value.body || !renderBlocks) return null;
+	if (!value.body) return null;
 	return <>{renderBlocks(value.body)}</>;
 }
