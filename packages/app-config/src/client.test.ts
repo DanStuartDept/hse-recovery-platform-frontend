@@ -106,10 +106,11 @@ describe("client config — validation", () => {
 		await expect(() => import("./client")).rejects.toThrow();
 	});
 
-	it("config object is frozen", async () => {
+	it("config object is deeply frozen", async () => {
 		setRequiredEnv();
 		const { config } = await import("./client");
 		expect(Object.isFrozen(config)).toBe(true);
+		expect(Object.isFrozen(config.cms)).toBe(true);
 	});
 });
 
