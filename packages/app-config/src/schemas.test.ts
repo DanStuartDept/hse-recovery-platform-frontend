@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { clientSchema, gtmSchema, oneTrustSchema, piwikSchema, serverSchema } from "./schemas";
+import {
+	clientSchema,
+	gtmSchema,
+	oneTrustSchema,
+	piwikSchema,
+	serverSchema,
+} from "./schemas";
 
 describe("clientSchema", () => {
 	const validInput = {
@@ -18,7 +24,10 @@ describe("clientSchema", () => {
 	});
 
 	it("rejects missing cms.apiPath", () => {
-		const input = { ...validInput, cms: { baseURL: "https://cms.hse.ie", apiPath: "" } };
+		const input = {
+			...validInput,
+			cms: { baseURL: "https://cms.hse.ie", apiPath: "" },
+		};
 		expect(() => clientSchema.parse(input)).toThrow();
 	});
 
@@ -93,7 +102,9 @@ describe("piwikSchema", () => {
 	});
 
 	it("rejects missing containerId", () => {
-		const result = piwikSchema.safeParse({ containerUrl: "https://hse.piwik.pro" });
+		const result = piwikSchema.safeParse({
+			containerUrl: "https://hse.piwik.pro",
+		});
 		expect(result.success).toBe(false);
 	});
 
@@ -113,10 +124,14 @@ describe("serverSchema", () => {
 	});
 
 	it("rejects missing previewToken", () => {
-		expect(() => serverSchema.parse({ previewToken: "", revalidateToken: "token-2" })).toThrow();
+		expect(() =>
+			serverSchema.parse({ previewToken: "", revalidateToken: "token-2" }),
+		).toThrow();
 	});
 
 	it("rejects missing revalidateToken", () => {
-		expect(() => serverSchema.parse({ previewToken: "token-1", revalidateToken: "" })).toThrow();
+		expect(() =>
+			serverSchema.parse({ previewToken: "token-1", revalidateToken: "" }),
+		).toThrow();
 	});
 });
