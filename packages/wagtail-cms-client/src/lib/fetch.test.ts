@@ -47,7 +47,7 @@ describe("fetchRequest", () => {
 		);
 
 		expect(mockFetch).toHaveBeenCalledWith("https://api.example.com/test", {
-			next: { revalidate: 360 },
+			next: { revalidate: 3600 },
 		});
 		expect(mockResponse.json).toHaveBeenCalled();
 		expect(result).toEqual(mockData);
@@ -69,7 +69,7 @@ describe("fetchRequest", () => {
 		await fetchRequest("https://api.example.com/test", customInit);
 
 		expect(mockFetch).toHaveBeenCalledWith("https://api.example.com/test", {
-			next: { revalidate: 360 },
+			next: { revalidate: 3600 },
 			method: "POST",
 			headers: { "Content-Type": "application/json" },
 		});
@@ -92,7 +92,7 @@ describe("fetchRequest", () => {
 		await fetchRequest("https://api.example.com/test", customInit);
 
 		expect(mockFetch).toHaveBeenCalledWith("https://api.example.com/test", {
-			next: { revalidate: 360 },
+			next: { revalidate: 3600 },
 			method: "GET",
 		});
 	});
@@ -222,7 +222,7 @@ describe("fetchRequest", () => {
 		const result = await fetchRequest("https://api.example.com/test");
 
 		expect(mockFetch).toHaveBeenCalledWith("https://api.example.com/test", {
-			next: { revalidate: 360 },
+			next: { revalidate: 3600 },
 		});
 		expect(result).toEqual(mockData);
 	});

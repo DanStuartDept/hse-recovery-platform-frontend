@@ -24,7 +24,7 @@ export async function fetchRequest<T>(
 	try {
 		const defaultInit = {
 			next: {
-				revalidate: 360,
+				revalidate: 3600,
 			},
 		} as RequestInit & { next?: { revalidate?: number } };
 
