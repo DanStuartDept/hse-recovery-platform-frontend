@@ -58,7 +58,7 @@ Current page types (`CMSPageType`, 5 values):
 - Dual output: ESM (`dist/es/`) + CJS (`dist/cjs/`).
 - TypeScript imports **must use `.js` extensions**.
 - `CMSClient` takes `ClientOptions: { baseURL, mediaBaseURL?, apiPath, init? }`.
-- All fetches include ISR caching (`next: { revalidate: 360 }` default).
+- All fetches include ISR caching (`next: { revalidate: 3600 }` default — 1 hour).
 
 ### CMSClient Methods
 
