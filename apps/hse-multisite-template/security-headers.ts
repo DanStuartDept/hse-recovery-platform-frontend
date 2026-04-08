@@ -23,10 +23,24 @@ const oneTrustDomains = {
 	connect: ["*.cookielaw.org", "*.onetrust.com"],
 };
 
-const piwikDomains = {
-	script: ["*.containers.piwik.pro", "*.piwik.pro"],
-	connect: ["*.containers.piwik.pro", "*.piwik.pro"],
-};
+function getPiwikDomains(): { script: string[]; connect: string[] } {
+	const defaults = ["*.containers.piwik.pro", "*.piwik.pro"];
+	const containerUrl = process.env.NEXT_PUBLIC_PIWIK_CONTAINER_URL;
+
+	if (!containerUrl) {
+		return { script: defaults, connect: defaults };
+	}
+
+	try {
+		const { origin } = new URL(containerUrl);
+		const domains = defaults.includes(origin)
+			? defaults
+			: [...defaults, origin];
+		return { script: domains, connect: domains };
+	} catch {
+		return { script: defaults, connect: defaults };
+	}
+}
 
 // -- Build CSP from env vars -------------------------------------------------
 
@@ -34,6 +48,7 @@ function buildCSP(): string {
 	const hasGtm = !!process.env.NEXT_PUBLIC_GTM_ID;
 	const hasOneTrust = !!process.env.NEXT_PUBLIC_ONETRUST_DOMAIN_ID;
 	const hasPiwik = !!process.env.NEXT_PUBLIC_PIWIK_CONTAINER_ID;
+	const piwikDomains = hasPiwik ? getPiwikDomains() : undefined;
 
 	const isDev = process.env.NODE_ENV === "development";
 
@@ -43,7 +58,7 @@ function buildCSP(): string {
 		...(isDev ? ["'unsafe-eval'"] : []), // React 19 requires eval() in dev for stack traces
 		...(hasGtm ? gtmDomains.script : []),
 		...(hasOneTrust ? oneTrustDomains.script : []),
-		...(hasPiwik ? piwikDomains.script : []),
+		...(piwikDomains ? piwikDomains.script : []),
 	];
 
 	const imgSrc = [
@@ -59,7 +74,7 @@ function buildCSP(): string {
 		"*.hse.ie",
 		...(hasGtm ? gtmDomains.connect : []),
 		...(hasOneTrust ? oneTrustDomains.connect : []),
-		...(hasPiwik ? piwikDomains.connect : []),
+		...(piwikDomains ? piwikDomains.connect : []),
 	];
 
 	const directives: Record<string, string[]> = {

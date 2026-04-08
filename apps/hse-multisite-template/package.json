@@ -15,6 +15,8 @@
 	"dependencies": {
 		"@hseireland/hse-frontend": "catalog:",
 		"@hseireland/hse-frontend-react": "catalog:",
+		"@next/third-parties": "^16.2.2",
+		"@piwikpro/next-piwik-pro": "^3.4.0",
 		"@repo/app-config": "workspace:*",
 		"@repo/i18n": "workspace:*",
 		"@repo/logger": "workspace:*",

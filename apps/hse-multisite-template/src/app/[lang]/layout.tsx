@@ -4,7 +4,9 @@ import { notFound } from "next/navigation";
 import "@hseireland/hse-frontend/packages/hse.scss";
 
 import { DictionaryProvider, loadDictionary } from "@repo/i18n";
+import { GtmScripts } from "@/components/scripts/GtmScripts";
 import { OneTrustScripts } from "@/components/scripts/OneTrustScripts";
+import { PiwikProScripts } from "@/components/scripts/PiwikProScripts";
 import { i18nConfig } from "@/lib/i18n/config";
 import { dictionaryLoaders } from "@/lib/i18n/loaders";
 
@@ -32,11 +34,14 @@ export default async function RootLayout(props: LayoutProps<"/[lang]">) {
 
 	return (
 		<html lang={lang}>
+			<GtmScripts />
 			<body>
 				<OneTrustScripts />
-				<DictionaryProvider flat={flat} locale={lang}>
-					{props.children}
-				</DictionaryProvider>
+				<PiwikProScripts>
+					<DictionaryProvider flat={flat} locale={lang}>
+						{props.children}
+					</DictionaryProvider>
+				</PiwikProScripts>
 			</body>
 		</html>
 	);
