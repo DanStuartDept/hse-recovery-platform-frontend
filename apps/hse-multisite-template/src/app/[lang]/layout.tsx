@@ -5,6 +5,7 @@ import "@hseireland/hse-frontend/packages/hse.scss";
 
 import { config } from "@repo/app-config";
 import { DictionaryProvider, loadDictionary } from "@repo/i18n";
+import { error as logError } from "@repo/logger";
 import { GtmScripts } from "@/components/scripts/GtmScripts";
 import { OneTrustScripts } from "@/components/scripts/OneTrustScripts";
 import { PiwikProScripts } from "@/components/scripts/PiwikProScripts";
@@ -36,11 +37,17 @@ export default async function RootLayout(props: LayoutProps<"/[lang]">) {
 		notFound();
 	}
 
-	const flat = await loadDictionary(
-		lang,
-		dictionaryLoaders,
-		i18nConfig.defaultLocale,
-	);
+	let flat: Record<string, string>;
+	try {
+		flat = await loadDictionary(
+			lang,
+			dictionaryLoaders,
+			i18nConfig.defaultLocale,
+		);
+	} catch (err) {
+		logError("[i18n] Dictionary loading failed for locale:", lang, err);
+		throw err;
+	}
 
 	return (
 		<html lang={lang}>
