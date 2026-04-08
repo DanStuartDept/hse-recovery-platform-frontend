@@ -4,10 +4,9 @@ import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import ErrorPage from "./error";
 
-vi.mock("@repo/logger", () => ({ log: vi.fn() }));
-vi.mock("@repo/app-config", () => ({ config: { isLocalhost: true } }));
+vi.mock("@repo/logger", () => ({ error: vi.fn() }));
 
-import { log } from "@repo/logger";
+import { error } from "@repo/logger";
 
 const testError = new Error("test error");
 
@@ -46,10 +45,10 @@ describe("error", () => {
 		expect(retry).toHaveBeenCalledOnce();
 	});
 
-	it("logs the error in localhost environment", () => {
+	it("logs the error", () => {
 		renderWithProvider(
 			<ErrorPage error={testError} unstable_retry={vi.fn()} />,
 		);
-		expect(log).toHaveBeenCalledWith("ErrorPage:", testError);
+		expect(error).toHaveBeenCalledWith("[ErrorPage]", testError);
 	});
 });

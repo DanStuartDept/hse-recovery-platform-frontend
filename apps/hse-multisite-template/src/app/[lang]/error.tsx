@@ -1,9 +1,8 @@
 "use client";
 
 import { Col, Container, Row } from "@hseireland/hse-frontend-react";
-import { config } from "@repo/app-config";
 import { useDictionary } from "@repo/i18n";
-import { log } from "@repo/logger";
+import { error as logError } from "@repo/logger";
 import { useEffect } from "react";
 import type { Dictionary } from "@/lib/i18n/dictionary";
 
@@ -17,9 +16,7 @@ export default function ErrorPage({
 	const dict = useDictionary<Dictionary>();
 
 	useEffect(() => {
-		if (config.isLocalhost) {
-			log("ErrorPage:", error);
-		}
+		logError("[ErrorPage]", error);
 	}, [error]);
 
 	return (

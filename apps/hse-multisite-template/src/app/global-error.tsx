@@ -1,8 +1,7 @@
 "use client";
 
 import { Col, Container, Row } from "@hseireland/hse-frontend-react";
-import { config } from "@repo/app-config";
-import { log } from "@repo/logger";
+import { error as logError } from "@repo/logger";
 import { useEffect } from "react";
 import "@hseireland/hse-frontend/packages/hse.scss";
 
@@ -14,9 +13,7 @@ export default function GlobalError({
 	unstable_retry: () => void;
 }) {
 	useEffect(() => {
-		if (config.isLocalhost) {
-			log("GlobalError:", error);
-		}
+		logError("[GlobalError]", error);
 	}, [error]);
 
 	return (
