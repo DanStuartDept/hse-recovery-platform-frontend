@@ -14,15 +14,11 @@ import { dictionaryLoaders } from "@/lib/i18n/loaders";
 /** App-level branding constants — not env vars, set per-app when scaffolding. */
 const SITE_NAME = "HSE.ie";
 const TITLE_TEMPLATE = `%s | ${SITE_NAME}`;
-const DEFAULT_DESCRIPTION =
-	"Health Service Executive — public health information and services for Ireland.";
-
 export const metadata: Metadata = {
 	title: {
 		template: TITLE_TEMPLATE,
 		default: SITE_NAME,
 	},
-	description: DEFAULT_DESCRIPTION,
 	metadataBase: new URL(config.siteUrl),
 	formatDetection: {
 		telephone: false,

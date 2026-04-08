@@ -19,7 +19,7 @@ const flat = {
 
 function renderWithProvider(ui: React.ReactElement) {
 	return render(
-		<DictionaryProvider flat={flat} locale="en-ie">
+		<DictionaryProvider flat={flat} locale="en">
 			{ui}
 		</DictionaryProvider>,
 	);

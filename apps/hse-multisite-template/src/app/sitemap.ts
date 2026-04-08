@@ -14,24 +14,15 @@ export const revalidate = 3600;
 
 const PAGE_SIZE = 20;
 
-/**
- * Converts an i18n locale (e.g. `"en-ie"`) to the Wagtail API locale
- * (e.g. `"en"`). Wagtail uses the language subtag only.
- */
-function toWagtailLocale(locale: string): string {
-	return locale.split("-")[0];
-}
-
 /** Paginates through the Wagtail pages API for a given locale. */
 async function fetchAllPages(locale: string): Promise<CMSPageContent[]> {
 	const allItems: CMSPageContent[] = [];
 	let offset = 0;
-	const wagtailLocale = toWagtailLocale(locale);
 
 	try {
 		for (;;) {
 			const batch = await cmsClient.fetchPages<CMSPageContents>({
-				locale: wagtailLocale,
+				locale,
 				limit: PAGE_SIZE,
 				offset,
 			});

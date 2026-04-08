@@ -1,4 +1,5 @@
 import { config } from "@repo/app-config";
+import { loadDictionary } from "@repo/i18n";
 import {
 	createCMSRenderer,
 	generatePageMetadata,
@@ -9,6 +10,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { cmsClient } from "@/lib/cms/client";
+import { i18nConfig } from "@/lib/i18n/config";
+import { dictionaryLoaders } from "@/lib/i18n/loaders";
 
 /** ISR revalidation interval in seconds (6 minutes). */
 const REVALIDATE_SECONDS = 360;
@@ -26,7 +29,7 @@ function slugToPath(slug?: string[]): string {
 export async function generateMetadata(
 	props: PageProps<"/[lang]/[[...slug]]">,
 ): Promise<Metadata> {
-	const { slug } = await props.params;
+	const { lang, slug } = await props.params;
 	const path = slugToPath(slug);
 	const response = await cmsClient.findPageByPath(path, {
 		next: { revalidate: REVALIDATE_SECONDS },
@@ -36,9 +39,16 @@ export async function generateMetadata(
 		return {};
 	}
 
+	const flat = await loadDictionary(
+		lang,
+		dictionaryLoaders,
+		i18nConfig.defaultLocale,
+	);
+
 	return generatePageMetadata(response as CMSPageProps, {
 		siteUrl: config.siteUrl,
 		path,
+		defaultDescription: flat["meta.defaultDescription"],
 	});
 }
 
