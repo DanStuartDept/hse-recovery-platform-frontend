@@ -77,12 +77,13 @@ Legal obligation under the EU Web Accessibility Directive (transposed into Irish
 
 - `createCMSRenderer()` factory with required `apiClient` and optional block/page overrides
 - Rich context threading: every block receives page data, API client, and position metadata via props (Server Component compatible — no React Context)
-- 14 block components mapped to 18 block types (including aliases)
+- 15 block components mapped to 19 block types (including aliases)
 - 5 page layout components for all hsebase page types
+- `renderPage` owns shared page shell (breadcrumbs + `<main>` wrapper); page layouts control only inner content and `Container` grid
 - Type guards, `generateRichText` utility, breadcrumb and page title shared components
 - TSDoc documentation on all exported functions, types, components, and registries
 - 34 tests covering factory logic, context threading, position computation, registry completeness, type guards, and utilities
-- Header/footer settings mapping is out of scope — will be addressed separately
+- Header/footer settings mapping is out of scope — will be addressed at the app level (Next.js layout), with the mapping package providing building blocks
 
 ---
 

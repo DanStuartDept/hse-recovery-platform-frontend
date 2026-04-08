@@ -1,6 +1,7 @@
 import type { CMSBlockType } from "@repo/wagtail-cms-types/blocks";
 import type { CMSPageProps } from "@repo/wagtail-cms-types/page-models";
 import { BlockFallback, defaultBlockRegistry } from "./blocks/index";
+import { Breadcrumb } from "./components/breadcrumb";
 import { CmsDebugPanel } from "./components/cms-debug-panel";
 import { defaultPageRegistry } from "./pages/index";
 import type {
@@ -11,10 +12,10 @@ import type {
 
 function DefaultFallbackPage({ page }: PageLayoutProps) {
 	return (
-		<main>
+		<>
 			<h1>{page.title}</h1>
 			<p>No layout registered for page type &ldquo;{page.meta.type}&rdquo;.</p>
-		</main>
+		</>
 	);
 }
 
@@ -114,12 +115,17 @@ export function createCMSRenderer(options: CMSRendererOptions): CMSRenderer {
 		const Layout = pageRegistry[page.meta.type] ?? FallbackPage;
 		return (
 			<>
-				<Layout
-					key={page.id}
-					page={page}
-					context={{ page, apiClient }}
-					renderBlocks={renderBlocks}
-				/>
+				{page.breadcrumb && page.breadcrumb.length > 0 && (
+					<Breadcrumb items={page.breadcrumb} />
+				)}
+				<main className="hse-main-wrapper">
+					<Layout
+						key={page.id}
+						page={page}
+						context={{ page, apiClient }}
+						renderBlocks={renderBlocks}
+					/>
+				</main>
 				{debug && <CmsDebugPanel data={page} />}
 			</>
 		);
