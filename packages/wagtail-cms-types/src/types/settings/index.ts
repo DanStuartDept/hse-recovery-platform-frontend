@@ -29,23 +29,10 @@ export type CMSHeaderNavLink = z.infer<typeof CMSHeaderNavLinkSchema>;
 /**
  * Navigation link schema for header secondary and mobile navigation items.
  * Used in `navigation_secondary_links` and `header_mobile_links` arrays.
- * Same shape as {@link CMSHeaderNavLinkSchema} but without the `page` field.
+ * Derived from {@link CMSHeaderNavLinkSchema} without the `page` field.
  */
-export const CMSHeaderSecondaryNavLinkSchema = z.object({
-	/** Unique identifier for this navigation link. */
-	id: z.number(),
-	/** Wagtail translation key for i18n support. */
-	translation_key: z.string(),
-	/** Sort position within the navigation list. */
-	sort_order: z.number(),
-	/** Display text for the navigation link. */
-	label: z.string(),
-	/** Full URL the link points to. */
-	link_url: z.string(),
-	/** Locale identifier (numeric). */
-	locale: z.number(),
-	/** Snippet ID this link belongs to. */
-	snippet: z.number(),
+export const CMSHeaderSecondaryNavLinkSchema = CMSHeaderNavLinkSchema.omit({
+	page: true,
 });
 
 export type CMSHeaderSecondaryNavLink = z.infer<
