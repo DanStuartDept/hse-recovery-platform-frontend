@@ -13,10 +13,10 @@ Tracked improvements and recommendations for the HSE Multisite Frontend monorepo
 | 5   | ~~[`@repo/wagtail-cms-mapping` Package](#5-repowagtail-cms-mapping-package)~~ | ~~Must~~              | ~~L~~       | Done                        |
 | 6   | [`@repo/hse-custom-ui` Package](#6-repohse-custom-ui-package)                 | Must                  | M           | —                           |
 | 7   | ~~[Error Handling and Resilience](#7-error-handling-and-resilience)~~         | ~~Must~~              | ~~M~~       | Done                        |
-| 8   | [Caching and Revalidation Strategy](#8-caching-and-revalidation-strategy)     | Must                  | L           | In progress                 |
+| 8   | ~~[Caching and Revalidation Strategy](#8-caching-and-revalidation-strategy)~~ | ~~Must~~              | ~~L~~       | Done                        |
 | 9   | [Image Optimisation](#9-image-optimisation)                                   | Must                  | M           | In progress                 |
 | 10  | [SEO Metadata from CMS](#10-seo-metadata-from-cms)                            | Must                  | M           | In progress                 |
-| 11  | [Expand `hse-multisite-template`](#11-expand-hse-multisite-template)          | Must                  | XL          | #2, #5, #6, ~~#7~~, #8, #9, #10 |
+| 11  | [Expand `hse-multisite-template`](#11-expand-hse-multisite-template)          | Must                  | XL          | #2, #5, #6, ~~#7~~, ~~#8~~, #9, #10 |
 | 12  | [CMS Preview / Draft Mode](#12-cms-preview--draft-mode)                       | Must                  | M           | #11                         |
 | 13  | [App Cookiecutter (Makefile)](#13-app-cookiecutter-makefile)                  | Should                | M           | #11                         |
 | 14  | ~~[Git Hooks (Husky + commitlint)](#14-git-hooks-husky--commitlint)~~         | ~~Should~~            | ~~S~~       | Done                        |
@@ -113,14 +113,14 @@ Shared package for custom UI components that don't exist in `@hseireland/hse-fro
 
 ---
 
-## 8. Caching and Revalidation Strategy
+## 8. Caching and Revalidation Strategy ✅
 
-**Partial.** ISR revalidation on CMS fetches and localhost fetch logging in place. Remaining: webhook-triggered invalidation, per-environment tuning.
+**Done.** ISR revalidation on CMS fetches (1-hour TTL), localhost fetch logging, and webhook-triggered on-demand revalidation via `revalidatePath`. Static pre-rendering of all CMS pages via `generateStaticParams` with `dynamicParams = true` for new pages.
 
 - ~~`fetch()` cache and `revalidate` settings for CMS API calls~~
 - ~~Localhost fetch logging (`logging.fetches.fullUrl`) for debugging cache behaviour~~
-- Cache invalidation when content is published in Wagtail (webhook-triggered revalidation via `revalidateTag` or `revalidatePath`)
-- Per-environment cache configuration (aggressive in prod, minimal in dev/preview)
+- ~~Cache invalidation when content is published in Wagtail (webhook-triggered revalidation via `revalidatePath`)~~
+- ~~Per-environment cache configuration (not needed — same config everywhere, webhook handles real-time updates)~~
 
 ---
 
@@ -152,7 +152,7 @@ Shared package for custom UI components that don't exist in `@hseireland/hse-fro
 
 Currently a minimal Next.js install with the HSE design system and a hello-world homepage. Needs to become a fully integrated headless Wagtail site that new apps are cloned from.
 
-**Depends on**: ~~#2~~, ~~#5~~, #6, ~~#7~~, #8, #9, #10 — these packages and patterns need to exist before the template can integrate them.
+**Depends on**: ~~#2~~, ~~#5~~, #6, ~~#7~~, ~~#8~~, #9, #10 — these packages and patterns need to exist before the template can integrate them.
 
 The template should include:
 
