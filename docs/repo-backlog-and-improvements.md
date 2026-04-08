@@ -12,11 +12,11 @@ Tracked improvements and recommendations for the HSE Multisite Frontend monorepo
 | 4   | [Accessibility (WCAG)](#4-accessibility-wcag)                                 | Must                  | M           | #1                          |
 | 5   | ~~[`@repo/wagtail-cms-mapping` Package](#5-repowagtail-cms-mapping-package)~~ | ~~Must~~              | ~~L~~       | Done                        |
 | 6   | [`@repo/hse-custom-ui` Package](#6-repohse-custom-ui-package)                 | Must                  | M           | —                           |
-| 7   | [Error Handling and Resilience](#7-error-handling-and-resilience)             | Must                  | M           | In progress                 |
+| 7   | ~~[Error Handling and Resilience](#7-error-handling-and-resilience)~~         | ~~Must~~              | ~~M~~       | Done                        |
 | 8   | [Caching and Revalidation Strategy](#8-caching-and-revalidation-strategy)     | Must                  | L           | In progress                 |
 | 9   | [Image Optimisation](#9-image-optimisation)                                   | Must                  | M           | In progress                 |
 | 10  | [SEO Metadata from CMS](#10-seo-metadata-from-cms)                            | Must                  | M           | In progress                 |
-| 11  | [Expand `hse-multisite-template`](#11-expand-hse-multisite-template)          | Must                  | XL          | #2, #5, #6, #7, #8, #9, #10 |
+| 11  | [Expand `hse-multisite-template`](#11-expand-hse-multisite-template)          | Must                  | XL          | #2, #5, #6, ~~#7~~, #8, #9, #10 |
 | 12  | [CMS Preview / Draft Mode](#12-cms-preview--draft-mode)                       | Must                  | M           | #11                         |
 | 13  | [App Cookiecutter (Makefile)](#13-app-cookiecutter-makefile)                  | Should                | M           | #11                         |
 | 14  | ~~[Git Hooks (Husky + commitlint)](#14-git-hooks-husky--commitlint)~~         | ~~Should~~            | ~~S~~       | Done                        |
@@ -97,15 +97,19 @@ Shared package for custom UI components that don't exist in `@hseireland/hse-fro
 
 ---
 
-## 7. Error Handling and Resilience
+## 7. Error Handling and Resilience ✅
 
-**Partial.** Error pages (`not-found.tsx`, `error.tsx`, `global-error.tsx`) implemented. Remaining: CMS degraded mode, Zod validation error surfacing.
+**Done.** Error pages, CMS error classification, Zod validation logging, and full error handling audit complete.
 
 - ~~Next.js `error.tsx` boundaries per route segment~~
 - ~~Global `global-error.tsx` for the root layout~~
 - ~~`not-found.tsx` for 404 pages (when Wagtail returns 404 for unpublished/deleted pages)~~
-- Fallback UI when the Wagtail CMS API is unreachable (degraded mode)
-- Consider how Zod validation failures on CMS responses are surfaced (invalid data from the API should not crash the page)
+- ~~CMS error classification: `FetchError` carries HTTP status, catch-all route logs at appropriate level (`log` for 404, `error` for 5xx/network, `warn` for other)~~
+- ~~Zod `safeParse` validation of CMS responses — logs schema mismatches as warnings without crashing the page~~
+- ~~`@repo/logger` extended with `warn()` and `error()` levels~~
+- ~~Error boundaries log at `error` level in all environments (removed localhost-only guard)~~
+- ~~Sitemap catch blocks log warnings instead of swallowing silently~~
+- ~~Layout `loadDictionary` wrapped in try/catch with error logging~~
 
 ---
 
@@ -148,7 +152,7 @@ Shared package for custom UI components that don't exist in `@hseireland/hse-fro
 
 Currently a minimal Next.js install with the HSE design system and a hello-world homepage. Needs to become a fully integrated headless Wagtail site that new apps are cloned from.
 
-**Depends on**: ~~#2~~, ~~#5~~, #6, #7, #8, #9, #10 — these packages and patterns need to exist before the template can integrate them.
+**Depends on**: ~~#2~~, ~~#5~~, #6, ~~#7~~, #8, #9, #10 — these packages and patterns need to exist before the template can integrate them.
 
 The template should include:
 
@@ -164,7 +168,7 @@ The template should include:
 - ~~SEO metadata: `generateMetadata` in catch-all route with `generatePageMetadata` utility (per #10)~~
 - ~~ISR revalidation on CMS fetches, localhost fetch logging (per #8)~~
 - ~~Remote image domains via `@repo/app-config` (per #9)~~
-- Error boundaries and not-found handling (per #7)
+- ~~Error boundaries, not-found handling, CMS error classification, and Zod validation logging (per #7)~~
 - Image loader strategy and `<Image>` usage (per #9)
 - Open Graph / Twitter Cards / JSON-LD (per #10)
 - Environment config for Wagtail API base URL, third-party script IDs
