@@ -7,20 +7,18 @@ global.fetch = mockFetch;
 
 describe("FetchError", () => {
 	it("should create a FetchError with correct properties", () => {
-		const message = "Test error message";
-		const code = "TEST_ERROR";
-
-		const error = new FetchError(message, code);
+		const error = new FetchError("Test error message", "TEST_ERROR", 500);
 
 		expect(error).toBeInstanceOf(Error);
 		expect(error).toBeInstanceOf(FetchError);
-		expect(error.message).toBe(message);
-		expect(error.code).toBe(code);
+		expect(error.message).toBe("Test error message");
+		expect(error.code).toBe("TEST_ERROR");
+		expect(error.status).toBe(500);
 		expect(error.name).toBe("FetchError [TEST_ERROR]");
 	});
 
 	it("should inherit from Error correctly", () => {
-		const error = new FetchError("Test message", "TEST_CODE");
+		const error = new FetchError("Test message", "TEST_CODE", 404);
 
 		expect(error instanceof Error).toBe(true);
 		expect(error instanceof FetchError).toBe(true);
@@ -120,11 +118,12 @@ describe("fetchRequest", () => {
 			expect((error as FetchError).message).toBe(
 				"Request failed: 404 Not Found (https://api.example.com/not-found)",
 			);
+			expect((error as FetchError).status).toBe(404);
 		}
 	});
 
 	it("should re-throw FetchError when it occurs during the request", async () => {
-		const originalError = new FetchError("Original error", "ORIGINAL_CODE");
+		const originalError = new FetchError("Original error", "ORIGINAL_CODE", 0);
 		mockFetch.mockRejectedValue(originalError);
 
 		await expect(fetchRequest("https://api.example.com/test")).rejects.toThrow(

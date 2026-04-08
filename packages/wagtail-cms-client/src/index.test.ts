@@ -123,6 +123,7 @@ describe("CMSClient", () => {
 			const fetchError = new libModule.FetchError(
 				"Not found",
 				"REQUEST_FAILED",
+				404,
 			);
 			mockFetchRequest.mockRejectedValue(fetchError);
 
@@ -327,6 +328,7 @@ describe("CMSClient", () => {
 			const fetchError = new libModule.FetchError(
 				"Not found",
 				"REQUEST_FAILED",
+				404,
 			);
 			mockFetchContent.mockRejectedValue(fetchError);
 
@@ -451,6 +453,7 @@ describe("CMSClient", () => {
 			const fetchError = new libModule.FetchError(
 				"Not found",
 				"REQUEST_FAILED",
+				404,
 			);
 			mockFetchRequest.mockRejectedValue(fetchError);
 
@@ -527,6 +530,7 @@ describe("CMSClient", () => {
 			const fetchError = new libModule.FetchError(
 				"Preview not found",
 				"REQUEST_FAILED",
+				404,
 			);
 			mockFetchRequest.mockRejectedValue(fetchError);
 
@@ -609,6 +613,7 @@ describe("CMSClient", () => {
 			const fetchError = new libModule.FetchError(
 				"Image not found",
 				"REQUEST_FAILED",
+				404,
 			);
 			mockFetchContent.mockRejectedValue(fetchError);
 
@@ -683,6 +688,7 @@ describe("CMSClient", () => {
 			const fetchError = new libModule.FetchError(
 				"Document not found",
 				"REQUEST_FAILED",
+				404,
 			);
 			mockFetchContent.mockRejectedValue(fetchError);
 
