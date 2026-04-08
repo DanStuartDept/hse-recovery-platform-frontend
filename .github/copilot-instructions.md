@@ -9,9 +9,11 @@
 | Name (npm) | Path | Purpose |
 |---|---|---|
 | `hse-multisite-template` | `apps/hse-multisite-template` | Next.js 16 app — primary UI |
+| `@repo/app-config` | `packages/app-config` | Centralised env var validation and typed config (source-only) |
 | `@repo/wagtail-api-client` | `packages/wagtail-cms-client` | Wagtail REST API client (`CMSClient` class + `fetchContent` helpers) |
 | `@repo/wagtail-cms-types` | `packages/wagtail-cms-types` | Zod-based TypeScript types for all Wagtail content (no build — exports raw `.ts`) |
 | `@repo/wagtail-cms-mapping` | `packages/wagtail-cms-mapping` | CMS-to-component mapping — factory pattern with HSE design system defaults |
+| `@repo/i18n` | `packages/i18n` | Locale routing, dictionary loading, translation helpers (source-only) |
 | `@repo/logger` | `packages/logger` | Thin console wrapper |
 | `@repo/vitest-config` | `packages/config-vitest` | Shared `createVitestConfig()` factory |
 | `@repo/biome-config` | `packages/biome-config` | Shared Biome rule sets |
@@ -36,6 +38,8 @@ pnpm typecheck        # tsc --noEmit (app runs next typegen first)
 - **Next.js App Router** (Next.js 16 / React 19). Use Server Components by default; add `"use client"` only when interactivity, hooks, or browser APIs are required.
 - **Wagtail CMS integration**: fetch content via `CMSClient` from `@repo/wagtail-api-client`. All response shapes are typed through `@repo/wagtail-cms-types` (sub-path exports: `/core`, `/blocks`, `/fields`, `/page-models`, `/settings`, `/snippets`).
 - **Design system**: `@hseireland/hse-frontend` (CSS/tokens) and `@hseireland/hse-frontend-react` (React components) are the HSE Ireland UI library — use their components before writing custom ones.
+- **i18n**: `@repo/i18n` handles locale routing (hidden default locale, `Accept-Language` negotiation), dictionary loading (shared + app layers), and client-side translation (`DictionaryProvider` / `useDictionary`).
+- **Third-party scripts**: OneTrust, GTM, and Piwik are gated on `@repo/app-config` env vars. CSP headers in `security-headers.ts` are built dynamically per integration.
 - **Forms**: `react-hook-form` + `@hookform/resolvers` + Zod schemas.
 
 ## Conventions

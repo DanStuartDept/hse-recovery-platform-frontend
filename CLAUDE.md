@@ -43,6 +43,7 @@ This is a **pnpm + Turborepo monorepo** with a Next.js 16 app integrating with a
 | `@repo/wagtail-api-client`  | `packages/wagtail-cms-client`  | Wagtail REST client (`CMSClient` + `fetchContent`)            |
 | `@repo/wagtail-cms-types`   | `packages/wagtail-cms-types`   | Zod-based CMS types (source-only, no build step)              |
 | `@repo/wagtail-cms-mapping` | `packages/wagtail-cms-mapping` | CMS-to-component mapping (source-only, factory pattern)       |
+| `@repo/i18n`                | `packages/i18n`                | Locale routing, dictionary loading, translation helpers        |
 | `@repo/logger`              | `packages/logger`              | Thin console wrapper                                          |
 | `@repo/vitest-config`       | `packages/config-vitest`       | Shared `createVitestConfig()` factory                         |
 | `@repo/biome-config`        | `packages/biome-config`        | Shared Biome rule sets                                        |
@@ -55,6 +56,8 @@ This is a **pnpm + Turborepo monorepo** with a Next.js 16 app integrating with a
 - **App configuration**: `@repo/app-config` centralises env var reading with Zod validation. Import `config` for client-safe settings, `serverConfig` from `@repo/app-config/server` for secrets. Never read `process.env` directly in app code.
 - **CMS content flow**: `CMSClient` (from `@repo/wagtail-api-client`) fetches data using `config.cms` from `@repo/app-config`; response shapes validated via Zod schemas in `@repo/wagtail-cms-types`; `createCMSRenderer` (from `@repo/wagtail-cms-mapping`) maps data to React components.
 - **Design system**: `@hseireland/hse-frontend` (CSS/tokens) + `@hseireland/hse-frontend-react` (React components). Use these before writing custom components.
+- **i18n**: `@repo/i18n` provides locale-aware routing (`createI18nProxy`), dictionary loading (`getDictionary`), and client-side translation (`DictionaryProvider` / `useDictionary`). Default locale (`en-ie`) is hidden from URLs; non-default locales get a prefix (`/ga/`).
+- **Third-party scripts**: OneTrust cookie consent, GTM, and Piwik are gated on `@repo/app-config` env vars and `config.isLocalhost`. CSP headers in `security-headers.ts` are built dynamically — domains are only added when the corresponding integration is configured.
 - **Forms**: `react-hook-form` + `@hookform/resolvers` + Zod schemas.
 
 ### Dependency conventions

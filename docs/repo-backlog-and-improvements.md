@@ -22,7 +22,7 @@ Tracked improvements and recommendations for the HSE Multisite Frontend monorepo
 | 14  | ~~[Git Hooks (Husky + commitlint)](#14-git-hooks-husky--commitlint)~~         | ~~Should~~            | ~~S~~       | Done                        |
 | 15  | [Test Coverage](#15-test-coverage)                                            | Should                | M (ongoing) | #1                          |
 | 16  | [Monitoring and Error Tracking](#16-monitoring-and-error-tracking)            | Should                | M           | —                           |
-| 17  | [Internationalisation (i18n)](#17-internationalisation-i18n)                  | Must                  | L           | Research needed             |
+| 17  | ~~[Internationalisation (i18n)](#17-internationalisation-i18n)~~              | ~~Must~~              | ~~L~~       | Done                        |
 | 18  | ~~[Copilot Agentic Workflow](#18-copilot-agentic-workflow)~~                  | ~~Should (parallel)~~ | ~~L~~       | Done                        |
 | 19  | [Design System Integration](#19-design-system-integration)                    | Should (ongoing)      | S           | —                           |
 

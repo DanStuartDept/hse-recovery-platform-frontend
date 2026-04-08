@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import "@hseireland/hse-frontend/packages/hse.scss";
 
 import { DictionaryProvider, loadDictionary } from "@repo/i18n";
+import { OneTrustScripts } from "@/components/scripts/OneTrustScripts";
 import { i18nConfig } from "@/lib/i18n/config";
 import { dictionaryLoaders } from "@/lib/i18n/loaders";
 
@@ -32,6 +33,7 @@ export default async function RootLayout(props: LayoutProps<"/[lang]">) {
 	return (
 		<html lang={lang}>
 			<body>
+				<OneTrustScripts />
 				<DictionaryProvider flat={flat} locale={lang}>
 					{props.children}
 				</DictionaryProvider>

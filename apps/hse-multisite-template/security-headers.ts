@@ -18,6 +18,8 @@ const gtmDomains = {
 
 const oneTrustDomains = {
 	script: ["*.cookielaw.org", "*.onetrust.com"],
+	img: ["*.cookielaw.org", "*.onetrust.com"],
+	style: ["*.cookielaw.org"],
 	connect: ["*.cookielaw.org", "*.onetrust.com"],
 };
 
@@ -49,6 +51,7 @@ function buildCSP(): string {
 		"data:",
 		"*.hse.ie",
 		...(hasGtm ? gtmDomains.img : []),
+		...(hasOneTrust ? oneTrustDomains.img : []),
 	];
 
 	const connectSrc = [
@@ -62,7 +65,11 @@ function buildCSP(): string {
 	const directives: Record<string, string[]> = {
 		"default-src": ["'self'"],
 		"script-src": scriptSrc,
-		"style-src": ["'self'", "'unsafe-inline'"],
+		"style-src": [
+			"'self'",
+			"'unsafe-inline'",
+			...(hasOneTrust ? oneTrustDomains.style : []),
+		],
 		"img-src": imgSrc,
 		"connect-src": connectSrc,
 		"frame-src": ["'self'", "*.youtube-nocookie.com", "*.google.com"],
