@@ -2,8 +2,10 @@
 
 import { Col, Container, Row } from "@hseireland/hse-frontend-react";
 import { config } from "@repo/app-config";
+import { useDictionary } from "@repo/i18n";
 import { log } from "@repo/logger";
 import { useEffect } from "react";
+import type { Dictionary } from "@/lib/i18n/dictionary";
 
 export default function ErrorPage({
 	error,
@@ -12,6 +14,8 @@ export default function ErrorPage({
 	error: Error & { digest?: string };
 	unstable_retry: () => void;
 }) {
+	const dict = useDictionary<Dictionary>();
+
 	useEffect(() => {
 		if (config.isLocalhost) {
 			log("ErrorPage:", error);
@@ -23,17 +27,15 @@ export default function ErrorPage({
 			<Row>
 				<Col width="two-thirds">
 					<h1 className="hse-u-margin-bottom-6 hse-u-text-color_hse-grey-900">
-						Something went wrong
+						{dict.error.heading}
 					</h1>
-					<p className="hse-body-reg-m">
-						There was a problem loading this page. Please try again.
-					</p>
+					<p className="hse-body-reg-m">{dict.error.body}</p>
 					<button
 						type="button"
 						className="hse-button"
 						onClick={() => unstable_retry()}
 					>
-						Try again
+						{dict.error.tryAgain}
 					</button>
 				</Col>
 			</Row>
