@@ -74,6 +74,9 @@ importers:
       '@commitlint/cli':
         specifier: ^20.2.0
         version: 20.5.0(@types/node@20.19.37)(conventional-commits-filter@5.0.0)(conventional-commits-parser@6.3.0)(typescript@5.9.3)
+      '@commitlint/config-conventional':
+        specifier: ^20.2.0
+        version: 20.5.0
       '@repo/commitlint-config':
         specifier: workspace:*
         version: link:packages/commitlint-config

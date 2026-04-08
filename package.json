@@ -14,6 +14,7 @@
   "devDependencies": {
     "@biomejs/biome": "2.4.9",
     "@commitlint/cli": "^20.2.0",
+    "@commitlint/config-conventional": "^20.2.0",
     "@repo/commitlint-config": "workspace:*",
     "@repo/vitest-config": "workspace:*",
     "husky": "^9.1.7",
