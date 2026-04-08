@@ -20,7 +20,7 @@ export function CuratedHubPage({ page, renderBlocks }: PageLayoutProps) {
 					<Row>
 						<Col width="two-thirds">
 							<PageTitle title={page.title} richLead={chp?.lead_text} />
-							{renderBlocks(page.body)}
+							{chp?.content && renderBlocks(chp.content)}
 							{chp?.bottom_content && renderBlocks(chp.bottom_content)}
 						</Col>
 					</Row>

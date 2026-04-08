@@ -1,7 +1,8 @@
 import { z } from "zod";
 import { BaseCMSBlockTypeSchema } from "../blocks";
+import { CMSPageContentSchema } from "../core";
 import { NavItemSchema } from "../fields";
-import { type CMSPageWithBlocks, CMSPageWithBlocksSchema } from "./index";
+import { CMSPageWithBlocksSchema } from "./index";
 
 export const CMSContentPagePropsSchema = CMSPageWithBlocksSchema.extend({
 	lead_text: z.string().optional(),
@@ -9,15 +10,17 @@ export const CMSContentPagePropsSchema = CMSPageWithBlocksSchema.extend({
 });
 export type CMSContentPageProps = z.infer<typeof CMSContentPagePropsSchema>;
 
-export const CMSLandingPagePropsSchema = CMSPageWithBlocksSchema.extend({
+export const CMSLandingPagePropsSchema = CMSPageContentSchema.extend({
 	lead_text: z.string().optional(),
 	top_content: z.array(BaseCMSBlockTypeSchema).optional(),
+	content: z.array(BaseCMSBlockTypeSchema).optional(),
 	bottom_content: z.array(BaseCMSBlockTypeSchema).optional(),
 });
 export type CMSLandingPageProps = z.infer<typeof CMSLandingPagePropsSchema>;
 
-export const CMSCuratedHubPagePropsSchema = CMSPageWithBlocksSchema.extend({
+export const CMSCuratedHubPagePropsSchema = CMSPageContentSchema.extend({
 	lead_text: z.string().optional(),
+	content: z.array(BaseCMSBlockTypeSchema).optional(),
 	bottom_content: z.array(BaseCMSBlockTypeSchema).optional(),
 });
 export type CMSCuratedHubPageProps = z.infer<
@@ -25,8 +28,9 @@ export type CMSCuratedHubPageProps = z.infer<
 >;
 
 export const CMSOrganisationLandingPagePropsSchema =
-	CMSPageWithBlocksSchema.extend({
+	CMSPageContentSchema.extend({
 		lead_text: z.string().optional(),
+		content: z.array(BaseCMSBlockTypeSchema).optional(),
 		bottom_content: z.array(BaseCMSBlockTypeSchema).optional(),
 	});
 export type CMSOrganisationLandingPageProps = z.infer<
@@ -34,7 +38,7 @@ export type CMSOrganisationLandingPageProps = z.infer<
 >;
 
 export const CMSOrganisationListingPagePropsSchema =
-	CMSPageWithBlocksSchema.extend({
+	CMSPageContentSchema.extend({
 		lead_text: z.string().optional(),
 		organisation_links: z.array(BaseCMSBlockTypeSchema),
 		organisation_links_count: z.number(),

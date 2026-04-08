@@ -12,6 +12,7 @@ import { BlockLinksList } from "./block-links-list";
 import { BlockPromo } from "./block-promo";
 import { BlockQuote } from "./block-quote";
 import { BlockRelatedInfo } from "./block-related-info";
+import { BlockSection } from "./block-section";
 import { BlockTeaserLinks } from "./block-teaser-links";
 import { BlockText } from "./block-text";
 
@@ -39,6 +40,7 @@ export const defaultBlockRegistry: BlockRegistry = {
 	content_block_chooser: BlockContentBlock,
 	brightcove_video: BlockBrightcove,
 	related_information: BlockRelatedInfo,
+	section: BlockSection,
 	teaser_links: BlockTeaserLinks,
 };
 
@@ -56,6 +58,7 @@ export {
 	BlockPromo,
 	BlockQuote,
 	BlockRelatedInfo,
+	BlockSection,
 	BlockTeaserLinks,
 	BlockText,
 };

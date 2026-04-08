@@ -21,7 +21,7 @@ export function LandingPage({ page, renderBlocks }: PageLayoutProps) {
 				<Container>
 					<PageTitle title={page.title} richLead={lp?.lead_text} />
 					{lp?.top_content && renderBlocks(lp.top_content)}
-					{renderBlocks(page.body)}
+					{lp?.content && renderBlocks(lp.content)}
 					{lp?.bottom_content && renderBlocks(lp.bottom_content)}
 				</Container>
 			</main>

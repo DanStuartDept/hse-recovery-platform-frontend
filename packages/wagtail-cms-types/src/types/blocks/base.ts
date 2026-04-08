@@ -36,6 +36,7 @@ export const CMSBlockComponentsKeysSchema = z.enum([
 	"content_block_chooser",
 	"brightcove_video",
 	"related_information",
+	"section",
 	"teaser_links",
 ]);
 

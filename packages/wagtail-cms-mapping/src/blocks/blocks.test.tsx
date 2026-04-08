@@ -51,9 +51,9 @@ describe("defaultBlockRegistry completeness", () => {
 		}
 	});
 
-	it("maps all 18 block types", () => {
-		expect(allBlockKeys).toHaveLength(18);
-		expect(Object.keys(defaultBlockRegistry)).toHaveLength(18);
+	it("maps all 19 block types", () => {
+		expect(allBlockKeys).toHaveLength(19);
+		expect(Object.keys(defaultBlockRegistry)).toHaveLength(19);
 	});
 });
 

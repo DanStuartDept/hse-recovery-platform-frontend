@@ -23,7 +23,7 @@ export function OrganisationLandingPage({
 			<main>
 				<Container>
 					<PageTitle title={page.title} richLead={olp?.lead_text} />
-					{renderBlocks(page.body)}
+					{olp?.content && renderBlocks(olp.content)}
 					{olp?.bottom_content && renderBlocks(olp.bottom_content)}
 				</Container>
 			</main>

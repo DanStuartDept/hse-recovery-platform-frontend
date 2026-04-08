@@ -9,11 +9,11 @@ import type {
 	PageLayoutProps,
 } from "./types/index";
 
-function DefaultFallbackPage({ page, renderBlocks }: PageLayoutProps) {
+function DefaultFallbackPage({ page }: PageLayoutProps) {
 	return (
 		<main>
 			<h1>{page.title}</h1>
-			{renderBlocks(page.body)}
+			<p>No layout registered for page type &ldquo;{page.meta.type}&rdquo;.</p>
 		</main>
 	);
 }

@@ -11,7 +11,7 @@ import { isContentPage } from "../types/index";
  * the main body blocks, and any bottom content blocks.
  */
 export function ContentPage({ page, renderBlocks }: PageLayoutProps) {
-	const sideNav = isContentPage(page) ? page.side_nav : undefined;
+	const cp = isContentPage(page) ? page : undefined;
 	return (
 		<>
 			<Breadcrumb items={page.breadcrumb} />
@@ -20,14 +20,14 @@ export function ContentPage({ page, renderBlocks }: PageLayoutProps) {
 					<Row>
 						<Col width="two-thirds">
 							<PageTitle title={page.title} />
-							{renderBlocks(page.body)}
+							{cp?.body && renderBlocks(cp.body)}
 						</Col>
-						{sideNav && sideNav.length > 0 && (
+						{cp?.side_nav && cp.side_nav.length > 0 && (
 							<Col width="one-third">
 								<aside>
 									<nav aria-label="Side navigation">
 										<ul>
-											{sideNav.map((item) => (
+											{cp.side_nav.map((item) => (
 												<li key={item.url}>
 													<a href={item.url}>{item.title}</a>
 												</li>

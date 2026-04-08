@@ -69,23 +69,50 @@ describe("CMSContentPagePropsSchema", () => {
 });
 
 describe("CMSLandingPagePropsSchema", () => {
+	const landingBasePage = {
+		id: 1,
+		title: "Test",
+		meta: {
+			slug: "test",
+			type: "hsebase.LandingPage",
+			locale: "en",
+			html_url: "https://example.com/test/",
+			detail_url: "https://example.com/api/pages/1/",
+			first_published_at: "2024-01-01T00:00:00Z",
+			last_published_at: "2024-01-01T00:00:00Z",
+			search_description: "",
+			parent: null,
+		},
+	};
+
 	it("accepts a page with content zones", () => {
 		const page = {
-			...basePage,
-			meta: { ...basePage.meta, type: "hsebase.LandingPage" },
+			...landingBasePage,
 			lead_text: "Landing lead",
 			top_content: [],
+			content: [],
 			bottom_content: [],
 		};
 		expect(CMSLandingPagePropsSchema.safeParse(page).success).toBe(true);
 	});
 
 	it("accepts a page without optional content zones", () => {
+		expect(CMSLandingPagePropsSchema.safeParse(landingBasePage).success).toBe(
+			true,
+		);
+	});
+
+	it("does not require body or header fields", () => {
 		const page = {
-			...basePage,
-			meta: { ...basePage.meta, type: "hsebase.LandingPage" },
+			...landingBasePage,
+			content: [{ type: "text", value: "hello", id: "1" }],
 		};
-		expect(CMSLandingPagePropsSchema.safeParse(page).success).toBe(true);
+		const result = CMSLandingPagePropsSchema.safeParse(page);
+		expect(result.success).toBe(true);
+		if (result.success) {
+			expect(result.data).not.toHaveProperty("body");
+			expect(result.data).not.toHaveProperty("header");
+		}
 	});
 });
 
