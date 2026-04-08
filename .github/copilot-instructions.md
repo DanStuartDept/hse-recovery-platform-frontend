@@ -14,7 +14,7 @@
 | `@repo/wagtail-cms-types` | `packages/wagtail-cms-types` | Zod-based TypeScript types for all Wagtail content (no build — exports raw `.ts`) |
 | `@repo/wagtail-cms-mapping` | `packages/wagtail-cms-mapping` | CMS-to-component mapping — factory pattern with HSE design system defaults |
 | `@repo/i18n` | `packages/i18n` | Locale routing, dictionary loading, translation helpers (source-only) |
-| `@repo/logger` | `packages/logger` | Thin console wrapper |
+| `@repo/logger` | `packages/logger` | Structured console logger (log, warn, error) |
 | `@repo/vitest-config` | `packages/config-vitest` | Shared `createVitestConfig()` factory |
 | `@repo/biome-config` | `packages/biome-config` | Shared Biome rule sets |
 | `@repo/typescript-config` | `packages/config-typescript` | Shared `tsconfig` bases |
@@ -44,6 +44,7 @@ pnpm typecheck        # tsc --noEmit (app runs next typegen first)
 - **Images**: `NEXT_PUBLIC_REMOTE_IMAGE_DOMAINS` env var (comma-separated hostnames) feeds `images.remotePatterns` in `next.config.ts` via `@repo/app-config`.
 - **Third-party scripts**: OneTrust, GTM, and Piwik are gated on `@repo/app-config` env vars. CSP headers in `security-headers.ts` are built dynamically per integration.
 - **Forms**: `react-hook-form` + `@hookform/resolvers` + Zod schemas.
+- **Error handling & logging**: `@repo/logger` provides `log`, `warn`, and `error` levels. CMS fetch errors are classified by HTTP status in the catch-all route and logged at appropriate severity. CMS responses are validated with Zod `safeParse` — mismatches logged as warnings without crashing. Error boundaries log at `error` level in all environments.
 
 ## Conventions
 

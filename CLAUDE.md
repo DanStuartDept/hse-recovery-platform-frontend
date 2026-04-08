@@ -44,7 +44,7 @@ This is a **pnpm + Turborepo monorepo** with a Next.js 16 app integrating with a
 | `@repo/wagtail-cms-types`   | `packages/wagtail-cms-types`   | Zod-based CMS types (source-only, no build step)              |
 | `@repo/wagtail-cms-mapping` | `packages/wagtail-cms-mapping` | CMS-to-component mapping (source-only, factory pattern)       |
 | `@repo/i18n`                | `packages/i18n`                | Locale routing, dictionary loading, translation helpers        |
-| `@repo/logger`              | `packages/logger`              | Thin console wrapper                                          |
+| `@repo/logger`              | `packages/logger`              | Structured console logger (log, warn, error)                  |
 | `@repo/vitest-config`       | `packages/config-vitest`       | Shared `createVitestConfig()` factory                         |
 | `@repo/biome-config`        | `packages/biome-config`        | Shared Biome rule sets                                        |
 | `@repo/typescript-config`   | `packages/config-typescript`   | Shared tsconfig bases                                         |
@@ -62,6 +62,7 @@ This is a **pnpm + Turborepo monorepo** with a Next.js 16 app integrating with a
 - **Images**: `NEXT_PUBLIC_REMOTE_IMAGE_DOMAINS` env var (comma-separated hostnames) feeds `images.remotePatterns` in `next.config.ts` via `@repo/app-config`.
 - **Third-party scripts**: OneTrust cookie consent, GTM, and Piwik are gated on `@repo/app-config` env vars and `config.isLocalhost`. CSP headers in `security-headers.ts` are built dynamically — domains are only added when the corresponding integration is configured.
 - **Forms**: `react-hook-form` + `@hookform/resolvers` + Zod schemas.
+- **Error handling & logging**: `@repo/logger` provides `log`, `warn`, and `error` levels. CMS fetch errors are classified by HTTP status (404 vs 5xx vs network) and logged at appropriate severity. CMS responses are validated against Zod schemas via `safeParse` — mismatches are logged as warnings without crashing the page. Error boundaries log at `error` level in all environments.
 
 ### Dependency conventions
 
