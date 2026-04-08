@@ -7,13 +7,7 @@ import type { I18nConfig } from "./types";
 function getPreferredLocale(request: NextRequest, config: I18nConfig): string {
 	const { defaultLocale, locales } = config;
 
-	// 1. NEXT_LOCALE cookie
-	const cookieLocale = request.cookies.get("NEXT_LOCALE")?.value;
-	if (cookieLocale && locales.includes(cookieLocale)) {
-		return cookieLocale;
-	}
-
-	// 2. Accept-Language header
+	// 1. Accept-Language header
 	if (locales.length > 1) {
 		const negotiator = new Negotiator({
 			headers: { "accept-language": request.headers.get("accept-language") ?? "" },
@@ -25,7 +19,7 @@ function getPreferredLocale(request: NextRequest, config: I18nConfig): string {
 		}
 	}
 
-	// 3. Fallback
+	// 2. Fallback
 	return defaultLocale;
 }
 
@@ -46,14 +40,10 @@ export function createI18nProxy(config: I18nConfig) {
 				const stripped = pathname.replace(new RegExp(`^/${defaultLocale}`), "") || "/";
 				const url = request.nextUrl.clone();
 				url.pathname = stripped;
-				const response = NextResponse.redirect(url);
-				response.cookies.set("NEXT_LOCALE", defaultLocale, { path: "/" });
-				return response;
+				return NextResponse.redirect(url);
 			}
 
-			const response = NextResponse.next();
-			response.cookies.set("NEXT_LOCALE", pathnameLocale, { path: "/" });
-			return response;
+			return NextResponse.next();
 		}
 
 		const locale = getPreferredLocale(request, config);
@@ -61,15 +51,11 @@ export function createI18nProxy(config: I18nConfig) {
 		if (locale !== defaultLocale) {
 			const url = request.nextUrl.clone();
 			url.pathname = `/${locale}${pathname}`;
-			const response = NextResponse.redirect(url);
-			response.cookies.set("NEXT_LOCALE", locale, { path: "/" });
-			return response;
+			return NextResponse.redirect(url);
 		}
 
 		const url = request.nextUrl.clone();
 		url.pathname = `/${defaultLocale}${pathname}`;
-		const response = NextResponse.rewrite(url);
-		response.cookies.set("NEXT_LOCALE", defaultLocale, { path: "/" });
-		return response;
+		return NextResponse.rewrite(url);
 	};
 }

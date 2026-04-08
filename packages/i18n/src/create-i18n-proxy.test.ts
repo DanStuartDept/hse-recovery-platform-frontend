@@ -13,13 +13,11 @@ const singleLocaleConfig: I18nConfig = {
 	locales: ["en-ie"],
 };
 
-function makeRequest(path: string, options?: { acceptLanguage?: string; cookie?: string }) {
+function makeRequest(path: string, options?: { acceptLanguage?: string }) {
 	const url = new URL(path, "http://localhost:3000");
 	const headers = new Headers();
 	if (options?.acceptLanguage) headers.set("accept-language", options.acceptLanguage);
-	const req = new NextRequest(url, { headers });
-	if (options?.cookie) req.cookies.set("NEXT_LOCALE", options.cookie);
-	return req;
+	return new NextRequest(url, { headers });
 }
 
 describe("createI18nProxy — multi-locale", () => {
@@ -54,22 +52,11 @@ describe("createI18nProxy — multi-locale", () => {
 		expect(response!.headers.get("location")).toContain("/ga/about/");
 	});
 
-	it("uses NEXT_LOCALE cookie over Accept-Language", () => {
-		const response = proxy(
-			makeRequest("/about/", {
-				acceptLanguage: "ga;q=0.9",
-				cookie: "en-ie",
-			}),
-		);
+	it("falls back to default locale when Accept-Language has no match", () => {
+		const response = proxy(makeRequest("/about/", { acceptLanguage: "fr;q=0.9" }));
 		expect(response).toBeDefined();
 		const rewriteHeader = response!.headers.get("x-middleware-rewrite");
 		expect(rewriteHeader).toContain("/en-ie/about/");
-	});
-
-	it("sets NEXT_LOCALE cookie on response", () => {
-		const response = proxy(makeRequest("/ga/about/"));
-		const cookie = response!.cookies.get("NEXT_LOCALE");
-		expect(cookie?.value).toBe("ga");
 	});
 });
 
