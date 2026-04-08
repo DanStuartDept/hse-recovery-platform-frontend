@@ -12,42 +12,45 @@ import { i18nConfig } from "@/lib/i18n/config";
 export const dynamic = "force-dynamic";
 export const revalidate = 3600;
 
-/**
- * Requested page size. The Wagtail API may return fewer items if
- * `WAGTAILAPI_LIMIT_MAX` is set lower — pagination handles this
- * by advancing by the actual number of items received.
- */
 const PAGE_SIZE = 20;
 
 /**
- * Returns one sitemap per locale.
- *
- * Next.js generates a sitemap index at `/sitemap.xml` pointing to
- * `/sitemap/[locale].xml` for each locale.
+ * Converts an i18n locale (e.g. `"en-ie"`) to the Wagtail API locale
+ * (e.g. `"en"`). Wagtail uses the language subtag only.
  */
-export async function generateSitemaps() {
-	return i18nConfig.locales.map((locale) => ({ id: locale }));
+function toWagtailLocale(locale: string): string {
+	return locale.split("-")[0];
 }
 
 /** Paginates through the Wagtail pages API for a given locale. */
 async function fetchAllPages(locale: string): Promise<CMSPageContent[]> {
 	const allItems: CMSPageContent[] = [];
 	let offset = 0;
+	const wagtailLocale = toWagtailLocale(locale);
 
-	for (;;) {
-		const batch = await cmsClient.fetchPages<CMSPageContents>({
-			locale,
-			limit: PAGE_SIZE,
-			offset,
-		});
+	try {
+		for (;;) {
+			const batch = await cmsClient.fetchPages<CMSPageContents>({
+				locale: wagtailLocale,
+				limit: PAGE_SIZE,
+				offset,
+			});
 
-		allItems.push(...batch.items);
+			allItems.push(...batch.items);
 
-		if (allItems.length >= batch.meta.total_count || batch.items.length === 0) {
-			break;
+			if (
+				allItems.length >= batch.meta.total_count ||
+				batch.items.length === 0
+			) {
+				break;
+			}
+
+			offset += batch.items.length;
 		}
-
-		offset += batch.items.length;
+	} catch {
+		// Return whatever we've collected so far — an empty sitemap is
+		// better than crashing the whole sitemap.
+		return allItems;
 	}
 
 	return allItems;
@@ -62,20 +65,29 @@ function extractPath(htmlUrl: string): string {
 	}
 }
 
-export default async function sitemap(props: {
-	id: Promise<string>;
-}): Promise<MetadataRoute.Sitemap> {
-	const locale = await props.id;
-	const isDefaultLocale = locale === i18nConfig.defaultLocale;
-	const pages = await fetchAllPages(locale);
+/**
+ * Generates a single `/sitemap.xml` with entries for all configured locales.
+ *
+ * Default locale pages have no URL prefix; non-default locales are prefixed
+ * (e.g. `/ga/about/`). Pages are fetched per-locale from the Wagtail API.
+ */
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+	const entries: MetadataRoute.Sitemap = [];
 
-	return pages.map((page) => {
-		const path = extractPath(page.meta.html_url);
-		const prefix = isDefaultLocale ? "" : `/${locale}`;
+	for (const locale of i18nConfig.locales) {
+		const isDefaultLocale = locale === i18nConfig.defaultLocale;
+		const pages = await fetchAllPages(locale);
 
-		return {
-			url: `${config.siteUrl}${prefix}${path}`,
-			lastModified: page.meta.last_published_at,
-		};
-	});
+		for (const page of pages) {
+			const path = extractPath(page.meta.html_url);
+			const prefix = isDefaultLocale ? "" : `/${locale}`;
+
+			entries.push({
+				url: `${config.siteUrl}${prefix}${path}`,
+				lastModified: page.meta.last_published_at,
+			});
+		}
+	}
+
+	return entries;
 }
