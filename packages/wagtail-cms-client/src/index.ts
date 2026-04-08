@@ -13,6 +13,12 @@ import type {
 	CMSQueries,
 	NotFoundContents,
 } from "@repo/wagtail-cms-types/core";
+import type {
+	CMSFooterAPIResponse,
+	CMSFooterResponse,
+	CMSHeaderAPIResponse,
+	CMSHeaderResponse,
+} from "@repo/wagtail-cms-types/settings";
 import { FetchError, fetchContent, fetchRequest } from "./lib/index.js";
 
 export * from "./lib/index.js";
@@ -313,5 +319,90 @@ export class CMSClient {
 		}
 		// If it doesn't look like an HTTP URL, use it as is
 		return baseUrl + media.download_url;
+	}
+
+	/**
+	 * Type guard to check if a response is a NotFoundContents error.
+	 */
+	private isNotFound(response: unknown): response is NotFoundContents {
+		return (
+			response != null &&
+			typeof response === "object" &&
+			"message" in response &&
+			"data" in response
+		);
+	}
+
+	/**
+	 * Fetches an endpoint relative to the base URL, bypassing the API path prefix.
+	 * Used for custom Wagtail endpoints outside the standard `/api/v2/` path
+	 * (e.g., `/api/headers/`, `/api/footers/`).
+	 *
+	 * @param path - The path relative to the base URL (e.g., `api/headers/`).
+	 * @param init - Optional request options (e.g., ISR revalidation).
+	 * @returns Promise that resolves with the parsed JSON response data.
+	 */
+	private async fetchBaseEndpoint<T>(
+		path: string,
+		init?: RequestInit,
+	): Promise<T | NotFoundContents> {
+		const url = `${this.baseURL}/${path}`;
+		try {
+			return (await fetchRequest(url, init)) as T;
+		} catch (error) {
+			return this.handleFetchError(error, "Path not found");
+		}
+	}
+
+	/**
+	 * Fetches the site header configuration from the CMS.
+	 * Calls the `/api/headers/` endpoint and returns the first item from the array.
+	 *
+	 * @param init - Optional request options (e.g., ISR revalidation).
+	 * @returns The header configuration, or `NotFoundContents` if the fetch fails or the array is empty.
+	 */
+	public async fetchHeader(
+		init?: RequestInit,
+	): Promise<CMSHeaderResponse | NotFoundContents> {
+		const response = await this.fetchBaseEndpoint<CMSHeaderAPIResponse>(
+			"api/headers/",
+			init,
+		);
+
+		if (this.isNotFound(response)) {
+			return { message: "Header not found", data: response.data };
+		}
+
+		const first = response[0];
+		if (!first) {
+			return { message: "Header not found", data: response };
+		}
+		return first;
+	}
+
+	/**
+	 * Fetches the site footer configuration from the CMS.
+	 * Calls the `/api/footers/` endpoint and returns the first item from the array.
+	 *
+	 * @param init - Optional request options (e.g., ISR revalidation).
+	 * @returns The footer configuration, or `NotFoundContents` if the fetch fails or the array is empty.
+	 */
+	public async fetchFooter(
+		init?: RequestInit,
+	): Promise<CMSFooterResponse | NotFoundContents> {
+		const response = await this.fetchBaseEndpoint<CMSFooterAPIResponse>(
+			"api/footers/",
+			init,
+		);
+
+		if (this.isNotFound(response)) {
+			return { message: "Footer not found", data: response.data };
+		}
+
+		const first = response[0];
+		if (!first) {
+			return { message: "Footer not found", data: response };
+		}
+		return first;
 	}
 }

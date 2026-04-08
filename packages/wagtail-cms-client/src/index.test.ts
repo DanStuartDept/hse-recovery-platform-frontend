@@ -806,4 +806,170 @@ describe("CMSClient", () => {
 			expect(result).toBe(mockResponse);
 		});
 	});
+
+	describe("fetchHeader", () => {
+		let client: CMSClient;
+
+		beforeEach(() => {
+			const options: ClientOptions = {
+				baseURL: "https://api.example.com",
+				apiPath: "/api/v2",
+			};
+			client = new CMSClient(options);
+		});
+
+		it("should return the first header from the API response", async () => {
+			const headerData = {
+				id: 1,
+				name: "Org Header",
+				service_name: "",
+				service_long_name: false,
+				transactional: false,
+				logo_aria: null,
+				show_search: false,
+				search_prompt_text: "Search",
+				navigation_text: "Main navigation",
+				locale: 1,
+				logo_link: null,
+				navigation_links: [],
+				navigation_secondary_links: [],
+				header_mobile_links: [],
+			};
+			mockFetchRequest.mockResolvedValue([headerData]);
+
+			const result = await client.fetchHeader();
+
+			expect(mockFetchRequest).toHaveBeenCalledWith(
+				"https://api.example.com/api/headers/",
+				undefined,
+			);
+			expect(result).toEqual(headerData);
+		});
+
+		it("should return NotFoundContents when the API returns an empty array", async () => {
+			mockFetchRequest.mockResolvedValue([]);
+
+			const result = await client.fetchHeader();
+
+			expect(result).toEqual({
+				message: "Header not found",
+				data: [],
+			});
+		});
+
+		it("should return NotFoundContents when the fetch fails", async () => {
+			mockFetchRequest.mockRejectedValue(
+				new libModule.FetchError("Server error", "REQUEST_FAILED", 500),
+			);
+
+			const result = await client.fetchHeader();
+
+			expect(result).toEqual({
+				message: "Header not found",
+				data: expect.any(libModule.FetchError),
+			});
+		});
+
+		it("should pass init options to fetchRequest", async () => {
+			const headerData = {
+				id: 1,
+				name: "Org Header",
+				service_name: "",
+				service_long_name: false,
+				transactional: false,
+				logo_aria: null,
+				show_search: false,
+				search_prompt_text: "Search",
+				navigation_text: "Main navigation",
+				locale: 1,
+				logo_link: null,
+				navigation_links: [],
+				navigation_secondary_links: [],
+				header_mobile_links: [],
+			};
+			const init = { next: { revalidate: 3600 } } as RequestInit;
+			mockFetchRequest.mockResolvedValue([headerData]);
+
+			await client.fetchHeader(init);
+
+			expect(mockFetchRequest).toHaveBeenCalledWith(
+				"https://api.example.com/api/headers/",
+				init,
+			);
+		});
+	});
+
+	describe("fetchFooter", () => {
+		let client: CMSClient;
+
+		beforeEach(() => {
+			const options: ClientOptions = {
+				baseURL: "https://api.example.com",
+				apiPath: "/api/v2",
+			};
+			client = new CMSClient(options);
+		});
+
+		it("should return the first footer from the API response", async () => {
+			const footerData = {
+				id: 1,
+				name: "Org Footer",
+				locale: 1,
+				footer_links: [],
+				footer_secondary_links: [],
+			};
+			mockFetchRequest.mockResolvedValue([footerData]);
+
+			const result = await client.fetchFooter();
+
+			expect(mockFetchRequest).toHaveBeenCalledWith(
+				"https://api.example.com/api/footers/",
+				undefined,
+			);
+			expect(result).toEqual(footerData);
+		});
+
+		it("should return NotFoundContents when the API returns an empty array", async () => {
+			mockFetchRequest.mockResolvedValue([]);
+
+			const result = await client.fetchFooter();
+
+			expect(result).toEqual({
+				message: "Footer not found",
+				data: [],
+			});
+		});
+
+		it("should return NotFoundContents when the fetch fails", async () => {
+			mockFetchRequest.mockRejectedValue(
+				new libModule.FetchError("Server error", "REQUEST_FAILED", 500),
+			);
+
+			const result = await client.fetchFooter();
+
+			expect(result).toEqual({
+				message: "Footer not found",
+				data: expect.any(libModule.FetchError),
+			});
+		});
+
+		it("should pass init options to fetchRequest", async () => {
+			const footerData = {
+				id: 1,
+				name: "Org Footer",
+				locale: 1,
+				footer_links: [],
+				footer_secondary_links: [],
+			};
+			const init = { next: { revalidate: 3600 } } as RequestInit;
+			mockFetchRequest.mockResolvedValue([footerData]);
+
+			await client.fetchFooter(init);
+
+			expect(mockFetchRequest).toHaveBeenCalledWith(
+				"https://api.example.com/api/footers/",
+				init,
+			);
+		});
+	});
 });
