@@ -23,7 +23,7 @@ Before creating a custom component, verify it doesn't already exist:
 
 ## Step 2: Create the component
 
-**File:** `apps/hse-app-template/src/components/{ComponentName}/{ComponentName}.tsx`
+**File:** `apps/hse-multisite-template/src/components/{ComponentName}/{ComponentName}.tsx`
 
 ```typescript
 import { Container, Row, Col } from "@hseireland/hse-frontend-react";
@@ -46,7 +46,7 @@ If the component needs interactivity, add `"use client"` directive at the top.
 
 ## Step 3: Create test file
 
-**File:** `apps/hse-app-template/src/components/{ComponentName}/{ComponentName}.test.tsx`
+**File:** `apps/hse-multisite-template/src/components/{ComponentName}/{ComponentName}.test.tsx`
 
 ```typescript
 import { render, screen } from "@testing-library/react";
@@ -61,11 +61,11 @@ describe("{ComponentName}", () => {
 });
 ```
 
-Run: `cd apps/hse-app-template && pnpm vitest run src/components/{ComponentName}/{ComponentName}.test.tsx`
+Run: `cd apps/hse-multisite-template && pnpm vitest run src/components/{ComponentName}/{ComponentName}.test.tsx`
 
 ## Step 4: Export from index
 
-**File:** `apps/hse-app-template/src/components/{ComponentName}/index.ts`
+**File:** `apps/hse-multisite-template/src/components/{ComponentName}/index.ts`
 
 ```typescript
 export { {ComponentName} } from "./{ComponentName}";

@@ -17,6 +17,7 @@
 ### Task 1.1: Fix `buildQueryString` URL encoding (Audit #1)
 
 **Files:**
+
 - Modify: `packages/wagtail-cms-client/src/utils/index.ts`
 - Modify: `packages/wagtail-cms-client/src/utils/index.test.ts`
 
@@ -26,15 +27,15 @@ Add tests to `packages/wagtail-cms-client/src/utils/index.test.ts`:
 
 ```typescript
 it("should encode special characters in values", () => {
-	const queries: CMSQueries = { search: "foo bar&baz=qux" };
-	const result = buildQueryString(queries);
-	expect(result).toBe("search=foo+bar%26baz%3Dqux");
+  const queries: CMSQueries = { search: "foo bar&baz=qux" };
+  const result = buildQueryString(queries);
+  expect(result).toBe("search=foo+bar%26baz%3Dqux");
 });
 
 it("should encode special characters in array values", () => {
-	const queries: CMSQueries = { fields: ["title&id", "body content"] };
-	const result = buildQueryString(queries);
-	expect(result).toBe("fields=title%26id%2Cbody+content");
+  const queries: CMSQueries = { fields: ["title&id", "body content"] };
+  const result = buildQueryString(queries);
+  expect(result).toBe("fields=title%26id%2Cbody+content");
 });
 ```
 
@@ -51,25 +52,25 @@ Replace the contents of `packages/wagtail-cms-client/src/utils/index.ts`:
 import type { CMSQueries } from "@repo/wagtail-cms-types/core";
 
 export function buildQueryString(queries: CMSQueries | undefined): string {
-	if (!queries) {
-		return "";
-	}
+  if (!queries) {
+    return "";
+  }
 
-	const params = new URLSearchParams();
+  const params = new URLSearchParams();
 
-	for (const key in queries) {
-		if (Object.hasOwn(queries, key) && queries[key] !== undefined) {
-			const value = queries[key];
+  for (const key in queries) {
+    if (Object.hasOwn(queries, key) && queries[key] !== undefined) {
+      const value = queries[key];
 
-			if (Array.isArray(value)) {
-				params.set(key, value.join(","));
-			} else if (value !== "") {
-				params.set(key, String(value));
-			}
-		}
-	}
+      if (Array.isArray(value)) {
+        params.set(key, value.join(","));
+      } else if (value !== "") {
+        params.set(key, String(value));
+      }
+    }
+  }
 
-	return params.toString();
+  return params.toString();
 }
 ```
 
@@ -78,11 +79,13 @@ export function buildQueryString(queries: CMSQueries | undefined): string {
 `URLSearchParams` encodes spaces as `+` and keys may appear in insertion order. Update any existing assertions that rely on raw `key=value` format. For example, `"type=appbase.HomePage&limit=10"` stays the same (no special chars), but tests with spaces or `&` in values will now be encoded.
 
 Review each existing test and confirm the expected output matches URLSearchParams encoding:
+
 - `"type=appbase.HomePage"` stays the same
 - `"type=appbase.HomePage&limit=10&offset=0"` stays the same
 - `"fields=title%2Cbody"` — note: URLSearchParams encodes commas in the individual values but we join with `,` first then set, so `fields=title,body` becomes `fields=title%2Cbody`. Wait — actually `URLSearchParams.set("fields", "title,body")` produces `fields=title%2Cbody`.
 
 **Important:** The existing test `"should handle array parameters by joining with comma"` expects `fields=title,body`. With URLSearchParams, commas are encoded as `%2C`. Either:
+
 - (a) Accept the encoded output: `fields=title%2Cbody` — Wagtail should decode it, or
 - (b) Build array values outside URLSearchParams and append raw.
 
@@ -90,9 +93,9 @@ The safest approach for Wagtail compatibility is (a) — standard URL encoding. 
 
 ```typescript
 it("should handle array parameters by joining with comma", () => {
-	const queries: CMSQueries = { fields: ["title", "body"] };
-	const result = buildQueryString(queries);
-	expect(result).toBe("fields=title%2Cbody");
+  const queries: CMSQueries = { fields: ["title", "body"] };
+  const result = buildQueryString(queries);
+  expect(result).toBe("fields=title%2Cbody");
 });
 ```
 
@@ -118,6 +121,7 @@ git commit -m "fix(packages): use URLSearchParams for proper URL encoding in bui
 ### Task 1.2: Fix `JSON.stringify(response)` error message (Audit #2)
 
 **Files:**
+
 - Modify: `packages/wagtail-cms-client/src/lib/fetch.ts`
 - Modify: `packages/wagtail-cms-client/src/lib/fetch.test.ts`
 
@@ -127,23 +131,19 @@ Add test to `packages/wagtail-cms-client/src/lib/fetch.test.ts`:
 
 ```typescript
 it("should include status, statusText, and url in error message", async () => {
-	vi.stubGlobal(
-		"fetch",
-		vi.fn().mockResolvedValue({
-			ok: false,
-			status: 404,
-			statusText: "Not Found",
-			url: "https://example.com/api/pages/",
-			json: vi.fn(),
-		}),
-	);
+  vi.stubGlobal(
+    "fetch",
+    vi.fn().mockResolvedValue({
+      ok: false,
+      status: 404,
+      statusText: "Not Found",
+      url: "https://example.com/api/pages/",
+      json: vi.fn(),
+    }),
+  );
 
-	await expect(fetchRequest("https://example.com/api/pages/")).rejects.toThrow(
-		/404 Not Found/,
-	);
-	await expect(fetchRequest("https://example.com/api/pages/")).rejects.toThrow(
-		/example\.com/,
-	);
+  await expect(fetchRequest("https://example.com/api/pages/")).rejects.toThrow(/404 Not Found/);
+  await expect(fetchRequest("https://example.com/api/pages/")).rejects.toThrow(/example\.com/);
 });
 ```
 
@@ -158,16 +158,10 @@ In `packages/wagtail-cms-client/src/lib/fetch.ts`, replace lines 56-59:
 
 ```typescript
 // Old:
-throw new FetchError(
-	`Request failed with response: ${JSON.stringify(response, null, 2)}`,
-	"REQUEST_FAILED",
-);
+throw new FetchError(`Request failed with response: ${JSON.stringify(response, null, 2)}`, "REQUEST_FAILED");
 
 // New:
-throw new FetchError(
-	`Request failed: ${response.status} ${response.statusText} (${response.url})`,
-	"REQUEST_FAILED",
-);
+throw new FetchError(`Request failed: ${response.status} ${response.statusText} (${response.url})`, "REQUEST_FAILED");
 ```
 
 - [ ] **Step 4: Update existing test assertions that match the old message format**
@@ -191,6 +185,7 @@ git commit -m "fix(packages): extract status/statusText/url in FetchError instea
 ### Task 1.3: Fix `decendant_of` spelling (Audit #3)
 
 **Files:**
+
 - Modify: `packages/wagtail-cms-types/src/types/core/index.ts` (line 41)
 - Modify: `packages/wagtail-cms-client/src/lib/cms/index.ts` (lines 66, 70)
 - Modify: `packages/wagtail-cms-client/src/lib/cms/index.test.ts` (lines 165, 180, 184, 188, 193)
@@ -215,6 +210,7 @@ descendant_of: z.number().optional(),
 In `packages/wagtail-cms-client/src/lib/cms/index.ts`, replace all instances of `decendant_of` with `descendant_of`:
 
 Line 66:
+
 ```typescript
 // Old:
 (queries?.child_of || queries?.ancestor_of || queries?.decendant_of) &&
@@ -224,6 +220,7 @@ Line 66:
 ```
 
 Line 70:
+
 ```typescript
 // Old:
 "Filtering by tree position is supported only for pages. Please remove the 'child_of', 'ancestor_of' or 'decendant_of'  query.",
@@ -264,11 +261,13 @@ git commit -m "fix(packages): correct decendant_of → descendant_of to match Wa
 ### Task 2.1: Fix Turbo pipeline config (Audit #4, #5, #6, #7)
 
 **Files:**
+
 - Modify: `turbo.json`
 
 - [ ] **Step 1: Read current turbo.json and plan changes**
 
 Current state:
+
 ```json
 {
   "build": {
@@ -286,6 +285,7 @@ Current state:
 ```
 
 Changes needed:
+
 1. **#4:** Add `"dist/**"` to build outputs
 2. **#5:** Change lint `dependsOn` to `[]`
 3. **#6:** Change typecheck `dependsOn` to `[]`
@@ -355,6 +355,7 @@ git commit -m "fix(config): add dist outputs, parallelise lint/typecheck, add in
 ### Task 3.1: Delete duplicate `fields/schemas.ts` (Audit #11)
 
 **Files:**
+
 - Delete: `packages/wagtail-cms-types/src/types/fields/schemas.ts`
 
 - [ ] **Step 1: Verify schemas.ts is not imported anywhere**
@@ -390,6 +391,7 @@ git commit -m "chore(packages): delete duplicate fields/schemas.ts (identical to
 ### Task 3.2: Remove `@repo/logger` from wagtail-cms-client (Audit #14)
 
 **Files:**
+
 - Modify: `packages/wagtail-cms-client/package.json` (remove `@repo/logger` from devDependencies)
 
 Note: We are NOT deleting the logger package itself — that's a bigger decision. We are removing the unused dependency reference.
@@ -429,17 +431,20 @@ git commit -m "chore(packages): remove unused @repo/logger dep from wagtail-cms-
 ### Task 3.3: Remove unused dependencies from wagtail-cms-client (Audit #10)
 
 **Files:**
+
 - Modify: `packages/wagtail-cms-client/package.json`
 
 - [ ] **Step 1: Verify each dependency is unused**
 
 Run these checks:
+
 ```bash
 grep -r "semantic-release" packages/wagtail-cms-client/
 grep -r "tsup" packages/wagtail-cms-client/src/
 grep -r "jsdom" packages/wagtail-cms-client/
 grep -r "typedoc" packages/wagtail-cms-client/src/
 ```
+
 Expected: No source-code imports for any of them. (`typedoc` may appear in the `generate-docs` script — that's fine, but it shouldn't be a devDependency since the script is optional.)
 
 - [ ] **Step 2: Remove unused devDependencies**
@@ -478,6 +483,7 @@ git commit -m "chore(packages): remove unused semantic-release, tsup, jsdom, typ
 ### Task 3.4: Remove redundant dev deps from wagtail-cms-types (Audit #34)
 
 **Files:**
+
 - Modify: `packages/wagtail-cms-types/package.json`
 
 - [ ] **Step 1: Verify `serve` is unused**
@@ -509,9 +515,10 @@ git commit -m "chore(packages): remove unused serve dep from wagtail-cms-types"
 ### Task 3.5: Remove unused tsconfig bases and CSS declarations (Audit #27, #37)
 
 **Files:**
+
 - Delete: `packages/config-typescript/react-app.json`
 - Delete: `packages/config-typescript/vite.json`
-- Modify: `apps/hse-app-template/declaration.css.d.ts`
+- Modify: `apps/hse-multisite-template/declaration.css.d.ts`
 
 - [ ] **Step 1: Verify react-app.json is not referenced**
 
@@ -532,12 +539,12 @@ rm packages/config-typescript/vite.json
 
 - [ ] **Step 4: Trim declaration.css.d.ts to only needed types**
 
-Replace `apps/hse-app-template/declaration.css.d.ts` with:
+Replace `apps/hse-multisite-template/declaration.css.d.ts` with:
 
 ```typescript
 declare module "*.scss" {
-	const content: { [className: string]: string };
-	export default content;
+  const content: { [className: string]: string };
+  export default content;
 }
 ```
 
@@ -551,7 +558,7 @@ Expected: All PASS
 - [ ] **Step 6: Commit**
 
 ```bash
-git add packages/config-typescript/react-app.json packages/config-typescript/vite.json apps/hse-app-template/declaration.css.d.ts
+git add packages/config-typescript/react-app.json packages/config-typescript/vite.json apps/hse-multisite-template/declaration.css.d.ts
 git commit -m "chore(config): remove unused tsconfig bases (react-app, vite) and unused CSS module declarations"
 ```
 
@@ -564,6 +571,7 @@ git commit -m "chore(config): remove unused tsconfig bases (react-app, vite) and
 ### Task 4.1: Fix wagtail-cms-types build/dev scripts (Audit #8, #9)
 
 **Files:**
+
 - Modify: `packages/wagtail-cms-types/package.json`
 
 - [ ] **Step 1: Restructure the scripts**
@@ -586,6 +594,7 @@ In `packages/wagtail-cms-types/package.json`, replace the scripts block:
 ```
 
 Key changes:
+
 - `build` → no-op echo (source-only, no transpilation needed)
 - `dev` → renamed to `dev:docs` (won't run during `turbo run dev`)
 - `build:watch` → `docs:watch`
@@ -614,6 +623,7 @@ git commit -m "fix(packages): change wagtail-cms-types build to no-op, rename de
 ### Task 4.2: Convert config-vitest to source-only + fix sharedConfig and coverage dedup (Audit #16, #17, #18)
 
 **Files:**
+
 - Modify: `packages/config-vitest/package.json`
 - Modify: `packages/config-vitest/src/index.ts`
 
@@ -623,43 +633,44 @@ Replace `packages/config-vitest/package.json`:
 
 ```json
 {
-	"name": "@repo/vitest-config",
-	"version": "0.0.0",
-	"type": "module",
-	"private": true,
-	"description": "Shared Vitest configuration for the monorepo.",
-	"exports": {
-		".": "./src/index.ts",
-		"./mocks": "./src/mocks/index.ts"
-	},
-	"scripts": {
-		"typecheck": "tsc --noEmit",
-		"lint": "biome check --write"
-	},
-	"dependencies": {
-		"@vitejs/plugin-react": "catalog:",
-		"vite-tsconfig-paths": "catalog:"
-	},
-	"peerDependencies": {
-		"vitest": "^1 || ^2 || ^3 || ^4",
-		"@vitest/coverage-v8": "^1 || ^2 || ^3 || ^4",
-		"jsdom": "^22 || ^23 || ^24 || ^26 || ^29",
-		"vitest-sonar-reporter": "^2.0.4 || ^3.0.0"
-	},
-	"devDependencies": {
-		"@repo/typescript-config": "workspace:*",
-		"@repo/biome-config": "workspace:*",
-		"@testing-library/jest-dom": "catalog:",
-		"@vitest/coverage-v8": "catalog:",
-		"typescript": "catalog:",
-		"vitest": "catalog:",
-		"jsdom": "catalog:",
-		"vitest-sonar-reporter": "catalog:"
-	}
+  "name": "@repo/vitest-config",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "description": "Shared Vitest configuration for the monorepo.",
+  "exports": {
+    ".": "./src/index.ts",
+    "./mocks": "./src/mocks/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "lint": "biome check --write"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "catalog:",
+    "vite-tsconfig-paths": "catalog:"
+  },
+  "peerDependencies": {
+    "vitest": "^1 || ^2 || ^3 || ^4",
+    "@vitest/coverage-v8": "^1 || ^2 || ^3 || ^4",
+    "jsdom": "^22 || ^23 || ^24 || ^26 || ^29",
+    "vitest-sonar-reporter": "^2.0.4 || ^3.0.0"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "@repo/biome-config": "workspace:*",
+    "@testing-library/jest-dom": "catalog:",
+    "@vitest/coverage-v8": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:",
+    "jsdom": "catalog:",
+    "vitest-sonar-reporter": "catalog:"
+  }
 }
 ```
 
 Changes:
+
 - Removed `main`, `module`, `types`, `files` fields (no build output)
 - Changed `exports` to point at `.ts` source files
 - Removed `build` and `dev` scripts (no bunchee)
@@ -675,64 +686,60 @@ import tsconfigPaths from "vite-tsconfig-paths";
 import { defineConfig } from "vitest/config";
 
 const coverageExclusions = [
-	"node_modules/",
-	"src/test-setup.js",
-	"src/vitest.setup.ts",
-	"**/*.test.{ts,tsx}",
-	"**/*.spec.{ts,tsx}",
-	"**/tests/**",
-	"**/__tests__/**",
-	"**/coverage/**",
-	"**/.next/**",
-	"**/dist/**",
-	"**/build/**",
-	"**/storybook-static/**",
-	"**/*.config.{js,ts,mjs,mts}",
-	"**/*.stories.{ts,tsx,js,jsx,mdx}",
-	"**/*.d.ts",
-	"**/node_modules/**",
+  "node_modules/",
+  "src/test-setup.js",
+  "src/vitest.setup.ts",
+  "**/*.test.{ts,tsx}",
+  "**/*.spec.{ts,tsx}",
+  "**/tests/**",
+  "**/__tests__/**",
+  "**/coverage/**",
+  "**/.next/**",
+  "**/dist/**",
+  "**/build/**",
+  "**/storybook-static/**",
+  "**/*.config.{js,ts,mjs,mts}",
+  "**/*.stories.{ts,tsx,js,jsx,mdx}",
+  "**/*.d.ts",
+  "**/node_modules/**",
 ];
 
 interface VitestConfigOptions {
-	include?: string[];
-	exclude?: string[];
-	setupFile?: string;
-	environment?: "jsdom" | "node";
+  include?: string[];
+  exclude?: string[];
+  setupFile?: string;
+  environment?: "jsdom" | "node";
 }
 
 export function createVitestConfig(options: VitestConfigOptions = {}) {
-	const {
-		include = [],
-		exclude = [],
-		setupFile,
-		environment = "jsdom",
-	} = options;
+  const { include = [], exclude = [], setupFile, environment = "jsdom" } = options;
 
-	return defineConfig({
-		plugins: [react(), tsconfigPaths()],
-		test: {
-			environment,
-			globals: true,
-			passWithNoTests: true,
-			setupFiles: setupFile ? [setupFile] : undefined,
-			coverage: {
-				provider: "v8",
-				reporter: ["text", "text-summary", "json", "html", "lcov"],
-				include,
-				exclude: [...coverageExclusions, ...exclude],
-			},
-			reporters: [
-				"default",
-				["json", { outputFile: "coverage/coverage.json" }],
-				["vitest-sonar-reporter", { outputFile: "coverage/test-report.xml" }],
-				["junit", { outputFile: "coverage/junit.xml" }],
-			],
-		},
-	});
+  return defineConfig({
+    plugins: [react(), tsconfigPaths()],
+    test: {
+      environment,
+      globals: true,
+      passWithNoTests: true,
+      setupFiles: setupFile ? [setupFile] : undefined,
+      coverage: {
+        provider: "v8",
+        reporter: ["text", "text-summary", "json", "html", "lcov"],
+        include,
+        exclude: [...coverageExclusions, ...exclude],
+      },
+      reporters: [
+        "default",
+        ["json", { outputFile: "coverage/coverage.json" }],
+        ["vitest-sonar-reporter", { outputFile: "coverage/test-report.xml" }],
+        ["junit", { outputFile: "coverage/junit.xml" }],
+      ],
+    },
+  });
 }
 ```
 
 Changes:
+
 - Removed `sharedConfig` export and its `default` export
 - Extracted `coverageExclusions` constant (dedup)
 - Added `"**/node_modules/**"` that was only in `createVitestConfig`
@@ -764,6 +771,7 @@ git commit -m "refactor(packages): convert config-vitest to source-only, remove 
 ### Task 4.3: Convert wagtail-cms-client and logger to ESM-only (Audit #15)
 
 **Files:**
+
 - Modify: `packages/wagtail-cms-client/package.json`
 - Modify: `packages/logger/package.json`
 
@@ -773,15 +781,15 @@ In `packages/wagtail-cms-client/package.json`, replace the exports/main/module/t
 
 ```json
 {
-	"main": "./dist/es/index.js",
-	"module": "./dist/es/index.js",
-	"types": "./dist/es/index.d.ts",
-	"exports": {
-		".": {
-			"types": "./dist/es/index.d.ts",
-			"default": "./dist/es/index.js"
-		}
-	}
+  "main": "./dist/es/index.js",
+  "module": "./dist/es/index.js",
+  "types": "./dist/es/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/es/index.d.ts",
+      "default": "./dist/es/index.js"
+    }
+  }
 }
 ```
 
@@ -793,15 +801,15 @@ In `packages/logger/package.json`, replace the exports/main/module/types fields:
 
 ```json
 {
-	"main": "./dist/es/index.js",
-	"module": "./dist/es/index.js",
-	"types": "./dist/es/index.d.ts",
-	"exports": {
-		".": {
-			"types": "./dist/es/index.d.ts",
-			"default": "./dist/es/index.js"
-		}
-	}
+  "main": "./dist/es/index.js",
+  "module": "./dist/es/index.js",
+  "types": "./dist/es/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/es/index.d.ts",
+      "default": "./dist/es/index.js"
+    }
+  }
 }
 ```
 
@@ -820,6 +828,7 @@ Expected: Builds succeed with only ESM output in `dist/es/`. The `dist/cjs/` dir
 ls packages/wagtail-cms-client/dist/
 ls packages/logger/dist/
 ```
+
 Expected: Only `es/` directory, no `cjs/`
 
 - [ ] **Step 5: Run all tests**
@@ -843,6 +852,7 @@ git commit -m "refactor(packages): remove CJS output from wagtail-cms-client and
 ### Task 5.1: Deduplicate NavigationItem schema (Audit #12)
 
 **Files:**
+
 - Modify: `packages/wagtail-cms-types/src/types/fields/index.ts`
 - Modify: `packages/wagtail-cms-types/src/types/page-models/appbase.ts`
 - Modify: `packages/wagtail-cms-types/src/types/settings/index.ts`
@@ -857,8 +867,8 @@ Add to the end of `packages/wagtail-cms-types/src/types/fields/index.ts`:
  * Used across page models and site settings for consistent navigation structures.
  */
 export const NavItemSchema = z.object({
-	title: z.string(),
-	url: z.string(),
+  title: z.string(),
+  url: z.string(),
 });
 
 export type NavItem = z.infer<typeof NavItemSchema>;
@@ -884,14 +894,12 @@ export const CMSAppBaseLandingPagePropsSchema = CMSPageWithBlocksSchema;
 export type CMSAppBaseLandingPageProps = CMSPageWithBlocks;
 
 export const CMSAppBaseContentPagePropsSchema = CMSPageWithBlocksSchema.extend({
-	lead_text: z.string().optional(),
-	disable_navigation: z.boolean().optional(),
-	side_nav: z.array(NavItemSchema).optional(),
+  lead_text: z.string().optional(),
+  disable_navigation: z.boolean().optional(),
+  side_nav: z.array(NavItemSchema).optional(),
 });
 
-export type CMSAppBaseContentPageProps = z.infer<
-	typeof CMSAppBaseContentPagePropsSchema
->;
+export type CMSAppBaseContentPageProps = z.infer<typeof CMSAppBaseContentPagePropsSchema>;
 
 export const CMSAppBaseSearchPagePropsSchema = CMSPageWithBlocksSchema;
 export type CMSAppBaseSearchPageProps = CMSPageWithBlocks;
@@ -936,6 +944,7 @@ git commit -m "refactor(packages): deduplicate NavigationItem schema into shared
 ### Task 5.2: Extract error handling helper in CMSClient (Audit #13)
 
 **Files:**
+
 - Modify: `packages/wagtail-cms-client/src/index.ts`
 - Modify: `packages/wagtail-cms-client/src/index.test.ts`
 
@@ -984,6 +993,7 @@ public async fetchEndpoint<T>(
 Apply the same pattern to: `fetchPage` (the try/catch branch for numeric ID), `findPageByPath`, `fetchPagePreview`, `fetchImage`, `fetchDocument`.
 
 Each method's `catch` block becomes:
+
 ```typescript
 } catch (error) {
 	return this.handleFetchError(error, "<specific message>");
@@ -1007,6 +1017,7 @@ git commit -m "refactor(packages): extract handleFetchError helper to deduplicat
 ### Task 5.3: Replace `z.any()` with proper types (Audit #20)
 
 **Files:**
+
 - Modify: `packages/wagtail-cms-types/src/types/core/index.ts` (line 24)
 - Modify: `packages/wagtail-cms-types/src/types/blocks/base.ts` (line 57)
 
@@ -1060,6 +1071,7 @@ git commit -m "fix(packages): replace z.any() with z.custom<RequestInit>() and z
 ### Task 5.4: Fix trailing `?` and remove wildcard re-export (Audit #23, #24)
 
 **Files:**
+
 - Modify: `packages/wagtail-cms-client/src/lib/cms/index.ts` (line 75)
 - Modify: `packages/wagtail-cms-client/src/lib/cms/index.test.ts`
 - Modify: `packages/wagtail-cms-client/src/index.ts` (line 18)
@@ -1070,11 +1082,8 @@ Add to `packages/wagtail-cms-client/src/lib/cms/index.test.ts`:
 
 ```typescript
 it("should not append trailing ? when no query params", async () => {
-	await fetchContent("https://example.com", "/api/v2", "pages");
-	expect(mockFetchRequest).toHaveBeenCalledWith(
-		"https://example.com/api/v2/pages/",
-		undefined,
-	);
+  await fetchContent("https://example.com", "/api/v2", "pages");
+  expect(mockFetchRequest).toHaveBeenCalledWith("https://example.com/api/v2/pages/", undefined);
 });
 ```
 
@@ -1092,9 +1101,7 @@ In `packages/wagtail-cms-client/src/lib/cms/index.ts`, replace the URL construct
 const url = `${baseURL}${apiPath}/${content}/?${query}`;
 
 // New:
-const url = query
-	? `${baseURL}${apiPath}/${content}/?${query}`
-	: `${baseURL}${apiPath}/${content}/`;
+const url = query ? `${baseURL}${apiPath}/${content}/?${query}` : `${baseURL}${apiPath}/${content}/`;
 ```
 
 - [ ] **Step 4: Run cms tests**
@@ -1133,6 +1140,7 @@ git commit -m "fix(packages): remove trailing ? with empty query, remove wildcar
 ### Task 5.5: Remove stale @repo/ui path alias (Audit #25)
 
 **Files:**
+
 - Modify: `packages/wagtail-cms-client/tsconfig.json`
 
 - [ ] **Step 1: Remove the stale path alias**
@@ -1163,6 +1171,7 @@ git commit -m "chore(packages): remove stale @repo/ui path alias from wagtail-cm
 ### Task 5.6: Make React plugin opt-in for non-React test configs (Audit #35)
 
 **Files:**
+
 - Modify: `packages/config-vitest/src/index.ts`
 
 Note: This depends on Task 4.2 completing first (which restructures this file). If running in Phase 5, the file should already reflect the Phase 4 changes.
@@ -1173,23 +1182,16 @@ In `packages/config-vitest/src/index.ts`, update `createVitestConfig`:
 
 ```typescript
 export function createVitestConfig(options: VitestConfigOptions = {}) {
-	const {
-		include = [],
-		exclude = [],
-		setupFile,
-		environment = "jsdom",
-	} = options;
+  const { include = [], exclude = [], setupFile, environment = "jsdom" } = options;
 
-	const plugins = environment === "jsdom"
-		? [react(), tsconfigPaths()]
-		: [tsconfigPaths()];
+  const plugins = environment === "jsdom" ? [react(), tsconfigPaths()] : [tsconfigPaths()];
 
-	return defineConfig({
-		plugins,
-		test: {
-			// ... rest unchanged
-		},
-	});
+  return defineConfig({
+    plugins,
+    test: {
+      // ... rest unchanged
+    },
+  });
 }
 ```
 
@@ -1224,6 +1226,7 @@ git commit -m "refactor(packages): only include React plugin in vitest config wh
 ### Task 6.1: Fix Prettier format script (Audit #19)
 
 **Files:**
+
 - Modify: Root `package.json`
 
 - [ ] **Step 1: Update format script to Markdown-only**
@@ -1250,6 +1253,7 @@ git commit -m "fix(config): scope Prettier to Markdown files only (Biome handles
 ### Task 6.2: Update TypeScript target (Audit #26)
 
 **Files:**
+
 - Modify: `packages/config-typescript/nextjs.json`
 
 - [ ] **Step 1: Update target from ES5 to ES2022**
@@ -1281,6 +1285,7 @@ git commit -m "fix(config): update TypeScript target from ES5 to ES2022 (Node 24
 ### Task 6.3: Fix non-React Biome configs (Audit #28)
 
 **Files:**
+
 - Modify: `packages/logger/biome.json`
 - Modify: `packages/config-vitest/biome.json`
 - Modify: `packages/wagtail-cms-types/biome.json`
@@ -1314,6 +1319,7 @@ git commit -m "fix(config): remove react-internal biome config from non-React pa
 ### Task 6.4: Remove biome-config placeholder scripts (Audit #29)
 
 **Files:**
+
 - Modify: `packages/biome-config/package.json`
 
 - [ ] **Step 1: Remove all placeholder scripts**
@@ -1322,14 +1328,14 @@ In `packages/biome-config/package.json`, remove the entire `scripts` block:
 
 ```json
 {
-	"name": "@repo/biome-config",
-	"version": "0.0.0",
-	"private": true,
-	"exports": {
-		"./base": "./base.json",
-		"./next-js": "./next.json",
-		"./react-internal": "./react-internal.json"
-	}
+  "name": "@repo/biome-config",
+  "version": "0.0.0",
+  "private": true,
+  "exports": {
+    "./base": "./base.json",
+    "./next-js": "./next.json",
+    "./react-internal": "./react-internal.json"
+  }
 }
 ```
 
@@ -1345,27 +1351,31 @@ git commit -m "chore(packages): remove placeholder echo scripts from biome-confi
 ### Task 6.5: Standardise workspace protocol and fix commitlint deps (Audit #30, #31)
 
 **Files:**
+
 - Modify: `packages/logger/package.json`
 - Modify: `packages/wagtail-cms-types/package.json`
 - Modify: `packages/wagtail-cms-client/package.json`
 - Modify: Root `package.json`
 - Modify: `packages/commitlint-config/package.json`
 
-- [ ] **Step 1: Standardise workspace:^ to workspace:***
+- [ ] **Step 1: Standardise workspace:^ to workspace:\***
 
 In these three files, change `@repo/vitest-config` from `"workspace:^"` to `"workspace:*"`:
 
 `packages/logger/package.json`:
+
 ```json
 "@repo/vitest-config": "workspace:*",
 ```
 
 `packages/wagtail-cms-types/package.json`:
+
 ```json
 "@repo/vitest-config": "workspace:*",
 ```
 
 `packages/wagtail-cms-client/package.json`:
+
 ```json
 "@repo/vitest-config": "workspace:*",
 ```
@@ -1402,6 +1412,7 @@ git commit -m "fix(config): standardise workspace:* protocol, deduplicate commit
 ### Task 6.6: Clean up pnpm catalog and TypeScript version (Audit #32, #33)
 
 **Files:**
+
 - Modify: `pnpm-workspace.yaml`
 - Modify: Root `package.json`
 
@@ -1411,9 +1422,9 @@ In `pnpm-workspace.yaml`, remove these lines from the `catalog:` section:
 
 ```yaml
 # Remove:
-'@next/third-parties': 16.1.5
+"@next/third-parties": 16.1.5
 react-hook-form: 7.72.0
-'@hookform/resolvers': 5.2.2
+"@hookform/resolvers": 5.2.2
 tsup: ^8.0.2
 ```
 
@@ -1450,26 +1461,27 @@ git commit -m "fix(config): remove unused pnpm catalog entries, align root TypeS
 ### Task 6.7: Fix template app boilerplate (Audit #36)
 
 **Files:**
-- Modify: `apps/hse-app-template/src/app/layout.tsx`
-- Modify: `apps/hse-app-template/wrangler.jsonc`
+
+- Modify: `apps/hse-multisite-template/src/app/layout.tsx`
+- Modify: `apps/hse-multisite-template/wrangler.jsonc`
 
 - [ ] **Step 1: Update layout metadata**
 
-In `apps/hse-app-template/src/app/layout.tsx`:
+In `apps/hse-multisite-template/src/app/layout.tsx`:
 
 ```typescript
 export const metadata: Metadata = {
-	title: "HSE App Template",
-	description: "HSE Recovery Platform application template",
+  title: "HSE App Template",
+  description: "HSE Recovery Platform application template",
 };
 ```
 
 - [ ] **Step 2: Fix wrangler.jsonc**
 
-In `apps/hse-app-template/wrangler.jsonc`:
+In `apps/hse-multisite-template/wrangler.jsonc`:
 
 1. Remove the duplicate comment block (the first `/** For more details... */` block — there are two identical ones).
-2. Change worker name from `"my-next-app"` to `"hse-app-template"`.
+2. Change worker name from `"my-next-app"` to `"hse-multisite-template"`.
 3. Update the self-reference service binding to match:
 
 ```jsonc
@@ -1478,24 +1490,24 @@ In `apps/hse-app-template/wrangler.jsonc`:
  * https://developers.cloudflare.com/workers/wrangler/configuration/
  */
 {
-	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "hse-app-template",
-	"main": ".open-next/worker.js",
-	// ... rest unchanged ...
-	"services": [
-		{
-			"binding": "WORKER_SELF_REFERENCE",
-			"service": "hse-app-template"
-		}
-	],
-	// ... rest unchanged ...
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "hse-multisite-template",
+  "main": ".open-next/worker.js",
+  // ... rest unchanged ...
+  "services": [
+    {
+      "binding": "WORKER_SELF_REFERENCE",
+      "service": "hse-multisite-template",
+    },
+  ],
+  // ... rest unchanged ...
 }
 ```
 
 - [ ] **Step 3: Commit**
 
 ```bash
-git add apps/hse-app-template/src/app/layout.tsx apps/hse-app-template/wrangler.jsonc
+git add apps/hse-multisite-template/src/app/layout.tsx apps/hse-multisite-template/wrangler.jsonc
 git commit -m "chore(apps): update template app metadata and wrangler name from boilerplate defaults"
 ```
 
@@ -1504,6 +1516,7 @@ git commit -m "chore(apps): update template app metadata and wrangler name from 
 ### Task 6.8: Wire up or remove test-setup.js (Audit #38)
 
 **Files:**
+
 - Delete: `packages/config-vitest/src/test-setup.js` (or wire it in)
 
 Decision: The test-setup file imports `@testing-library/jest-dom/vitest` which provides custom DOM matchers. Since no vitest config references it, and consumers can opt in via `setupFile` parameter in `createVitestConfig`, we should document this in the function and leave the file as an available resource — but it needs to be importable.
@@ -1539,6 +1552,7 @@ These items require design decisions before implementation. They should be tackl
 **Question:** Where to add `.parse()` / `.safeParse()` calls — in `fetchRequest`, in `CMSClient` methods, or in a mapping layer? What are the performance implications on Cloudflare Workers?
 
 **Recommendation:** Create a follow-up spike. Options:
+
 1. Validate in `fetchRequest` (catches all malformed responses but couples the generic fetch to Zod)
 2. Validate in each `CMSClient` method (most control, but requires passing schema types)
 3. Validate in the future mapping layer (cleanest separation, but deferred until mapping package exists)
@@ -1553,15 +1567,15 @@ These items require design decisions before implementation. They should be tackl
 
 ## Parallel Execution Summary
 
-| Phase | Tasks | Parallel Agents | Depends On |
-|-------|-------|-----------------|------------|
-| 1: Bug Fixes | 1.1, 1.2, 1.3 | 3 | — |
-| 2: Turbo Pipeline | 2.1 | 1 | Phase 1 |
-| 3: Dead Code Removal | 3.1, 3.2, 3.3, 3.4, 3.5 | 5 | Phase 2 |
-| 4: Build Restructuring | 4.1, 4.2, 4.3 | 3 | Phase 3 |
-| 5: Code Quality | 5.1, 5.2, 5.3, 5.4, 5.5, 5.6 | 6 | Phase 4 |
-| 6: Config Consistency | 6.1–6.8 | 8 | Phase 5 |
-| 7: Deferred Research | — | — | Separate planning |
+| Phase                  | Tasks                        | Parallel Agents | Depends On        |
+| ---------------------- | ---------------------------- | --------------- | ----------------- |
+| 1: Bug Fixes           | 1.1, 1.2, 1.3                | 3               | —                 |
+| 2: Turbo Pipeline      | 2.1                          | 1               | Phase 1           |
+| 3: Dead Code Removal   | 3.1, 3.2, 3.3, 3.4, 3.5      | 5               | Phase 2           |
+| 4: Build Restructuring | 4.1, 4.2, 4.3                | 3               | Phase 3           |
+| 5: Code Quality        | 5.1, 5.2, 5.3, 5.4, 5.5, 5.6 | 6               | Phase 4           |
+| 6: Config Consistency  | 6.1–6.8                      | 8               | Phase 5           |
+| 7: Deferred Research   | —                            | —               | Separate planning |
 
 **Total tasks:** 26 executable tasks (items 21 and 22 deferred)
 **Maximum parallelism:** 8 agents (Phase 6)

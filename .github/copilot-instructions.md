@@ -8,7 +8,7 @@
 
 | Name (npm) | Path | Purpose |
 |---|---|---|
-| `hse-app-template` | `apps/hse-app-template` | Next.js 16 app — primary UI |
+| `hse-multisite-template` | `apps/hse-multisite-template` | Next.js 16 app — primary UI |
 | `@repo/wagtail-api-client` | `packages/wagtail-cms-client` | Wagtail REST API client (`CMSClient` class + `fetchContent` helpers) |
 | `@repo/wagtail-cms-types` | `packages/wagtail-cms-types` | Zod-based TypeScript types for all Wagtail content (no build — exports raw `.ts`) |
 | `@repo/wagtail-cms-mapping` | `packages/wagtail-cms-mapping` | CMS-to-component mapping — factory pattern with HSE design system defaults |

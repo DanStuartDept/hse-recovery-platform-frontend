@@ -65,42 +65,42 @@ vi.mock("@repo/app-config", () => ({
 
 ### `AppConfig` (from `@repo/app-config`)
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `cms.baseURL` | `string` | Wagtail CMS base URL |
-| `cms.apiPath` | `string` | API version path (e.g. `"/api/v2"`) |
-| `environment` | `"localhost" \| "dev" \| "pre-prod" \| "prod"` | Deployment environment |
-| `siteUrl` | `string` | Public site URL for canonical links and OG tags |
-| `gtmId` | `string \| undefined` | Google Tag Manager container ID |
-| `oneTrustDomainId` | `string \| undefined` | OneTrust cookie consent domain ID |
-| `piwik` | `{ containerId, containerUrl } \| undefined` | Piwik Pro settings (all-or-nothing) |
-| `isLocalhost` | `boolean` | `true` when environment is `"localhost"` |
-| `isProduction` | `boolean` | `true` when environment is `"prod"` |
-| `analyticsEnabled` | `boolean` | `true` when not localhost and at least one analytics integration is configured |
+| Field              | Type                                           | Description                                                                    |
+| ------------------ | ---------------------------------------------- | ------------------------------------------------------------------------------ |
+| `cms.baseURL`      | `string`                                       | Wagtail CMS base URL                                                           |
+| `cms.apiPath`      | `string`                                       | API version path (e.g. `"/api/v2"`)                                            |
+| `environment`      | `"localhost" \| "dev" \| "pre-prod" \| "prod"` | Deployment environment                                                         |
+| `siteUrl`          | `string`                                       | Public site URL for canonical links and OG tags                                |
+| `gtmId`            | `string \| undefined`                          | Google Tag Manager container ID                                                |
+| `oneTrustDomainId` | `string \| undefined`                          | OneTrust cookie consent domain ID                                              |
+| `piwik`            | `{ containerId, containerUrl } \| undefined`   | Piwik Pro settings (all-or-nothing)                                            |
+| `isLocalhost`      | `boolean`                                      | `true` when environment is `"localhost"`                                       |
+| `isProduction`     | `boolean`                                      | `true` when environment is `"prod"`                                            |
+| `analyticsEnabled` | `boolean`                                      | `true` when not localhost and at least one analytics integration is configured |
 
 ### `ServerConfig` (from `@repo/app-config/server`)
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `previewToken` | `string` | CMS preview API route authentication secret |
+| Field             | Type     | Description                                    |
+| ----------------- | -------- | ---------------------------------------------- |
+| `previewToken`    | `string` | CMS preview API route authentication secret    |
 | `revalidateToken` | `string` | CMS revalidation webhook authentication secret |
 
 ## Environment variables
 
-| Env var | Required | Maps to |
-|---------|----------|---------|
-| `NEXT_PUBLIC_CMS_API_ENDPOINT` | Yes | `config.cms.baseURL` |
-| `NEXT_PUBLIC_API_PATH` | Yes | `config.cms.apiPath` |
-| `NEXT_PUBLIC_ENVIRONMENT_NAME` | Yes | `config.environment` |
-| `NEXT_PUBLIC_SITEURL` | Yes | `config.siteUrl` |
-| `PREVIEW_TOKEN` | Yes | `serverConfig.previewToken` |
-| `REVALIDATE_TOKEN` | Yes | `serverConfig.revalidateToken` |
-| `NEXT_PUBLIC_GTM_ID` | No | `config.gtmId` |
-| `NEXT_PUBLIC_ONETRUST_DOMAIN_ID` | No | `config.oneTrustDomainId` |
-| `NEXT_PUBLIC_PIWIK_CONTAINER_ID` | No | `config.piwik?.containerId` |
-| `NEXT_PUBLIC_PIWIK_CONTAINER_URL` | No | `config.piwik?.containerUrl` |
+| Env var                           | Required | Maps to                        |
+| --------------------------------- | -------- | ------------------------------ |
+| `NEXT_PUBLIC_CMS_API_ENDPOINT`    | Yes      | `config.cms.baseURL`           |
+| `NEXT_PUBLIC_API_PATH`            | Yes      | `config.cms.apiPath`           |
+| `NEXT_PUBLIC_ENVIRONMENT_NAME`    | Yes      | `config.environment`           |
+| `NEXT_PUBLIC_SITEURL`             | Yes      | `config.siteUrl`               |
+| `PREVIEW_TOKEN`                   | Yes      | `serverConfig.previewToken`    |
+| `REVALIDATE_TOKEN`                | Yes      | `serverConfig.revalidateToken` |
+| `NEXT_PUBLIC_GTM_ID`              | No       | `config.gtmId`                 |
+| `NEXT_PUBLIC_ONETRUST_DOMAIN_ID`  | No       | `config.oneTrustDomainId`      |
+| `NEXT_PUBLIC_PIWIK_CONTAINER_ID`  | No       | `config.piwik?.containerId`    |
+| `NEXT_PUBLIC_PIWIK_CONTAINER_URL` | No       | `config.piwik?.containerUrl`   |
 
-Copy `apps/hse-app-template/.env.example` to `.env` and fill in the values.
+Copy `apps/hse-multisite-template/.env.example` to `.env` and fill in the values.
 
 ## Validation behaviour
 

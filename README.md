@@ -19,7 +19,7 @@ pnpm install
 
 ### Apps
 
-- **`apps/hse-app-template`** (`hse-app-template`): [Next.js](https://nextjs.org/) 16 application (React 19, App Router). Uses the [HSE Ireland design system](https://github.com/HSEIreland) and fetches content via the Wagtail API client.
+- **`apps/hse-multisite-template`** (`hse-multisite-template`): [Next.js](https://nextjs.org/) 16 application (React 19, App Router). Uses the [HSE Ireland design system](https://github.com/HSEIreland) and fetches content via the Wagtail API client.
 
 ### Packages
 
@@ -41,7 +41,7 @@ pnpm dev
 Run a specific app only:
 
 ```sh
-turbo run dev --filter=hse-app-template
+turbo run dev --filter=hse-multisite-template
 ```
 
 The app is available at [http://localhost:3000](http://localhost:3000).

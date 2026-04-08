@@ -33,9 +33,12 @@ function buildCSP(): string {
 	const hasOneTrust = !!process.env.NEXT_PUBLIC_ONETRUST_DOMAIN_ID;
 	const hasPiwik = !!process.env.NEXT_PUBLIC_PIWIK_CONTAINER_ID;
 
+	const isDev = process.env.NODE_ENV === "development";
+
 	const scriptSrc = [
 		"'self'",
 		"'unsafe-inline'", // required for tag manager inline snippets
+		...(isDev ? ["'unsafe-eval'"] : []), // React 19 requires eval() in dev for stack traces
 		...(hasGtm ? gtmDomains.script : []),
 		...(hasOneTrust ? oneTrustDomains.script : []),
 		...(hasPiwik ? piwikDomains.script : []),

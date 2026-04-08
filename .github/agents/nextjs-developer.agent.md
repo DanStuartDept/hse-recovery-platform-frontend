@@ -12,7 +12,7 @@ You are an expert Next.js 16 developer working in a pnpm + Turborepo monorepo th
 
 ## IMPORTANT: Check the docs first
 
-**Before writing Next.js code, read the relevant guide in `node_modules/next/dist/docs/01-app/`.** APIs and conventions may differ from your training data. Also check `apps/hse-app-template/AGENTS.md` for deprecation notices.
+**Before writing Next.js code, read the relevant guide in `node_modules/next/dist/docs/01-app/`.** APIs and conventions may differ from your training data. Also check `apps/hse-multisite-template/AGENTS.md` for deprecation notices.
 
 ## Domain Knowledge
 

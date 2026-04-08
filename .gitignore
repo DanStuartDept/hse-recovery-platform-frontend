@@ -44,3 +44,7 @@ yarn-error.log*
 *.pem
 .playwright
 .playwright-cli
+
+# Claude
+.claude/
+CLAUDE.md

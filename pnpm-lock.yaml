@@ -99,7 +99,7 @@ importers:
         specifier: 'catalog:'
         version: 4.1.2(@types/node@20.19.37)(jsdom@26.1.0)(vite@7.3.1(@types/node@20.19.37)(jiti@2.6.1)(sass-embedded@1.98.0)(sass@1.98.0)(terser@5.16.9)(yaml@2.8.3))
 
-  apps/hse-app-template:
+  apps/hse-multisite-template:
     dependencies:
       '@hseireland/hse-frontend':
         specifier: 'catalog:'

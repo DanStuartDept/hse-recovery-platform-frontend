@@ -61,7 +61,7 @@ export type CMSPageProps =
 
 ## Step 4: Create Next.js route
 
-**File:** `apps/hse-app-template/src/app/{route-path}/page.tsx`
+**File:** `apps/hse-multisite-template/src/app/{route-path}/page.tsx`
 
 Create a Server Component that fetches and renders the page:
 

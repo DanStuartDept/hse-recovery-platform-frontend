@@ -20,7 +20,7 @@ pnpm format           # prettier --write (Markdown files only)
 Filter to a single workspace:
 
 ```bash
-turbo run dev --filter=hse-app-template
+turbo run dev --filter=hse-multisite-template
 turbo run test --filter=@repo/wagtail-api-client
 ```
 
@@ -36,18 +36,18 @@ This is a **pnpm + Turborepo monorepo** with a Next.js 16 app integrating with a
 
 ### Workspace layout
 
-| npm name | Path | Role |
-|---|---|---|
-| `hse-app-template` | `apps/hse-app-template` | Next.js 16 / React 19 App Router app |
-| `@repo/app-config` | `packages/app-config` | Centralised env var validation and typed config (source-only) |
-| `@repo/wagtail-api-client` | `packages/wagtail-cms-client` | Wagtail REST client (`CMSClient` + `fetchContent`) |
-| `@repo/wagtail-cms-types` | `packages/wagtail-cms-types` | Zod-based CMS types (source-only, no build step) |
-| `@repo/wagtail-cms-mapping` | `packages/wagtail-cms-mapping` | CMS-to-component mapping (source-only, factory pattern) |
-| `@repo/logger` | `packages/logger` | Thin console wrapper |
-| `@repo/vitest-config` | `packages/config-vitest` | Shared `createVitestConfig()` factory |
-| `@repo/biome-config` | `packages/biome-config` | Shared Biome rule sets |
-| `@repo/typescript-config` | `packages/config-typescript` | Shared tsconfig bases |
-| `@repo/commitlint-config` | `packages/commitlint-config` | Conventional commits config |
+| npm name                    | Path                           | Role                                                          |
+| --------------------------- | ------------------------------ | ------------------------------------------------------------- |
+| `hse-multisite-template`    | `apps/hse-multisite-template`  | Next.js 16 / React 19 App Router app                          |
+| `@repo/app-config`          | `packages/app-config`          | Centralised env var validation and typed config (source-only) |
+| `@repo/wagtail-api-client`  | `packages/wagtail-cms-client`  | Wagtail REST client (`CMSClient` + `fetchContent`)            |
+| `@repo/wagtail-cms-types`   | `packages/wagtail-cms-types`   | Zod-based CMS types (source-only, no build step)              |
+| `@repo/wagtail-cms-mapping` | `packages/wagtail-cms-mapping` | CMS-to-component mapping (source-only, factory pattern)       |
+| `@repo/logger`              | `packages/logger`              | Thin console wrapper                                          |
+| `@repo/vitest-config`       | `packages/config-vitest`       | Shared `createVitestConfig()` factory                         |
+| `@repo/biome-config`        | `packages/biome-config`        | Shared Biome rule sets                                        |
+| `@repo/typescript-config`   | `packages/config-typescript`   | Shared tsconfig bases                                         |
+| `@repo/commitlint-config`   | `packages/commitlint-config`   | Conventional commits config                                   |
 
 ### Key architectural decisions
 

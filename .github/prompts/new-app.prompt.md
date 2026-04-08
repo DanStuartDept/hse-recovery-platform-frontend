@@ -20,7 +20,7 @@ From the repo root:
 make new-app APP_NAME={APP_NAME}
 ```
 
-If no Makefile target exists yet, manually scaffold based on `apps/hse-app-template/`.
+If no Makefile target exists yet, manually scaffold based on `apps/hse-multisite-template/`.
 
 ## Step 2: Register in workspace
 
@@ -42,7 +42,7 @@ Ensure the new app uses:
 - `@repo/vitest-config` for Vitest (`createVitestConfig()`)
 - `@repo/app-config` for environment variable configuration (add as a dependency)
 
-Copy `apps/hse-app-template/.env.example` to the new app's directory and customise as needed.
+Copy `apps/hse-multisite-template/.env.example` to the new app's directory and customise as needed.
 
 ## Step 5: Install dependencies
 

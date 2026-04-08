@@ -17,6 +17,7 @@
 Skills must be created first — agents and prompts reference them. These are the portable, cross-tool knowledge files.
 
 **Files:**
+
 - Create: `.github/skills/cms-content-fetching/SKILL.md`
 - Create: `.github/skills/hse-design-system/SKILL.md`
 - Create: `.github/skills/conventional-commit/SKILL.md`
@@ -40,16 +41,17 @@ description: Teaches the full CMS data flow from Wagtail API through typed clien
 This skill teaches how content flows from the Wagtail CMS backend to rendered React components in this monorepo.
 
 ## Data Flow Overview
+```
 
-```
 Wagtail CMS Backend (REST API v2)
-        ↓
+↓
 @repo/wagtail-api-client (CMSClient class)
-        ↓
+↓
 @repo/wagtail-cms-types (Zod validation)
-        ↓
+↓
 Next.js App (Server Components → React rendering)
-```
+
+````
 
 <!-- TODO: wagtail-cms-mapping — a mapping layer will sit between Client and Rendering steps when the @repo/wagtail-cms-mapping package is created -->
 
@@ -95,7 +97,7 @@ export const MyPageSchema = CMSPageWithBlocksSchema.extend({
 
 // Infer type
 export type MyPage = z.infer<typeof MyPageSchema>;
-```
+````
 
 ## Layer 2: Client (`@repo/wagtail-api-client`)
 
@@ -107,23 +109,23 @@ export type MyPage = z.infer<typeof MyPageSchema>;
 import { CMSClient } from "@repo/wagtail-api-client";
 
 const client = new CMSClient({
-  baseURL: process.env.CMS_BASE_URL,    // e.g. "https://cms.example.com"
-  apiPath: "/api/cms/v2",                // Wagtail API path
-  mediaBaseURL: process.env.MEDIA_URL,   // Optional separate media domain
+  baseURL: process.env.CMS_BASE_URL, // e.g. "https://cms.example.com"
+  apiPath: "/api/cms/v2", // Wagtail API path
+  mediaBaseURL: process.env.MEDIA_URL, // Optional separate media domain
 });
 ```
 
 ### Key Methods
 
-| Method | Purpose |
-|---|---|
-| `fetchPage(idOrSlug, queries?, init?)` | Fetch single page by ID or slug |
-| `fetchPages(queries?, init?)` | Fetch page listing with filters |
-| `findPageByPath<T>(path, init?)` | Resolve URL path to page (uses Wagtail's `find/?html_path=`) |
-| `fetchPagePreview<T>(contentType, token, id, init?)` | Fetch draft preview |
-| `fetchImage(id, queries?, init?)` | Fetch image by ID |
-| `fetchDocument(id, queries?, init?)` | Fetch document by ID |
-| `getMediaSrc(media)` | Construct full media URL from `CMSMediaMeta` |
+| Method                                               | Purpose                                                      |
+| ---------------------------------------------------- | ------------------------------------------------------------ |
+| `fetchPage(idOrSlug, queries?, init?)`               | Fetch single page by ID or slug                              |
+| `fetchPages(queries?, init?)`                        | Fetch page listing with filters                              |
+| `findPageByPath<T>(path, init?)`                     | Resolve URL path to page (uses Wagtail's `find/?html_path=`) |
+| `fetchPagePreview<T>(contentType, token, id, init?)` | Fetch draft preview                                          |
+| `fetchImage(id, queries?, init?)`                    | Fetch image by ID                                            |
+| `fetchDocument(id, queries?, init?)`                 | Fetch document by ID                                         |
+| `getMediaSrc(media)`                                 | Construct full media URL from `CMSMediaMeta`                 |
 
 ### ISR Caching
 
@@ -140,19 +142,19 @@ All fetch requests include `next: { revalidate: 360 }` by default (6-minute ISR)
 
 ### Query Parameters
 
-| Parameter | Example | Purpose |
-|---|---|---|
-| `type` | `?type=news.NewsContentPage` | Filter by page model |
-| `fields` | `?fields=title,body,lead_text` | Select specific fields (`*` for all) |
-| `child_of` | `?child_of=5` | Direct children of page ID |
-| `descendant_of` | `?descendant_of=5` | All descendants |
-| `ancestor_of` | `?ancestor_of=10` | All ancestors |
-| `slug` | `?slug=about` | Exact match on slug |
-| `search` | `?search=mental+health` | Full-text search |
-| `order` | `?order=-first_published_at` | Sort (prefix `-` for descending) |
-| `locale` | `?locale=en` | Filter by locale |
-| `limit` | `?limit=10` | Items per page (default 20) |
-| `offset` | `?offset=20` | Skip N items |
+| Parameter       | Example                        | Purpose                              |
+| --------------- | ------------------------------ | ------------------------------------ |
+| `type`          | `?type=news.NewsContentPage`   | Filter by page model                 |
+| `fields`        | `?fields=title,body,lead_text` | Select specific fields (`*` for all) |
+| `child_of`      | `?child_of=5`                  | Direct children of page ID           |
+| `descendant_of` | `?descendant_of=5`             | All descendants                      |
+| `ancestor_of`   | `?ancestor_of=10`              | All ancestors                        |
+| `slug`          | `?slug=about`                  | Exact match on slug                  |
+| `search`        | `?search=mental+health`        | Full-text search                     |
+| `order`         | `?order=-first_published_at`   | Sort (prefix `-` for descending)     |
+| `locale`        | `?locale=en`                   | Filter by locale                     |
+| `limit`         | `?limit=10`                    | Items per page (default 20)          |
+| `offset`        | `?offset=20`                   | Skip N items                         |
 
 ### Pagination
 
@@ -200,17 +202,18 @@ function BlockRenderer({ block }: { block: BaseCMSBlockType }) {
   }
 }
 ```
-```
+
+````
 
 - [ ] **Step 3: Create `hse-design-system/SKILL.md`**
 
 This skill documents the HSE Ireland design system. Read the actual packages for accurate details.
 
 Before writing this file, read these to verify component exports and SCSS tokens:
-- `apps/hse-app-template/node_modules/@hseireland/hse-frontend-react/src/components/index.ts`
-- `apps/hse-app-template/node_modules/@hseireland/hse-frontend/packages/core/settings/_colours.scss`
-- `apps/hse-app-template/node_modules/@hseireland/hse-frontend/packages/core/settings/_spacing.scss`
-- `apps/hse-app-template/node_modules/@hseireland/hse-frontend/packages/core/settings/_breakpoints.scss`
+- `apps/hse-multisite-template/node_modules/@hseireland/hse-frontend-react/src/components/index.ts`
+- `apps/hse-multisite-template/node_modules/@hseireland/hse-frontend/packages/core/settings/_colours.scss`
+- `apps/hse-multisite-template/node_modules/@hseireland/hse-frontend/packages/core/settings/_spacing.scss`
+- `apps/hse-multisite-template/node_modules/@hseireland/hse-frontend/packages/core/settings/_breakpoints.scss`
 
 ```markdown
 ---
@@ -341,13 +344,14 @@ mobile:        320px
 tablet:        641px
 desktop:       769px
 large-desktop: 990px
-```
+````
 
 Usage: `@include mq($from: tablet) { ... }` or `@include mq($until: desktop) { ... }`
 
 ### Spacing
 
 0-9 scale with responsive values:
+
 ```
 0: 0px    1: 4px    2: 8px    3: 16px   4: 24px
 5: 32px   6: 40px   7: 48px   8: 56px   9: 64px
@@ -363,15 +367,15 @@ Weights: `$hse-font-normal: 400`, `$hse-font-bold: 600`.
 
 ### Key Mixins
 
-| Mixin | Purpose |
-|---|---|
-| `visually-hidden()` | Hide visually, keep in DOM for screen readers |
-| `visually-hidden-focusable()` | Skip link pattern |
-| `reading-width()` | Max-width 44em for readable content |
-| `panel($bg, $text)` | Panel component base |
-| `care-card($bg, $text, $border)` | Care card component |
-| `toggle-button()` | Toggle button base |
-| `close-button($size)` | Close/dismiss button |
+| Mixin                            | Purpose                                       |
+| -------------------------------- | --------------------------------------------- |
+| `visually-hidden()`              | Hide visually, keep in DOM for screen readers |
+| `visually-hidden-focusable()`    | Skip link pattern                             |
+| `reading-width()`                | Max-width 44em for readable content           |
+| `panel($bg, $text)`              | Panel component base                          |
+| `care-card($bg, $text, $border)` | Care card component                           |
+| `toggle-button()`                | Toggle button base                            |
+| `close-button($size)`            | Close/dismiss button                          |
 
 ## Decision Guide
 
@@ -380,7 +384,8 @@ Weights: `$hse-font-normal: 400`, `$hse-font-bold: 600`.
 3. **Need custom styling?** Use `@hseireland/hse-frontend` SCSS variables/tokens. Never hardcode colours, spacing, or breakpoints.
 4. **Need a component that doesn't exist?** Compose from existing design system elements. Only create from scratch as a last resort.
 5. **Layout?** Always use `Container` → `Row` → `Col`.
-```
+
+````
 
 - [ ] **Step 4: Create `conventional-commit/SKILL.md`**
 
@@ -396,12 +401,14 @@ This monorepo enforces commit messages via `@repo/commitlint-config` (extends `@
 
 ## Format
 
-```
+````
+
 type(scope): description
 
 [optional body]
 
 [optional footer]
+
 ```
 
 ## Types
@@ -437,12 +444,14 @@ Scope is optional — omit for cross-cutting changes.
 ## Examples
 
 ```
+
 feat(apps): add news listing page with pagination
 fix(packages): handle null breadcrumb in CMSClient response
 chore(deps): update @hseireland/hse-frontend-react to 5.4.0
 docs: add Copilot agentic setup instructions
 ci(gh-actions): add Biome lint step to PR workflow
 refactor(packages): extract Zod schema helpers to shared util
+
 ```
 
 ## Breaking Changes
@@ -450,9 +459,11 @@ refactor(packages): extract Zod schema helpers to shared util
 Use `!` suffix or `BREAKING CHANGE:` footer:
 
 ```
+
 feat(packages)!: rename fetchContent to fetchEndpoint
 
 BREAKING CHANGE: fetchContent has been renamed to fetchEndpoint for clarity
+
 ```
 
 ## Rules
@@ -477,6 +488,7 @@ git commit -m "feat(gh-actions): add portable skills for CMS, design system, and
 Four scoped instruction files that activate automatically based on file patterns.
 
 **Files:**
+
 - Create: `.github/instructions/typescript.instructions.md`
 - Create: `.github/instructions/nextjs.instructions.md`
 - Create: `.github/instructions/cms-packages.instructions.md`
@@ -514,7 +526,7 @@ applyTo: "**/*.ts,**/*.tsx"
 
 - [ ] **Step 3: Create `nextjs.instructions.md`**
 
-```markdown
+````markdown
 ---
 description: "Next.js 16 App Router conventions — Server Components, async params, Wagtail CMS integration, HSE design system."
 applyTo: "apps/**"
@@ -546,6 +558,7 @@ export default function Page({ params }: { params: { slug: string } }) {
   const { slug } = params; // Error: params is a Promise
 }
 ```
+````
 
 ## CMS Integration
 
@@ -571,7 +584,8 @@ export default function Page({ params }: { params: { slug: string } }) {
 
 - **Biome** for linting (not ESLint). Run `pnpm lint`.
 - **Vitest** for testing (not Jest). Run `turbo run test --filter=<app>`.
-```
+
+````
 
 - [ ] **Step 4: Create `cms-packages.instructions.md`**
 
@@ -617,7 +631,7 @@ applyTo: "packages/wagtail-*/**"
 | `fetchImage(id, queries?, init?)` | Single image |
 | `fetchDocument(id, queries?, init?)` | Single document |
 | `getMediaSrc(media)` | Full media URL string |
-```
+````
 
 - [ ] **Step 5: Create `a11y.instructions.md`**
 
@@ -695,6 +709,7 @@ git commit -m "feat(gh-actions): add scoped Copilot instructions for TS, Next.js
 These two agents use strict enforcement tone ("must fix", "violation").
 
 **Files:**
+
 - Create: `.github/agents/a11y-reviewer.agent.md`
 - Create: `.github/agents/security-reviewer.agent.md`
 
@@ -706,7 +721,7 @@ Run: `mkdir -p .github/agents`
 
 Adapted from `github/awesome-copilot/agents/accessibility.agent.md`. Strip Angular/Vue, add HSE policies, strict tone.
 
-```markdown
+````markdown
 ---
 name: "A11y Reviewer"
 description: "Accessibility reviewer enforcing WCAG 2.1 AA and HSE-specific policies for public-sector health services"
@@ -738,6 +753,7 @@ Source: [service-manual.hse.ie/accessibility](https://service-manual.hse.ie/acce
 ## Review Checklist
 
 ### Semantics & Structure
+
 - [ ] Heading hierarchy is logical (no skipped levels)
 - [ ] Landmarks used: `<main>`, `<nav>`, `<header>`, `<footer>`, `<aside>`
 - [ ] No `<div>` or `<span>` where a semantic element exists
@@ -745,6 +761,7 @@ Source: [service-manual.hse.ie/accessibility](https://service-manual.hse.ie/acce
 - [ ] Tables have `<th>`, `scope`, and `<caption>` where appropriate
 
 ### Keyboard & Focus
+
 - [ ] All interactive elements keyboard-accessible
 - [ ] Visible focus indicator on all focusable elements
 - [ ] Skip link present (use `<SkipLink>` component)
@@ -753,18 +770,21 @@ Source: [service-manual.hse.ie/accessibility](https://service-manual.hse.ie/acce
 - [ ] No keyboard traps
 
 ### Images & Media
+
 - [ ] All `<img>` have meaningful `alt` or `alt=""` if decorative
 - [ ] Complex images have long description or adjacent text
 - [ ] `next/image` used (not raw `<img>`)
 - [ ] Videos have captions/transcripts
 
 ### Forms
+
 - [ ] Every input has a visible `<label>`
 - [ ] Error messages are inline, associated with the control
 - [ ] `autocomplete` attributes on relevant fields
 - [ ] Design system form components used (`@hseireland/hse-frontend-react`)
 
 ### Colour & Visual
+
 - [ ] Text contrast ≥ 4.5:1 (AA), large text ≥ 3:1
 - [ ] Non-text UI elements ≥ 3:1 contrast
 - [ ] Colour is not the sole indicator of state/meaning
@@ -772,6 +792,7 @@ Source: [service-manual.hse.ie/accessibility](https://service-manual.hse.ie/acce
 - [ ] Content reflows at 400% zoom without horizontal scroll
 
 ### Dynamic Content
+
 - [ ] Live regions for async updates (`aria-live="polite"`)
 - [ ] Route changes announced to screen readers
 - [ ] Modal dialogs trap focus and restore on close
@@ -794,6 +815,7 @@ npx pa11y http://localhost:3000 --reporter cli
 # Lighthouse accessibility audit
 npx lhci autorun --only-categories=accessibility
 ```
+````
 
 ## PR Review Comment Template
 
@@ -808,7 +830,8 @@ npx lhci autorun --only-categories=accessibility
 
 Refs: WCAG 2.1 [SC x.x.x] as applicable
 ```
-```
+
+````
 
 - [ ] **Step 3: Create `security-reviewer.agent.md`**
 
@@ -888,15 +911,19 @@ Environment variables must be accessed via `process.env` and defined in `.env.lo
 
 ## Review Template
 
-```
+````
+
 **Security Review:**
+
 - Secrets/credentials: [CLEAN / SECURITY RISK: ...]
 - Input validation: [OK / SECURITY RISK: ...]
 - Auth/access control: [OK / SECURITY RISK: ...]
 - CMS data handling: [OK / SECURITY RISK: ...]
 - Headers/CSP: [OK / SECURITY RISK: ...]
 - Dependencies: [OK / SECURITY RISK: ...]
+
 ```
+
 ```
 
 - [ ] **Step 4: Commit strict-tone agents**
@@ -913,6 +940,7 @@ git commit -m "feat(gh-actions): add a11y-reviewer and security-reviewer agents"
 Four agents with advisory tone ("prefer", "consider", "recommended").
 
 **Files:**
+
 - Create: `.github/agents/nextjs-developer.agent.md`
 - Create: `.github/agents/react-expert.agent.md`
 - Create: `.github/agents/gh-actions-expert.agent.md`
@@ -922,11 +950,29 @@ Four agents with advisory tone ("prefer", "consider", "recommended").
 
 Adapted from `github/awesome-copilot/agents/expert-nextjs-developer.agent.md`. Pinned to Next.js 16, CMS integration, Biome/Vitest.
 
-```markdown
+````markdown
 ---
 name: "Next.js Developer"
 description: "Next.js 16 App Router expert for this Wagtail CMS monorepo — Server Components, data fetching, HSE design system"
-tools: ["changes", "codebase", "edit/editFiles", "fetch", "findTestFiles", "new", "openSimpleBrowser", "problems", "runCommands", "runTests", "search", "searchResults", "terminalLastCommand", "terminalSelection", "testFailure", "usages"]
+tools:
+  [
+    "changes",
+    "codebase",
+    "edit/editFiles",
+    "fetch",
+    "findTestFiles",
+    "new",
+    "openSimpleBrowser",
+    "problems",
+    "runCommands",
+    "runTests",
+    "search",
+    "searchResults",
+    "terminalLastCommand",
+    "terminalSelection",
+    "testFailure",
+    "usages",
+  ]
 ---
 
 # Next.js Developer
@@ -937,7 +983,7 @@ You are an expert Next.js 16 developer working in a pnpm + Turborepo monorepo th
 
 ## IMPORTANT: Check the docs first
 
-**Before writing Next.js code, read the relevant guide in `node_modules/next/dist/docs/01-app/`.** APIs and conventions may differ from your training data. Also check `apps/hse-app-template/AGENTS.md` for deprecation notices.
+**Before writing Next.js code, read the relevant guide in `node_modules/next/dist/docs/01-app/`.** APIs and conventions may differ from your training data. Also check `apps/hse-multisite-template/AGENTS.md` for deprecation notices.
 
 ## Domain Knowledge
 
@@ -950,6 +996,7 @@ You are an expert Next.js 16 developer working in a pnpm + Turborepo monorepo th
 ### Server Components (Default)
 
 All components are Server Components unless marked with `"use client"`. Prefer Server Components for:
+
 - Data fetching (CMSClient calls)
 - Rendering CMS content
 - Layout and page structure
@@ -966,6 +1013,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
   // ...
 }
 ```
+````
 
 ### CMS Data Fetching
 
@@ -1000,19 +1048,20 @@ export default function Layout({ children }) {
 
 ## Tooling
 
-| Tool | Command |
-|---|---|
-| Lint | `pnpm lint` (Biome v2, not ESLint) |
-| Test | `turbo run test --filter=<app>` (Vitest, not Jest) |
-| Typecheck | `pnpm typecheck` |
-| Dev server | `turbo run dev --filter=<app>` |
+| Tool       | Command                                            |
+| ---------- | -------------------------------------------------- |
+| Lint       | `pnpm lint` (Biome v2, not ESLint)                 |
+| Test       | `turbo run test --filter=<app>` (Vitest, not Jest) |
+| Typecheck  | `pnpm typecheck`                                   |
+| Dev server | `turbo run dev --filter=<app>`                     |
 
 ## Monorepo Context
 
 - Internal packages: `"workspace:*"` protocol
 - External versions: `"catalog:"` from `pnpm-workspace.yaml`
 - Filter to workspace: `turbo run <task> --filter=<package>`
-```
+
+````
 
 - [ ] **Step 2: Create `react-expert.agent.md`**
 
@@ -1073,7 +1122,7 @@ function BlockRenderer({ block }: { block: CMSBlockType }) {
       return null;
   }
 }
-```
+````
 
 ### Forms
 
@@ -1087,7 +1136,11 @@ import { z } from "zod";
 const schema = z.object({ email: z.string().email() });
 
 function MyForm() {
-  const { register, handleSubmit, formState: { errors } } = useForm({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
     resolver: zodResolver(schema),
   });
   // Use design system form components for inputs
@@ -1110,7 +1163,8 @@ Follow the design system's composition pattern:
 - **Vitest** with `@vitest/coverage-v8` (not Jest)
 - Default environment: `jsdom`
 - Run: `turbo run test --filter=<package>`
-```
+
+````
 
 - [ ] **Step 3: Create `gh-actions-expert.agent.md`**
 
@@ -1145,15 +1199,15 @@ You are a GitHub Actions specialist helping build CI/CD workflows for a pnpm + T
     cache: "pnpm"
 
 - run: pnpm install --frozen-lockfile
-```
+````
 
 ### Turborepo Tasks
 
 ```yaml
-- run: pnpm build         # Build all packages in dependency order
-- run: pnpm lint           # Biome check --write
-- run: pnpm typecheck      # tsc --noEmit across workspace
-- run: pnpm test:ci        # Vitest with coverage
+- run: pnpm build # Build all packages in dependency order
+- run: pnpm lint # Biome check --write
+- run: pnpm typecheck # tsc --noEmit across workspace
+- run: pnpm test:ci # Vitest with coverage
 ```
 
 ### Filtering to Changed Packages
@@ -1201,7 +1255,8 @@ pnpm cache is handled by `setup-node`. For Turbo cache:
 - External versions pinned in `pnpm-workspace.yaml` catalog — `catalog:` in package.json
 - HSE design system from GitHub Packages (`@hseireland` scope) — may need `NODE_AUTH_TOKEN` in CI
 - Use `pnpm install --frozen-lockfile` — never `pnpm install` in CI
-```
+
+````
 
 - [ ] **Step 4: Create `cms-specialist.agent.md`**
 
@@ -1262,13 +1317,14 @@ Refer to `.github/skills/cms-content-fetching/SKILL.md` for the complete data fl
     "title": "..."
   }]
 }
-```
+````
 
 ## Content Model
 
 ### Page Types
 
 Six page types in `CMSPageType`:
+
 - `appbase.HomePage`, `appbase.LandingPage`, `appbase.ContentPage`, `appbase.SearchPage`
 - `news.NewsListingPage`, `news.NewsContentPage`
 
@@ -1322,14 +1378,15 @@ const home = await client.fetchPage(1);
 - Add block keys to `CMSBlockComponentsKeysSchema` enum
 - Add to union types: `CMSPageProps`, `BlockValuesProps`
 - Use sub-path exports for organization
-```
+
+````
 
 - [ ] **Step 5: Commit collaborative-tone agents**
 
 ```bash
 git add .github/agents/nextjs-developer.agent.md .github/agents/react-expert.agent.md .github/agents/gh-actions-expert.agent.md .github/agents/cms-specialist.agent.md
 git commit -m "feat(gh-actions): add nextjs-developer, react-expert, gh-actions-expert, cms-specialist agents"
-```
+````
 
 ---
 
@@ -1338,6 +1395,7 @@ git commit -m "feat(gh-actions): add nextjs-developer, react-expert, gh-actions-
 Four prompts for cross-package CMS workflows.
 
 **Files:**
+
 - Create: `.github/prompts/new-page-model.prompt.md`
 - Create: `.github/prompts/new-streamfield-block.prompt.md`
 - Create: `.github/prompts/new-page-with-blocks.prompt.md`
@@ -1349,7 +1407,7 @@ Run: `mkdir -p .github/prompts`
 
 - [ ] **Step 2: Create `new-page-model.prompt.md`**
 
-```markdown
+````markdown
 ---
 name: "New Page Model"
 description: "Add a new Wagtail page type: Zod schema in types, Next.js route in the app"
@@ -1378,6 +1436,7 @@ export const CMSPageTypeSchema = z.enum([
   "{APP_LABEL}.{PAGE_TYPE_NAME}",
 ]);
 ```
+````
 
 ## Step 2: Create Zod schema
 
@@ -1413,7 +1472,7 @@ export type CMSPageProps =
 
 ## Step 4: Create Next.js route
 
-**File:** `apps/hse-app-template/src/app/{route-path}/page.tsx`
+**File:** `apps/hse-multisite-template/src/app/{route-path}/page.tsx`
 
 Create a Server Component that fetches and renders the page:
 
@@ -1440,7 +1499,8 @@ export default async function {PageTypeName}Page({ params }: { params: Promise<{
 ```
 
 <!-- TODO: wagtail-cms-mapping — when @repo/wagtail-cms-mapping exists, add a step here to register the page type to a layout template mapping -->
-```
+
+````
 
 - [ ] **Step 3: Create `new-streamfield-block.prompt.md`**
 
@@ -1471,7 +1531,7 @@ export const CMSBlockComponentsKeysSchema = z.enum([
   // ... existing keys
   "{BLOCK_KEY}",
 ]);
-```
+````
 
 ## Step 2: Create Zod schema for block value
 
@@ -1503,7 +1563,8 @@ export type BlockValuesProps =
 ```
 
 <!-- TODO: wagtail-cms-mapping — when @repo/wagtail-cms-mapping exists, add a step here to map this block key to an @hseireland/hse-frontend-react component -->
-```
+
+````
 
 - [ ] **Step 4: Create `new-page-with-blocks.prompt.md`**
 
@@ -1540,7 +1601,7 @@ Follow the **New Page Model** workflow:
 1. Add page type to `CMSPageTypeSchema` in `packages/wagtail-cms-types/src/types/core/index.ts`
 2. Create page schema in `packages/wagtail-cms-types/src/types/page-models/{app_label}.ts`
 3. Add to `CMSPageProps` union in `packages/wagtail-cms-types/src/types/page-models/index.ts`
-4. Create Next.js route in `apps/hse-app-template/src/app/`
+4. Create Next.js route in `apps/hse-multisite-template/src/app/`
 
 ## Phase 3: Wire Up Blocks to Page Rendering
 
@@ -1557,10 +1618,11 @@ function BlockRenderer({ block }: { block: CMSBlockType }) {
       return null;
   }
 }
-```
+````
 
 <!-- TODO: wagtail-cms-mapping — when @repo/wagtail-cms-mapping exists, block-to-component mapping and page-to-template mapping will be handled in that package instead of inline in the route component -->
-```
+
+````
 
 - [ ] **Step 5: Create `integrate-component.prompt.md`**
 
@@ -1585,7 +1647,7 @@ Wire up an existing `@hseireland/hse-frontend-react` component to a Wagtail CMS 
 Use the **Storybook MCP** at `http://localhost:6006/mcp` to examine the component's props, variants, and usage examples.
 
 Alternatively, read the component source:
-`apps/hse-app-template/node_modules/@hseireland/hse-frontend-react/src/components/`
+`apps/hse-multisite-template/node_modules/@hseireland/hse-frontend-react/src/components/`
 
 ## Step 2: Check if block key exists
 
@@ -1598,7 +1660,7 @@ export const CMSBlockComponentsKeysSchema = z.enum([
   // ... existing keys
   "{BLOCK_KEY}",
 ]);
-```
+````
 
 ## Step 3: Create or update Zod block schema
 
@@ -1632,14 +1694,15 @@ export type BlockValuesProps =
 ```
 
 <!-- TODO: wagtail-cms-mapping — when @repo/wagtail-cms-mapping exists, add a step here to register the mapping from BLOCK_KEY to COMPONENT_NAME in the mapping package -->
-```
+
+````
 
 - [ ] **Step 6: Commit CMS workflow prompts**
 
 ```bash
 git add .github/prompts/new-page-model.prompt.md .github/prompts/new-streamfield-block.prompt.md .github/prompts/new-page-with-blocks.prompt.md .github/prompts/integrate-component.prompt.md
 git commit -m "feat(gh-actions): add CMS workflow prompts for page models, blocks, and component integration"
-```
+````
 
 ---
 
@@ -1648,13 +1711,14 @@ git commit -m "feat(gh-actions): add CMS workflow prompts for page models, block
 Three prompts for component creation and app scaffolding.
 
 **Files:**
+
 - Create: `.github/prompts/new-local-component.prompt.md`
 - Create: `.github/prompts/new-custom-component.prompt.md`
 - Create: `.github/prompts/new-app.prompt.md`
 
 - [ ] **Step 1: Create `new-local-component.prompt.md`**
 
-```markdown
+````markdown
 ---
 name: "New Local Component"
 description: "Create a custom composite component in the app, built from design system elements, with tests"
@@ -1680,7 +1744,7 @@ Before creating a custom component, verify it doesn't already exist:
 
 ## Step 2: Create the component
 
-**File:** `apps/hse-app-template/src/components/{ComponentName}/{ComponentName}.tsx`
+**File:** `apps/hse-multisite-template/src/components/{ComponentName}/{ComponentName}.tsx`
 
 ```typescript
 import { Container, Row, Col } from "@hseireland/hse-frontend-react";
@@ -1698,12 +1762,13 @@ export function {ComponentName}({ ...props }: {ComponentName}Props) {
   );
 }
 ```
+````
 
 If the component needs interactivity, add `"use client"` directive at the top.
 
 ## Step 3: Create test file
 
-**File:** `apps/hse-app-template/src/components/{ComponentName}/{ComponentName}.test.tsx`
+**File:** `apps/hse-multisite-template/src/components/{ComponentName}/{ComponentName}.test.tsx`
 
 ```typescript
 import { render, screen } from "@testing-library/react";
@@ -1718,17 +1783,18 @@ describe("{ComponentName}", () => {
 });
 ```
 
-Run: `cd apps/hse-app-template && pnpm vitest run src/components/{ComponentName}/{ComponentName}.test.tsx`
+Run: `cd apps/hse-multisite-template && pnpm vitest run src/components/{ComponentName}/{ComponentName}.test.tsx`
 
 ## Step 4: Export from index
 
-**File:** `apps/hse-app-template/src/components/{ComponentName}/index.ts`
+**File:** `apps/hse-multisite-template/src/components/{ComponentName}/index.ts`
 
 ```typescript
 export { {ComponentName} } from "./{ComponentName}";
 export type { {ComponentName}Props } from "./{ComponentName}";
 ```
-```
+
+````
 
 - [ ] **Step 2: Create `new-custom-component.prompt.md`**
 
@@ -1764,9 +1830,10 @@ If the package doesn't exist, scaffold it:
 
 ```bash
 mkdir -p packages/hse-custom-ui/src
-```
+````
 
 Create `packages/hse-custom-ui/package.json`:
+
 ```json
 {
   "name": "@repo/hse-custom-ui",
@@ -1834,7 +1901,8 @@ describe("{ComponentName}", () => {
 export { {ComponentName} } from "./{ComponentName}/{ComponentName}";
 export type { {ComponentName}Props } from "./{ComponentName}/{ComponentName}";
 ```
-```
+
+````
 
 - [ ] **Step 3: Create `new-app.prompt.md`**
 
@@ -1859,9 +1927,9 @@ From the repo root:
 
 ```bash
 make new-app APP_NAME={APP_NAME}
-```
+````
 
-If no Makefile target exists yet, manually scaffold based on `apps/hse-app-template/`.
+If no Makefile target exists yet, manually scaffold based on `apps/hse-multisite-template/`.
 
 ## Step 2: Register in workspace
 
@@ -1878,6 +1946,7 @@ The new app should inherit the default pipeline tasks (`build`, `dev`, `test`, `
 ## Step 4: Set up shared configs
 
 Ensure the new app uses:
+
 - `@repo/typescript-config/nextjs.json` for tsconfig
 - `@repo/biome-config` for Biome
 - `@repo/vitest-config` for Vitest (`createVitestConfig()`)
@@ -1894,14 +1963,15 @@ pnpm install
 turbo run build --filter={APP_NAME}
 turbo run dev --filter={APP_NAME}
 ```
-```
+
+````
 
 - [ ] **Step 4: Commit component & app prompts**
 
 ```bash
 git add .github/prompts/new-local-component.prompt.md .github/prompts/new-custom-component.prompt.md .github/prompts/new-app.prompt.md
 git commit -m "feat(gh-actions): add component and app scaffolding prompts"
-```
+````
 
 ---
 
@@ -1910,6 +1980,7 @@ git commit -m "feat(gh-actions): add component and app scaffolding prompts"
 Add references to the new instructions, agents, and skills.
 
 **Files:**
+
 - Modify: `.github/copilot-instructions.md`
 
 - [ ] **Step 1: Read the current file**
@@ -1921,7 +1992,6 @@ Read `.github/copilot-instructions.md` to see current content.
 Add to the end of `.github/copilot-instructions.md`:
 
 ```markdown
-
 ## Scoped Instructions
 
 Additional instructions activate based on file patterns — see `.github/instructions/`.
@@ -1961,6 +2031,7 @@ Expected: 20 files (6 agents + 4 instructions + 7 prompts + 3 skills)
 Run: `find .github -type f -name "*.md" | sort`
 
 Expected output:
+
 ```
 .github/agents/a11y-reviewer.agent.md
 .github/agents/cms-specialist.agent.md

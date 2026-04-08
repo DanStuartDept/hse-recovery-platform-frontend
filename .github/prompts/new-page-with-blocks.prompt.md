@@ -30,7 +30,7 @@ Follow the **New Page Model** workflow:
 1. Add page type to `CMSPageTypeSchema` in `packages/wagtail-cms-types/src/types/core/index.ts`
 2. Create page schema in `packages/wagtail-cms-types/src/types/page-models/{app_label}.ts`
 3. Add to `CMSPageProps` union in `packages/wagtail-cms-types/src/types/page-models/index.ts`
-4. Create Next.js route in `apps/hse-app-template/src/app/`
+4. Create Next.js route in `apps/hse-multisite-template/src/app/`
 
 ## Phase 3: Wire Up Blocks to Page Rendering
 

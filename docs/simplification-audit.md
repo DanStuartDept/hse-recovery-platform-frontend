@@ -4,46 +4,46 @@ Findings from a code reuse, quality, and efficiency audit of the monorepo. Items
 
 ## Summary
 
-| # | Item | Severity | Packages affected |
-|---|------|----------|-------------------|
-| 1 | [`buildQueryString` lacks URL encoding](#1-buildquerystring-lacks-url-encoding) | Bug | `wagtail-cms-client` |
-| 2 | [`JSON.stringify(response)` produces `{}` on error](#2-jsonstringifyresponse-produces--on-error) | Bug | `wagtail-cms-client` |
-| 3 | [Verify `decendant_of` spelling against Wagtail API](#3-verify-decendant_of-spelling-against-wagtail-api) | Bug (potential) | `wagtail-cms-types`, `wagtail-cms-client` |
-| 4 | [Turbo build outputs missing `dist/**`](#4-turbo-build-outputs-missing-dist) | High | Root `turbo.json` |
-| 5 | [Turbo `lint` task unnecessarily serialised](#5-turbo-lint-task-unnecessarily-serialised) | High | Root `turbo.json` |
-| 6 | [Turbo `typecheck` task unnecessarily serialised](#6-turbo-typecheck-task-unnecessarily-serialised) | Medium | Root `turbo.json` |
-| 7 | [Turbo lint/typecheck missing `inputs` config](#7-turbo-linttypecheck-missing-inputs-config) | Medium | Root `turbo.json` |
-| 8 | [`wagtail-cms-types` build script runs typedoc](#8-wagtail-cms-types-build-script-runs-typedoc) | High | `wagtail-cms-types` |
-| 9 | [`wagtail-cms-types` dev script runs typedoc + live-server](#9-wagtail-cms-types-dev-script-runs-typedoc--live-server) | Medium | `wagtail-cms-types` |
-| 10 | [Unused dependencies in `wagtail-cms-client`](#10-unused-dependencies-in-wagtail-cms-client) | Medium | `wagtail-cms-client` |
-| 11 | [Duplicate file: `fields/schemas.ts` identical to `fields/index.ts`](#11-duplicate-file-fieldsschemasts-identical-to-fieldsindexts) | Low-effort fix | `wagtail-cms-types` |
-| 12 | [Duplicated NavigationItem schema](#12-duplicated-navigationitem-schema) | Low-effort fix | `wagtail-cms-types` |
-| 13 | [Duplicated error handling boilerplate in `CMSClient`](#13-duplicated-error-handling-boilerplate-in-cmsclient) | Medium | `wagtail-cms-client` |
-| 14 | [`@repo/logger` unused everywhere](#14-repologger-unused-everywhere) | Medium | `logger`, `wagtail-cms-client` |
-| 15 | [Dual CJS+ESM build for private packages](#15-dual-cjsesm-build-for-private-packages) | Medium | `wagtail-cms-client`, `logger`, `config-vitest` |
-| 16 | [`config-vitest` could be source-only](#16-config-vitest-could-be-source-only) | Medium | `config-vitest` |
-| 17 | [`sharedConfig` exported but never used](#17-sharedconfig-exported-but-never-used) | Low-effort fix | `config-vitest` |
-| 18 | [Duplicated coverage exclusion list in vitest config](#18-duplicated-coverage-exclusion-list-in-vitest-config) | Low-effort fix | `config-vitest` |
-| 19 | [Prettier format script overlaps with Biome](#19-prettier-format-script-overlaps-with-biome) | Medium | Root `package.json` |
-| 20 | [`z.any()` usage violates strict TypeScript policy](#20-zany-usage-violates-strict-typescript-policy) | Medium | `wagtail-cms-types` |
-| 21 | [Zod schemas never used for runtime validation](#21-zod-schemas-never-used-for-runtime-validation) | Medium | `wagtail-cms-types`, `wagtail-cms-client` |
-| 22 | [Hardcoded `next.revalidate: 360` in generic API client](#22-hardcoded-nextrevalidate-360-in-generic-api-client) | Medium | `wagtail-cms-client` |
-| 23 | [Trailing `?` appended even with no query params](#23-trailing--appended-even-with-no-query-params) | Low | `wagtail-cms-client` |
-| 24 | [`wagtail-cms-client` re-exports all of `wagtail-cms-types/core`](#24-wagtail-cms-client-re-exports-all-of-wagtail-cms-typescore) | Medium | `wagtail-cms-client` |
-| 25 | [Stale `@repo/ui` path alias in tsconfig](#25-stale-repoui-path-alias-in-tsconfig) | Low-effort fix | `wagtail-cms-client` |
-| 26 | [TypeScript target ES5 unnecessarily conservative](#26-typescript-target-es5-unnecessarily-conservative) | Low | `config-typescript` |
-| 27 | [Unused tsconfig bases (`react-app.json`, `vite.json`)](#27-unused-tsconfig-bases-react-appjson-vitejson) | Low-effort fix | `config-typescript` |
-| 28 | [Non-React packages extend `react-internal` Biome config](#28-non-react-packages-extend-react-internal-biome-config) | Low | `logger`, `config-vitest`, `wagtail-cms-types` |
-| 29 | [`biome-config` has placeholder echo scripts](#29-biome-config-has-placeholder-echo-scripts) | Low-effort fix | `biome-config` |
-| 30 | [Inconsistent `workspace:*` vs `workspace:^`](#30-inconsistent-workspace-vs-workspace) | Low-effort fix | Multiple |
-| 31 | [Duplicate commitlint dependencies](#31-duplicate-commitlint-dependencies) | Low-effort fix | Root, `commitlint-config` |
-| 32 | [Unused pnpm catalog entries](#32-unused-pnpm-catalog-entries) | Low-effort fix | Root `pnpm-workspace.yaml` |
-| 33 | [TypeScript version mismatch root vs catalog](#33-typescript-version-mismatch-root-vs-catalog) | Low-effort fix | Root `package.json` |
-| 34 | [Redundant dev deps in `wagtail-cms-types`](#34-redundant-dev-deps-in-wagtail-cms-types) | Low-effort fix | `wagtail-cms-types` |
-| 35 | [React plugin loaded for non-React test configs](#35-react-plugin-loaded-for-non-react-test-configs) | Low | `config-vitest` |
-| 36 | [Template app has boilerplate metadata](#36-template-app-has-boilerplate-metadata) | Low-effort fix | `hse-app-template` |
-| 37 | [Unused CSS module declarations](#37-unused-css-module-declarations) | Low-effort fix | `hse-app-template` |
-| 38 | [Test setup file exists but is never referenced](#38-test-setup-file-exists-but-is-never-referenced) | Low | `config-vitest` |
+| #   | Item                                                                                                                                | Severity        | Packages affected                               |
+| --- | ----------------------------------------------------------------------------------------------------------------------------------- | --------------- | ----------------------------------------------- |
+| 1   | [`buildQueryString` lacks URL encoding](#1-buildquerystring-lacks-url-encoding)                                                     | Bug             | `wagtail-cms-client`                            |
+| 2   | [`JSON.stringify(response)` produces `{}` on error](#2-jsonstringifyresponse-produces--on-error)                                    | Bug             | `wagtail-cms-client`                            |
+| 3   | [Verify `decendant_of` spelling against Wagtail API](#3-verify-decendant_of-spelling-against-wagtail-api)                           | Bug (potential) | `wagtail-cms-types`, `wagtail-cms-client`       |
+| 4   | [Turbo build outputs missing `dist/**`](#4-turbo-build-outputs-missing-dist)                                                        | High            | Root `turbo.json`                               |
+| 5   | [Turbo `lint` task unnecessarily serialised](#5-turbo-lint-task-unnecessarily-serialised)                                           | High            | Root `turbo.json`                               |
+| 6   | [Turbo `typecheck` task unnecessarily serialised](#6-turbo-typecheck-task-unnecessarily-serialised)                                 | Medium          | Root `turbo.json`                               |
+| 7   | [Turbo lint/typecheck missing `inputs` config](#7-turbo-linttypecheck-missing-inputs-config)                                        | Medium          | Root `turbo.json`                               |
+| 8   | [`wagtail-cms-types` build script runs typedoc](#8-wagtail-cms-types-build-script-runs-typedoc)                                     | High            | `wagtail-cms-types`                             |
+| 9   | [`wagtail-cms-types` dev script runs typedoc + live-server](#9-wagtail-cms-types-dev-script-runs-typedoc--live-server)              | Medium          | `wagtail-cms-types`                             |
+| 10  | [Unused dependencies in `wagtail-cms-client`](#10-unused-dependencies-in-wagtail-cms-client)                                        | Medium          | `wagtail-cms-client`                            |
+| 11  | [Duplicate file: `fields/schemas.ts` identical to `fields/index.ts`](#11-duplicate-file-fieldsschemasts-identical-to-fieldsindexts) | Low-effort fix  | `wagtail-cms-types`                             |
+| 12  | [Duplicated NavigationItem schema](#12-duplicated-navigationitem-schema)                                                            | Low-effort fix  | `wagtail-cms-types`                             |
+| 13  | [Duplicated error handling boilerplate in `CMSClient`](#13-duplicated-error-handling-boilerplate-in-cmsclient)                      | Medium          | `wagtail-cms-client`                            |
+| 14  | [`@repo/logger` unused everywhere](#14-repologger-unused-everywhere)                                                                | Medium          | `logger`, `wagtail-cms-client`                  |
+| 15  | [Dual CJS+ESM build for private packages](#15-dual-cjsesm-build-for-private-packages)                                               | Medium          | `wagtail-cms-client`, `logger`, `config-vitest` |
+| 16  | [`config-vitest` could be source-only](#16-config-vitest-could-be-source-only)                                                      | Medium          | `config-vitest`                                 |
+| 17  | [`sharedConfig` exported but never used](#17-sharedconfig-exported-but-never-used)                                                  | Low-effort fix  | `config-vitest`                                 |
+| 18  | [Duplicated coverage exclusion list in vitest config](#18-duplicated-coverage-exclusion-list-in-vitest-config)                      | Low-effort fix  | `config-vitest`                                 |
+| 19  | [Prettier format script overlaps with Biome](#19-prettier-format-script-overlaps-with-biome)                                        | Medium          | Root `package.json`                             |
+| 20  | [`z.any()` usage violates strict TypeScript policy](#20-zany-usage-violates-strict-typescript-policy)                               | Medium          | `wagtail-cms-types`                             |
+| 21  | [Zod schemas never used for runtime validation](#21-zod-schemas-never-used-for-runtime-validation)                                  | Medium          | `wagtail-cms-types`, `wagtail-cms-client`       |
+| 22  | [Hardcoded `next.revalidate: 360` in generic API client](#22-hardcoded-nextrevalidate-360-in-generic-api-client)                    | Medium          | `wagtail-cms-client`                            |
+| 23  | [Trailing `?` appended even with no query params](#23-trailing--appended-even-with-no-query-params)                                 | Low             | `wagtail-cms-client`                            |
+| 24  | [`wagtail-cms-client` re-exports all of `wagtail-cms-types/core`](#24-wagtail-cms-client-re-exports-all-of-wagtail-cms-typescore)   | Medium          | `wagtail-cms-client`                            |
+| 25  | [Stale `@repo/ui` path alias in tsconfig](#25-stale-repoui-path-alias-in-tsconfig)                                                  | Low-effort fix  | `wagtail-cms-client`                            |
+| 26  | [TypeScript target ES5 unnecessarily conservative](#26-typescript-target-es5-unnecessarily-conservative)                            | Low             | `config-typescript`                             |
+| 27  | [Unused tsconfig bases (`react-app.json`, `vite.json`)](#27-unused-tsconfig-bases-react-appjson-vitejson)                           | Low-effort fix  | `config-typescript`                             |
+| 28  | [Non-React packages extend `react-internal` Biome config](#28-non-react-packages-extend-react-internal-biome-config)                | Low             | `logger`, `config-vitest`, `wagtail-cms-types`  |
+| 29  | [`biome-config` has placeholder echo scripts](#29-biome-config-has-placeholder-echo-scripts)                                        | Low-effort fix  | `biome-config`                                  |
+| 30  | [Inconsistent `workspace:*` vs `workspace:^`](#30-inconsistent-workspace-vs-workspace)                                              | Low-effort fix  | Multiple                                        |
+| 31  | [Duplicate commitlint dependencies](#31-duplicate-commitlint-dependencies)                                                          | Low-effort fix  | Root, `commitlint-config`                       |
+| 32  | [Unused pnpm catalog entries](#32-unused-pnpm-catalog-entries)                                                                      | Low-effort fix  | Root `pnpm-workspace.yaml`                      |
+| 33  | [TypeScript version mismatch root vs catalog](#33-typescript-version-mismatch-root-vs-catalog)                                      | Low-effort fix  | Root `package.json`                             |
+| 34  | [Redundant dev deps in `wagtail-cms-types`](#34-redundant-dev-deps-in-wagtail-cms-types)                                            | Low-effort fix  | `wagtail-cms-types`                             |
+| 35  | [React plugin loaded for non-React test configs](#35-react-plugin-loaded-for-non-react-test-configs)                                | Low             | `config-vitest`                                 |
+| 36  | [Template app has boilerplate metadata](#36-template-app-has-boilerplate-metadata)                                                  | Low-effort fix  | `hse-multisite-template`                        |
+| 37  | [Unused CSS module declarations](#37-unused-css-module-declarations)                                                                | Low-effort fix  | `hse-multisite-template`                        |
+| 38  | [Test setup file exists but is never referenced](#38-test-setup-file-exists-but-is-never-referenced)                                | Low             | `config-vitest`                                 |
 
 ---
 
@@ -348,7 +348,7 @@ Both `live-server` and `serve` are installed for viewing docs locally. `serve` i
 
 ### 36. Template app has boilerplate metadata
 
-**Files:** `apps/hse-app-template/src/app/layout.tsx`
+**Files:** `apps/hse-multisite-template/src/app/layout.tsx`
 
 Metadata reads "Create Next App".
 
@@ -356,7 +356,7 @@ Metadata reads "Create Next App".
 
 ### 37. Unused CSS module declarations
 
-**File:** `apps/hse-app-template/declaration.css.d.ts`
+**File:** `apps/hse-multisite-template/declaration.css.d.ts`
 
 Declares module types for `.css`, `.scss`, `.sass`, `.less`, `.styl` as CSS modules. Current usage is side-effect SCSS imports only. `.less` and `.styl` are certainly unused.
 
@@ -374,10 +374,10 @@ Imports `@testing-library/jest-dom/vitest` but no vitest config passes it via `s
 
 ## Areas for Further Research
 
-| Topic | Question |
-|-------|----------|
-| Zod runtime validation | Where is the best place to add `.parse()` / `.safeParse()` — in `fetchRequest`, in `CMSClient` methods, or in the mapping layer? |
+| Topic                          | Question                                                                                                                                                             |
+| ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Zod runtime validation         | Where is the best place to add `.parse()` / `.safeParse()` — in `fetchRequest`, in `CMSClient` methods, or in the mapping layer?                                     |
 | `CMSClient` return type design | The `T \| NotFoundContents` union has no type discriminator. Should this use a discriminated union with a `success` flag, or throw errors instead of returning them? |
-| `CMSClient` scalability | The class is 363 lines and growing. Should resource-specific methods (pages, images, documents) be split into separate modules? |
-| `@repo/logger` future | Should this become a real structured logger (pino, winston), or should it be removed until monitoring (backlog item 16) is tackled? |
-| `decendant_of` spelling | Need to verify against the actual Wagtail Pages API — could be a Wagtail-side typo that we need to match |
+| `CMSClient` scalability        | The class is 363 lines and growing. Should resource-specific methods (pages, images, documents) be split into separate modules?                                      |
+| `@repo/logger` future          | Should this become a real structured logger (pino, winston), or should it be removed until monitoring (backlog item 16) is tackled?                                  |
+| `decendant_of` spelling        | Need to verify against the actual Wagtail Pages API — could be a Wagtail-side typo that we need to match                                                             |

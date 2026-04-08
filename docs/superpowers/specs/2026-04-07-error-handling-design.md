@@ -1,4 +1,4 @@
-# Error Handling Design — Error Pages for hse-app-template
+# Error Handling Design — Error Pages for hse-multisite-template
 
 **Date:** 2026-04-07
 **Backlog item:** #7 — Error Handling and Resilience (partial — error pages only)
@@ -13,19 +13,20 @@ Add `not-found.tsx`, `error.tsx`, and `global-error.tsx` to the template app so 
 ## Scope
 
 Error pages only. Out of scope for this ticket:
+
 - CMS fallback / degraded mode (CMS unavailable = 404)
 - Zod validation error surfacing
 - loading.tsx / Suspense boundaries
 
 ## Files
 
-All in `apps/hse-app-template/src/app/`:
+All in `apps/hse-multisite-template/src/app/`:
 
-| File | Type | Purpose |
-|------|------|---------|
-| `not-found.tsx` | Server Component | 404 page matching hse.ie pattern |
-| `error.tsx` | Client Component | Route-segment error boundary |
-| `global-error.tsx` | Client Component | Root-layout error fallback |
+| File               | Type             | Purpose                          |
+| ------------------ | ---------------- | -------------------------------- |
+| `not-found.tsx`    | Server Component | 404 page matching hse.ie pattern |
+| `error.tsx`        | Client Component | Route-segment error boundary     |
+| `global-error.tsx` | Client Component | Root-layout error fallback       |
 
 ---
 
@@ -36,6 +37,7 @@ Server component (no `"use client"`). Mirrors the live hse.ie 404 page.
 **Layout:** `Container` > `Row` > `Col width="two-thirds"` from `@hseireland/hse-frontend-react`.
 
 **Content (matching hse.ie):**
+
 - h1: "Page not found"
 - "We cannot find the page you are looking for."
 - "The link may be broken, or the page may have been moved or deleted."
@@ -60,6 +62,7 @@ Client component (`"use client"`). React error boundary for route segments.
 **Props:** `{ error: Error & { digest?: string }; reset: () => void }`
 
 **Behaviour:**
+
 - Shows "Something went wrong" heading with a brief message and a "Try again" button that calls `reset()`.
 - Uses `Container` > `Row` > `Col width="two-thirds"` layout, same as 404.
 - On mount, logs the error via `@repo/logger` (`log`) when `config.isLocalhost` is `true` (from `@repo/app-config`). Uses `useEffect` for the logging side effect.
@@ -77,6 +80,7 @@ Client component (`"use client"`). Catches errors in the root layout itself.
 **Key difference:** Must render its own `<html>` and `<body>` tags since the root layout errored. Imports `@hseireland/hse-frontend/packages/hse.scss` directly for styling.
 
 **Behaviour:**
+
 - Same "Something went wrong" UI as `error.tsx`.
 - Same dev-only logging via `@repo/logger` + `@repo/app-config`.
 - Same "Try again" button calling `reset()`.
@@ -85,12 +89,12 @@ Client component (`"use client"`). Catches errors in the root layout itself.
 
 ## Dependencies Used
 
-| Package | Import | Used in |
-|---------|--------|---------|
-| `@hseireland/hse-frontend-react` | `Container`, `Row`, `Col` | All three files |
-| `@hseireland/hse-frontend` | SCSS import | `global-error.tsx` only (layout.tsx already imports it for the others) |
-| `@repo/logger` | `log` | `error.tsx`, `global-error.tsx` |
-| `@repo/app-config` | `config` | `error.tsx`, `global-error.tsx` (for `isLocalhost` check) |
+| Package                          | Import                    | Used in                                                                |
+| -------------------------------- | ------------------------- | ---------------------------------------------------------------------- |
+| `@hseireland/hse-frontend-react` | `Container`, `Row`, `Col` | All three files                                                        |
+| `@hseireland/hse-frontend`       | SCSS import               | `global-error.tsx` only (layout.tsx already imports it for the others) |
+| `@repo/logger`                   | `log`                     | `error.tsx`, `global-error.tsx`                                        |
+| `@repo/app-config`               | `config`                  | `error.tsx`, `global-error.tsx` (for `isLocalhost` check)              |
 
 ## Testing
 

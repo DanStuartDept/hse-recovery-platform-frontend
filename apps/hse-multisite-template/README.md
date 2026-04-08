@@ -1,4 +1,4 @@
-# hse-app-template
+# hse-multisite-template
 
 Next.js 16 application template for the HSE Multisite Frontend. Uses the [HSE Ireland design system](https://github.com/HSEIreland) and fetches content via the Wagtail API client.
 
@@ -7,7 +7,7 @@ Next.js 16 application template for the HSE Multisite Frontend. Uses the [HSE Ir
 From the monorepo root:
 
 ```sh
-turbo run dev --filter=hse-app-template
+turbo run dev --filter=hse-multisite-template
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
@@ -15,5 +15,5 @@ Open [http://localhost:3000](http://localhost:3000).
 ## Build
 
 ```sh
-turbo run build --filter=hse-app-template
+turbo run build --filter=hse-multisite-template
 ```

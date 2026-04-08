@@ -18,7 +18,7 @@ Wire up an existing `@hseireland/hse-frontend-react` component to a Wagtail CMS 
 Use the **Storybook MCP** at `http://localhost:6006/mcp` to examine the component's props, variants, and usage examples.
 
 Alternatively, read the component source:
-`apps/hse-app-template/node_modules/@hseireland/hse-frontend-react/src/components/`
+`apps/hse-multisite-template/node_modules/@hseireland/hse-frontend-react/src/components/`
 
 ## Step 2: Check if block key exists
 

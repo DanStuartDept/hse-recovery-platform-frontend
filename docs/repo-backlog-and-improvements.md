@@ -4,27 +4,27 @@ Tracked improvements and recommendations for the HSE Multisite Frontend monorepo
 
 ## Summary
 
-| # | Item | Priority | Size | Depends on |
-|---|------|----------|------|------------|
-| 1 | ~~[CI/CD Pipeline](#1-cicd-pipeline)~~ | ~~Must~~ | ~~M~~ | Done |
-| 2 | [GDPR / Cookie Consent](#2-gdpr--cookie-consent) | Must | L | — |
-| 3 | ~~[Security Headers / CSP](#3-security-headers--csp)~~ | ~~Must~~ | ~~S~~ | Done |
-| 4 | [Accessibility (WCAG)](#4-accessibility-wcag) | Must | M | #1 |
-| 5 | ~~[`@repo/wagtail-cms-mapping` Package](#5-repowagtail-cms-mapping-package)~~ | ~~Must~~ | ~~L~~ | Done |
-| 6 | [`@repo/hse-custom-ui` Package](#6-repohse-custom-ui-package) | Must | M | — |
-| 7 | [Error Handling and Resilience](#7-error-handling-and-resilience) | Must | M | In progress |
-| 8 | [Caching and Revalidation Strategy](#8-caching-and-revalidation-strategy) | Must | L | — |
-| 9 | [Image Optimisation](#9-image-optimisation) | Must | M | — |
-| 10 | [SEO Metadata from CMS](#10-seo-metadata-from-cms) | Must | M | — |
-| 11 | [Expand `hse-app-template`](#11-expand-hse-app-template) | Must | XL | #2, #5, #6, #7, #8, #9, #10 |
-| 12 | [CMS Preview / Draft Mode](#12-cms-preview--draft-mode) | Must | M | #11 |
-| 13 | [App Cookiecutter (Makefile)](#13-app-cookiecutter-makefile) | Should | M | #11 |
-| 14 | ~~[Git Hooks (Husky + commitlint)](#14-git-hooks-husky--commitlint)~~ | ~~Should~~ | ~~S~~ | Done |
-| 15 | [Test Coverage](#15-test-coverage) | Should | M (ongoing) | #1 |
-| 16 | [Monitoring and Error Tracking](#16-monitoring-and-error-tracking) | Should | M | — |
-| 17 | [Internationalisation (i18n)](#17-internationalisation-i18n) | Must | L | Research needed |
-| 18 | ~~[Copilot Agentic Workflow](#18-copilot-agentic-workflow)~~ | ~~Should (parallel)~~ | ~~L~~ | Done |
-| 19 | [Design System Integration](#19-design-system-integration) | Should (ongoing) | S | — |
+| #   | Item                                                                          | Priority              | Size        | Depends on                  |
+| --- | ----------------------------------------------------------------------------- | --------------------- | ----------- | --------------------------- |
+| 1   | ~~[CI/CD Pipeline](#1-cicd-pipeline)~~                                        | ~~Must~~              | ~~M~~       | Done                        |
+| 2   | [GDPR / Cookie Consent](#2-gdpr--cookie-consent)                              | Must                  | L           | —                           |
+| 3   | ~~[Security Headers / CSP](#3-security-headers--csp)~~                        | ~~Must~~              | ~~S~~       | Done                        |
+| 4   | [Accessibility (WCAG)](#4-accessibility-wcag)                                 | Must                  | M           | #1                          |
+| 5   | ~~[`@repo/wagtail-cms-mapping` Package](#5-repowagtail-cms-mapping-package)~~ | ~~Must~~              | ~~L~~       | Done                        |
+| 6   | [`@repo/hse-custom-ui` Package](#6-repohse-custom-ui-package)                 | Must                  | M           | —                           |
+| 7   | [Error Handling and Resilience](#7-error-handling-and-resilience)             | Must                  | M           | In progress                 |
+| 8   | [Caching and Revalidation Strategy](#8-caching-and-revalidation-strategy)     | Must                  | L           | —                           |
+| 9   | [Image Optimisation](#9-image-optimisation)                                   | Must                  | M           | —                           |
+| 10  | [SEO Metadata from CMS](#10-seo-metadata-from-cms)                            | Must                  | M           | —                           |
+| 11  | [Expand `hse-multisite-template`](#11-expand-hse-multisite-template)          | Must                  | XL          | #2, #5, #6, #7, #8, #9, #10 |
+| 12  | [CMS Preview / Draft Mode](#12-cms-preview--draft-mode)                       | Must                  | M           | #11                         |
+| 13  | [App Cookiecutter (Makefile)](#13-app-cookiecutter-makefile)                  | Should                | M           | #11                         |
+| 14  | ~~[Git Hooks (Husky + commitlint)](#14-git-hooks-husky--commitlint)~~         | ~~Should~~            | ~~S~~       | Done                        |
+| 15  | [Test Coverage](#15-test-coverage)                                            | Should                | M (ongoing) | #1                          |
+| 16  | [Monitoring and Error Tracking](#16-monitoring-and-error-tracking)            | Should                | M           | —                           |
+| 17  | [Internationalisation (i18n)](#17-internationalisation-i18n)                  | Must                  | L           | Research needed             |
+| 18  | ~~[Copilot Agentic Workflow](#18-copilot-agentic-workflow)~~                  | ~~Should (parallel)~~ | ~~L~~       | Done                        |
+| 19  | [Design System Integration](#19-design-system-integration)                    | Should (ongoing)      | S           | —                           |
 
 **Priority key**: Must = launch blocker | Should = important, not blocking | Could = deferred, but acknowledged
 
@@ -55,7 +55,7 @@ Legal launch blocker for a public-sector Irish health service under the ePrivacy
 
 ## 3. Security Headers / CSP ✅
 
-**Done.** Security headers configured in `apps/hse-app-template/next.config.ts` via the `headers()` function, applied to all routes.
+**Done.** Security headers configured in `apps/hse-multisite-template/next.config.ts` via the `headers()` function, applied to all routes.
 
 - Content Security Policy with per-directive source arrays (script, style, img, connect, frame, font)
 - CSP covers known integrations: GTM, OneTrust, Piwik Pro, HSE domains
@@ -145,7 +145,7 @@ Sitemap and robots.txt are covered in the template expansion (#11), but broader 
 
 ---
 
-## 11. Expand `hse-app-template`
+## 11. Expand `hse-multisite-template`
 
 Currently a minimal Next.js install with the HSE design system and a hello-world homepage. Needs to become a fully integrated headless Wagtail site that new apps are cloned from.
 
@@ -187,7 +187,7 @@ Core editorial workflow — without this, content editors cannot preview unpubli
 
 ## 13. App Cookiecutter (Makefile)
 
-A `make new-app` style command that clones `apps/hse-app-template` into a new app workspace — copies the directory, renames package.json fields, README, etc. Simple enough for non-FE devs (e.g., DevOps) to run.
+A `make new-app` style command that clones `apps/hse-multisite-template` into a new app workspace — copies the directory, renames package.json fields, README, etc. Simple enough for non-FE devs (e.g., DevOps) to run.
 
 - Should also automate related setup like GitHub Actions workflows for build/deploy of the new app
 - Create Copilot prompts so developers can offload the process to their AI assistant, with the Makefile as the source of truth
