@@ -1,4 +1,5 @@
 import { config } from "@repo/app-config";
+import { warn } from "@repo/logger";
 import type {
 	CMSPageContent,
 	CMSPageContents,
@@ -38,9 +39,8 @@ async function fetchAllPages(locale: string): Promise<CMSPageContent[]> {
 
 			offset += batch.items.length;
 		}
-	} catch {
-		// Return whatever we've collected so far — an empty sitemap is
-		// better than crashing the whole sitemap.
+	} catch (err) {
+		warn("[Sitemap] CMS fetch failed, returning partial results:", err);
 		return allItems;
 	}
 
@@ -52,6 +52,7 @@ function extractPath(htmlUrl: string): string {
 	try {
 		return new URL(htmlUrl).pathname;
 	} catch {
+		warn("[Sitemap] Malformed URL, defaulting to /:", htmlUrl);
 		return "/";
 	}
 }
