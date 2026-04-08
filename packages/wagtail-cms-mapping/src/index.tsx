@@ -1,6 +1,7 @@
 import type { CMSBlockType } from "@repo/wagtail-cms-types/blocks";
 import type { CMSPageProps } from "@repo/wagtail-cms-types/page-models";
 import { BlockFallback, defaultBlockRegistry } from "./blocks/index";
+import { CmsDebugPanel } from "./components/cms-debug-panel";
 import { defaultPageRegistry } from "./pages/index";
 import type {
 	CMSRenderer,
@@ -37,7 +38,7 @@ function DefaultFallbackPage({ page, renderBlocks }: PageLayoutProps) {
  * ```
  */
 export function createCMSRenderer(options: CMSRendererOptions): CMSRenderer {
-	const { apiClient } = options;
+	const { apiClient, debug = false } = options;
 	const blockRegistry = {
 		...defaultBlockRegistry,
 		...options.blocks,
@@ -112,12 +113,15 @@ export function createCMSRenderer(options: CMSRendererOptions): CMSRenderer {
 		currentPage = page;
 		const Layout = pageRegistry[page.meta.type] ?? FallbackPage;
 		return (
-			<Layout
-				key={page.id}
-				page={page}
-				context={{ page, apiClient }}
-				renderBlocks={renderBlocks}
-			/>
+			<>
+				<Layout
+					key={page.id}
+					page={page}
+					context={{ page, apiClient }}
+					renderBlocks={renderBlocks}
+				/>
+				{debug && <CmsDebugPanel data={page} />}
+			</>
 		);
 	}
 

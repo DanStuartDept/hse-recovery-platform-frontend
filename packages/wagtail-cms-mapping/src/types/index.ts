@@ -102,6 +102,8 @@ export type CMSRendererOptions = {
 	fallbackBlock?: ComponentType<BlockComponentProps>;
 	/** Fallback component rendered for unmapped page types. */
 	fallbackPage?: ComponentType<PageLayoutProps>;
+	/** When `true`, appends a collapsible panel with the raw CMS page data below the rendered page. */
+	debug?: boolean;
 };
 
 /** The object returned by {@link createCMSRenderer}. */

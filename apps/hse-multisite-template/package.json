@@ -21,6 +21,7 @@
 		"@repo/i18n": "workspace:*",
 		"@repo/logger": "workspace:*",
 		"@repo/wagtail-api-client": "workspace:*",
+		"@repo/wagtail-cms-mapping": "workspace:*",
 		"@repo/wagtail-cms-types": "workspace:*",
 		"next": "catalog:",
 		"react": "catalog:",
