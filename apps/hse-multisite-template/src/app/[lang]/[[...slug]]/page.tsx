@@ -6,7 +6,10 @@ import {
 	createCMSRenderer,
 	generatePageMetadata,
 } from "@repo/wagtail-cms-mapping";
-import type { NotFoundContents } from "@repo/wagtail-cms-types/core";
+import type {
+	CMSPageContents,
+	NotFoundContents,
+} from "@repo/wagtail-cms-types/core";
 import { CMSPageContentSchema } from "@repo/wagtail-cms-types/core";
 import type { CMSPageProps } from "@repo/wagtail-cms-types/page-models";
 import type { Metadata } from "next";
@@ -16,8 +19,14 @@ import { cmsClient } from "@/lib/cms/client";
 import { i18nConfig } from "@/lib/i18n/config";
 import { dictionaryLoaders } from "@/lib/i18n/loaders";
 
-/** ISR revalidation interval in seconds (6 minutes). */
-const REVALIDATE_SECONDS = 360;
+/**
+ * Allow pages not returned by generateStaticParams to be rendered on-demand.
+ * New pages published after the last build are server-rendered on first visit, then cached.
+ */
+export const dynamicParams = true;
+
+/** ISR revalidation interval in seconds (1 hour). On-demand revalidation via webhook handles real-time updates. */
+const REVALIDATE_SECONDS = 3600;
 
 function isNotFound(response: unknown): response is NotFoundContents {
 	return (
@@ -27,6 +36,64 @@ function isNotFound(response: unknown): response is NotFoundContents {
 
 function slugToPath(slug?: string[]): string {
 	return slug ? `/${slug.join("/")}/` : "/";
+}
+
+/** Extracts the path portion from a Wagtail `html_url`. */
+function extractPath(htmlUrl: string): string {
+	try {
+		return new URL(htmlUrl).pathname;
+	} catch {
+		warn("[CMS] Malformed html_url, defaulting to /:", htmlUrl);
+		return "/";
+	}
+}
+
+/**
+ * Pre-renders all published CMS pages at build time for every configured locale.
+ * Pages are served as static HTML with ISR revalidation as a safety net.
+ */
+export async function generateStaticParams(): Promise<
+	Array<{ lang: string; slug?: string[] }>
+> {
+	const params: Array<{ lang: string; slug?: string[] }> = [];
+
+	for (const locale of i18nConfig.locales) {
+		let offset = 0;
+		const PAGE_SIZE = 20;
+
+		try {
+			for (;;) {
+				const batch = await cmsClient.fetchPages<CMSPageContents>({
+					locale,
+					limit: PAGE_SIZE,
+					offset,
+				});
+
+				for (const page of batch.items) {
+					const path = extractPath(page.meta.html_url);
+					const segments = path.split("/").filter(Boolean);
+
+					params.push({
+						lang: locale,
+						slug: segments.length > 0 ? segments : undefined,
+					});
+				}
+
+				if (
+					batch.items.length === 0 ||
+					offset + batch.items.length >= batch.meta.total_count
+				) {
+					break;
+				}
+
+				offset += batch.items.length;
+			}
+		} catch (err) {
+			warn("[generateStaticParams] CMS fetch failed for locale", locale, err);
+		}
+	}
+
+	return params;
 }
 
 function logCmsError(path: string, response: NotFoundContents): void {
