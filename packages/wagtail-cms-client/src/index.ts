@@ -70,6 +70,19 @@ export class CMSClient {
 	}
 
 	/**
+	 * Type guard to check if a response is a NotFoundContents error.
+	 */
+	private isNotFound(response: unknown): response is NotFoundContents {
+		return (
+			response != null &&
+			typeof response === "object" &&
+			"message" in response &&
+			typeof (response as Record<string, unknown>).message === "string" &&
+			"data" in response
+		);
+	}
+
+	/**
 	 * Fetches an endpoint using the provided path and handles response and error cases.
 	 *
 	 * @param path - The path of the endpoint to fetch.
@@ -322,35 +335,25 @@ export class CMSClient {
 	}
 
 	/**
-	 * Type guard to check if a response is a NotFoundContents error.
-	 */
-	private isNotFound(response: unknown): response is NotFoundContents {
-		return (
-			response != null &&
-			typeof response === "object" &&
-			"message" in response &&
-			"data" in response
-		);
-	}
-
-	/**
 	 * Fetches an endpoint relative to the base URL, bypassing the API path prefix.
 	 * Used for custom Wagtail endpoints outside the standard `/api/v2/` path
 	 * (e.g., `/api/headers/`, `/api/footers/`).
 	 *
-	 * @param path - The path relative to the base URL (e.g., `api/headers/`).
+	 * @param path - The path relative to the base URL, must not begin with `/`.
+	 * @param notFoundMessage - Message to include in the NotFoundContents response on failure.
 	 * @param init - Optional request options (e.g., ISR revalidation).
 	 * @returns Promise that resolves with the parsed JSON response data.
 	 */
 	private async fetchBaseEndpoint<T>(
 		path: string,
+		notFoundMessage: string,
 		init?: RequestInit,
 	): Promise<T | NotFoundContents> {
 		const url = `${this.baseURL}/${path}`;
 		try {
 			return (await fetchRequest(url, init)) as T;
 		} catch (error) {
-			return this.handleFetchError(error, "Path not found");
+			return this.handleFetchError(error, notFoundMessage);
 		}
 	}
 
@@ -366,11 +369,12 @@ export class CMSClient {
 	): Promise<CMSHeaderResponse | NotFoundContents> {
 		const response = await this.fetchBaseEndpoint<CMSHeaderAPIResponse>(
 			"api/headers/",
+			"Header not found",
 			init,
 		);
 
 		if (this.isNotFound(response)) {
-			return { message: "Header not found", data: response.data };
+			return response;
 		}
 
 		const first = response[0];
@@ -392,11 +396,12 @@ export class CMSClient {
 	): Promise<CMSFooterResponse | NotFoundContents> {
 		const response = await this.fetchBaseEndpoint<CMSFooterAPIResponse>(
 			"api/footers/",
+			"Footer not found",
 			init,
 		);
 
 		if (this.isNotFound(response)) {
-			return { message: "Footer not found", data: response.data };
+			return response;
 		}
 
 		const first = response[0];

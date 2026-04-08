@@ -1,4 +1,8 @@
 import type { ClientOptions, CMSQueries } from "@repo/wagtail-cms-types/core";
+import type {
+	CMSFooterResponse,
+	CMSHeaderResponse,
+} from "@repo/wagtail-cms-types/settings";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CMSClient } from "./index.js";
 import * as libModule from "./lib/index.js";
@@ -819,7 +823,7 @@ describe("CMSClient", () => {
 		});
 
 		it("should return the first header from the API response", async () => {
-			const headerData = {
+			const headerData: CMSHeaderResponse = {
 				id: 1,
 				name: "Org Header",
 				service_name: "",
@@ -871,7 +875,7 @@ describe("CMSClient", () => {
 		});
 
 		it("should pass init options to fetchRequest", async () => {
-			const headerData = {
+			const headerData: CMSHeaderResponse = {
 				id: 1,
 				name: "Org Header",
 				service_name: "",
@@ -911,7 +915,7 @@ describe("CMSClient", () => {
 		});
 
 		it("should return the first footer from the API response", async () => {
-			const footerData = {
+			const footerData: CMSFooterResponse = {
 				id: 1,
 				name: "Org Footer",
 				locale: 1,
@@ -954,7 +958,7 @@ describe("CMSClient", () => {
 		});
 
 		it("should pass init options to fetchRequest", async () => {
-			const footerData = {
+			const footerData: CMSFooterResponse = {
 				id: 1,
 				name: "Org Footer",
 				locale: 1,
