@@ -5,12 +5,32 @@ import "@hseireland/hse-frontend/packages/hse.scss";
 
 import { config } from "@repo/app-config";
 import { DictionaryProvider, loadDictionary } from "@repo/i18n";
-import { error as logError } from "@repo/logger";
+import { error as logError, warn } from "@repo/logger";
+import type { NotFoundContents } from "@repo/wagtail-cms-types/core";
+import type {
+	CMSFooterResponse,
+	CMSHeaderResponse,
+} from "@repo/wagtail-cms-types/settings";
 import { GtmScripts } from "@/components/scripts/GtmScripts";
 import { OneTrustScripts } from "@/components/scripts/OneTrustScripts";
 import { PiwikProScripts } from "@/components/scripts/PiwikProScripts";
+import { SiteFooter } from "@/components/site-footer";
+import { SiteHeader } from "@/components/site-header";
+import { cmsClient } from "@/lib/cms/client";
 import { i18nConfig } from "@/lib/i18n/config";
 import { dictionaryLoaders } from "@/lib/i18n/loaders";
+
+/** ISR revalidation interval in seconds (1 hour). */
+const REVALIDATE_SECONDS = 3600;
+
+function isNotFound(response: unknown): response is NotFoundContents {
+	return (
+		response != null &&
+		typeof response === "object" &&
+		"message" in response &&
+		"data" in response
+	);
+}
 
 /** App-level branding constants — not env vars, set per-app when scaffolding. */
 const SITE_NAME = "HSE.ie";
@@ -49,6 +69,29 @@ export default async function RootLayout(props: LayoutProps<"/[lang]">) {
 		throw err;
 	}
 
+	const [headerResponse, footerResponse] = await Promise.all([
+		cmsClient.fetchHeader({
+			next: { revalidate: REVALIDATE_SECONDS },
+		} as RequestInit),
+		cmsClient.fetchFooter({
+			next: { revalidate: REVALIDATE_SECONDS },
+		} as RequestInit),
+	]);
+
+	let headerData: CMSHeaderResponse | null = null;
+	if (isNotFound(headerResponse)) {
+		warn("[Layout] Failed to fetch header:", headerResponse.message);
+	} else {
+		headerData = headerResponse;
+	}
+
+	let footerData: CMSFooterResponse | null = null;
+	if (isNotFound(footerResponse)) {
+		warn("[Layout] Failed to fetch footer:", footerResponse.message);
+	} else {
+		footerData = footerResponse;
+	}
+
 	return (
 		<html lang={lang}>
 			<GtmScripts />
@@ -56,7 +99,9 @@ export default async function RootLayout(props: LayoutProps<"/[lang]">) {
 				<OneTrustScripts />
 				<PiwikProScripts>
 					<DictionaryProvider flat={flat} locale={lang}>
+						<SiteHeader data={headerData} />
 						{props.children}
+						<SiteFooter data={footerData} />
 					</DictionaryProvider>
 				</PiwikProScripts>
 			</body>
