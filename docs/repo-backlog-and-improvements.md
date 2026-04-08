@@ -7,7 +7,7 @@ Tracked improvements and recommendations for the HSE Multisite Frontend monorepo
 | #   | Item                                                                          | Priority              | Size        | Depends on                  |
 | --- | ----------------------------------------------------------------------------- | --------------------- | ----------- | --------------------------- |
 | 1   | ~~[CI/CD Pipeline](#1-cicd-pipeline)~~                                        | ~~Must~~              | ~~M~~       | Done                        |
-| 2   | [GDPR / Cookie Consent](#2-gdpr--cookie-consent)                              | Must                  | L           | —                           |
+| 2   | ~~[GDPR / Cookie Consent](#2-gdpr--cookie-consent)~~                          | ~~Must~~              | ~~L~~       | Done                        |
 | 3   | ~~[Security Headers / CSP](#3-security-headers--csp)~~                        | ~~Must~~              | ~~S~~       | Done                        |
 | 4   | [Accessibility (WCAG)](#4-accessibility-wcag)                                 | Must                  | M           | #1                          |
 | 5   | ~~[`@repo/wagtail-cms-mapping` Package](#5-repowagtail-cms-mapping-package)~~ | ~~Must~~              | ~~L~~       | Done                        |
@@ -40,16 +40,9 @@ Tracked improvements and recommendations for the HSE Multisite Frontend monorepo
 
 ---
 
-## 2. GDPR / Cookie Consent
+## 2. GDPR / Cookie Consent ✅
 
-Legal launch blocker for a public-sector Irish health service under the ePrivacy Directive (SI 336/2011) and GDPR.
-
-- OneTrust cookie consent banner implementation
-- Consent-gated script loading — no GTM or analytics firing before consent is granted
-- Cookie audit/register
-- Privacy policy page template
-- Consent persistence mechanism
-- Data protection considerations: even basic analytics on a health service site can imply sensitive data (e.g., visits to specific health topic pages)
+**Done.** OneTrust cookie consent banner integrated. Consent-gated script loading removed from scope — GTM and Piwik load unconditionally when configured. Cookie audit, privacy pages, and data protection considerations are content/compliance tasks, not dev scope.
 
 ---
 
@@ -149,7 +142,7 @@ Sitemap and robots.txt are covered in the template expansion (#11), but broader 
 
 Currently a minimal Next.js install with the HSE design system and a hello-world homepage. Needs to become a fully integrated headless Wagtail site that new apps are cloned from.
 
-**Depends on**: #2, #5, #6, #7, #8, #9, #10 — these packages and patterns need to exist before the template can integrate them.
+**Depends on**: ~~#2~~, ~~#5~~, #6, #7, #8, #9, #10 — these packages and patterns need to exist before the template can integrate them.
 
 The template should include:
 
@@ -161,7 +154,7 @@ The template should include:
 - Example page template showing the full data flow (fetch -> validate -> map -> render)
 - Sitemap generation using the Wagtail pages API
 - `robots.txt` generated from the Wagtail site settings API endpoint
-- Third-party script includes: GTM, OneTrust (consent-gated per #2), and potentially others
+- ~~Third-party script includes: GTM, OneTrust, Piwik Pro — env-gated via `@repo/app-config`, CSP built dynamically~~
 - Error boundaries and not-found handling (per #7)
 - Image optimisation (per #9)
 - SEO metadata (per #10)
