@@ -1,0 +1,42 @@
+{
+	"name": "@repo/i18n",
+	"version": "0.0.0",
+	"private": true,
+	"description": "Locale-aware routing, dictionary loading, and translation utilities",
+	"exports": {
+		".": "./src/index.ts",
+		"./types": "./src/types.ts"
+	},
+	"scripts": {
+		"build": "echo 'Source-only package — no build step'",
+		"lint": "biome check --write",
+		"typecheck": "tsc --noEmit",
+		"test": "vitest run",
+		"test:ci": "vitest run --coverage"
+	},
+	"dependencies": {
+		"@formatjs/intl-localematcher": "^0.5.9",
+		"negotiator": "^1.0.0"
+	},
+	"peerDependencies": {
+		"next": ">=16",
+		"react": ">=19"
+	},
+	"devDependencies": {
+		"@repo/biome-config": "workspace:*",
+		"@repo/typescript-config": "workspace:*",
+		"@repo/vitest-config": "workspace:*",
+		"@testing-library/jest-dom": "catalog:",
+		"@testing-library/react": "^16.3.2",
+		"@types/negotiator": "^0.6.3",
+		"@types/node": "catalog:",
+		"@types/react": "catalog:",
+		"@vitest/coverage-v8": "catalog:",
+		"jsdom": "catalog:",
+		"next": "catalog:",
+		"react": "catalog:",
+		"typescript": "catalog:",
+		"vitest": "catalog:",
+		"vitest-sonar-reporter": "catalog:"
+	}
+}

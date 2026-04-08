@@ -16,6 +16,7 @@
 		"@hseireland/hse-frontend": "catalog:",
 		"@hseireland/hse-frontend-react": "catalog:",
 		"@repo/app-config": "workspace:*",
+		"@repo/i18n": "workspace:*",
 		"@repo/logger": "workspace:*",
 		"@repo/wagtail-api-client": "workspace:*",
 		"@repo/wagtail-cms-types": "workspace:*",
