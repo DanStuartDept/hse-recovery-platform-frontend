@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { createElement, Fragment, type ReactNode } from "react";
 import type { RichTagFactory } from "./types";
 
 /**
@@ -6,6 +6,8 @@ import type { RichTagFactory } from "./types";
  * with React nodes using the provided tag factory functions.
  * Returns an array of `ReactNode` (strings and elements) for direct JSX rendering.
  * Tags that have no matching factory are left as plain text.
+ * Each item in the returned array is wrapped in a keyed Fragment to avoid
+ * React "missing key" warnings when the array is rendered in JSX.
  */
 export function rich(template: string, tags: Record<string, RichTagFactory>): ReactNode[] {
 	const tagNames = Object.keys(tags);
@@ -15,21 +17,22 @@ export function rich(template: string, tags: Record<string, RichTagFactory>): Re
 
 	const result: ReactNode[] = [];
 	let lastIndex = 0;
+	let keyIndex = 0;
 
 	for (const match of template.matchAll(pattern)) {
 		const [fullMatch, tagName, innerText] = match;
 		const matchIndex = match.index;
 
 		if (matchIndex > lastIndex) {
-			result.push(template.slice(lastIndex, matchIndex));
+			result.push(createElement(Fragment, { key: keyIndex++ }, template.slice(lastIndex, matchIndex)));
 		}
 
-		result.push(tags[tagName](innerText));
+		result.push(createElement(Fragment, { key: keyIndex++ }, tags[tagName](innerText)));
 		lastIndex = matchIndex + fullMatch.length;
 	}
 
 	if (lastIndex < template.length) {
-		result.push(template.slice(lastIndex));
+		result.push(createElement(Fragment, { key: keyIndex++ }, template.slice(lastIndex)));
 	}
 
 	if (result.length === 0) {

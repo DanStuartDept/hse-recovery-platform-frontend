@@ -25,6 +25,10 @@ export async function loadDictionary(
 		base = { ...defaultShared, ...defaultApp };
 	}
 
+	if (!loaders[locale]) {
+		throw new Error(`No dictionary loader for locale "${locale}"`);
+	}
+
 	const shared = sharedLoaders[locale] ? await sharedLoaders[locale]() : {};
 	const app = (await loaders[locale]()).default;
 

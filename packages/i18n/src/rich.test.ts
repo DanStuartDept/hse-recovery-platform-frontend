@@ -1,7 +1,14 @@
 import type { ReactElement } from "react";
-import { createElement } from "react";
+import { createElement, Fragment } from "react";
 import { describe, expect, it } from "vitest";
 import { rich } from "./rich";
+
+/** Unwrap a keyed Fragment to get the inner child node. */
+function unwrap(node: unknown): unknown {
+	const el = node as ReactElement<{ children: unknown }>;
+	if (el && el.type === Fragment) return el.props.children;
+	return node;
+}
 
 describe("rich", () => {
 	it("returns plain text as-is when no tags", () => {
@@ -14,10 +21,11 @@ describe("rich", () => {
 			link: (text) => createElement("a", { href: "/" }, text),
 		});
 		expect(result).toHaveLength(3);
-		expect(result[0]).toBe("Click ");
-		expect(result[2]).toBe(" now");
-		expect((result[1] as unknown as ReactElement).type).toBe("a");
-		expect((result[1] as unknown as ReactElement<{ children: string }>).props.children).toBe("here");
+		expect(unwrap(result[0])).toBe("Click ");
+		expect(unwrap(result[2])).toBe(" now");
+		const inner = unwrap(result[1]) as ReactElement<{ children: string }>;
+		expect(inner.type).toBe("a");
+		expect(inner.props.children).toBe("here");
 	});
 
 	it("replaces multiple tags", () => {
@@ -26,9 +34,9 @@ describe("rich", () => {
 			italic: (text) => createElement("em", null, text),
 		});
 		expect(result).toHaveLength(3);
-		expect((result[0] as unknown as ReactElement).type).toBe("strong");
-		expect(result[1]).toBe(" and ");
-		expect((result[2] as unknown as ReactElement).type).toBe("em");
+		expect((unwrap(result[0]) as ReactElement).type).toBe("strong");
+		expect(unwrap(result[1])).toBe(" and ");
+		expect((unwrap(result[2]) as ReactElement).type).toBe("em");
 	});
 
 	it("treats unmatched tags as plain text", () => {
@@ -45,6 +53,15 @@ describe("rich", () => {
 			b: (text) => createElement("strong", null, text),
 		});
 		expect(result).toHaveLength(1);
-		expect((result[0] as unknown as ReactElement).type).toBe("strong");
+		expect((unwrap(result[0]) as ReactElement).type).toBe("strong");
+	});
+
+	it("assigns unique keys to each item in the returned array", () => {
+		const result = rich("Click <link>here</link> now", {
+			link: (text) => createElement("a", { href: "/" }, text),
+		});
+		const keys = result.map((node) => (node as ReactElement).key);
+		const uniqueKeys = new Set(keys);
+		expect(uniqueKeys.size).toBe(result.length);
 	});
 });

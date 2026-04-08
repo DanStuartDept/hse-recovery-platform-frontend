@@ -55,6 +55,13 @@ describe("loadDictionary", () => {
 		expect(flat["app.title"]).toBe("Мій додаток");
 		expect(flat["common.hello"]).toBeUndefined();
 	});
+
+	it("throws a descriptive error for unknown locale", async () => {
+		const loaders: DictionaryLoaders = {
+			"en-ie": () => Promise.resolve({ default: {} }),
+		};
+		await expect(loadDictionary("fr", loaders)).rejects.toThrow('No dictionary loader for locale "fr"');
+	});
 });
 
 describe("getDictionary", () => {

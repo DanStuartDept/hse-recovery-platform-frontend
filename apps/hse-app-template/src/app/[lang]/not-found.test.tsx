@@ -73,4 +73,12 @@ describe("not-found", () => {
 			screen.getByRole("link", { name: "information and news about the HSE" }),
 		).toHaveAttribute("href", "https://about.hse.ie/");
 	});
+
+	it("renders the contact link", () => {
+		renderWithProvider(<NotFound />);
+		expect(screen.getByRole("link", { name: /us/ })).toHaveAttribute(
+			"href",
+			"https://www2.hse.ie/contact/",
+		);
+	});
 });
