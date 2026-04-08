@@ -4,6 +4,7 @@
     "claude-code-setup@claude-plugins-official": true,
     "feature-dev@claude-plugins-official": true,
     "superpowers@claude-plugins-official": true,
-    "github@claude-plugins-official": true
+    "github@claude-plugins-official": true,
+    "chrome-devtools-mcp@claude-plugins-official": true
   }
 }
