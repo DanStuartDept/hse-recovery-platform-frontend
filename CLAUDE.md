@@ -79,6 +79,7 @@ This is a **pnpm + Turborepo monorepo** with a Next.js 16 app integrating with a
 - Commits follow **Conventional Commits** (enforced by commitlint).
 - TypeScript strict mode everywhere. Avoid `any`.
 - Shared tsconfig bases from `@repo/typescript-config` (`base.json`, `nextjs.json`, `vite.json`, `react-library.json`).
+- **File naming**: kebab-case for all `.ts`/`.tsx` files (e.g., `cms-debug-panel.tsx`, not `CmsDebugPanel.tsx`). Component exports remain PascalCase.
 
 ## Testing
 

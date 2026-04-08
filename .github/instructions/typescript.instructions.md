@@ -9,6 +9,7 @@ applyTo: "**/*.ts,**/*.tsx"
 - **Biome v2** for linting and formatting (no ESLint). Tabs, indent-width 2, line-width 120.
 - Run `pnpm lint` (Biome check --write) before committing.
 - Prefer **named exports**. Use `type` keyword for type-only imports: `import type { Foo } from "..."`.
+- **File naming**: kebab-case for all `.ts`/`.tsx` files (e.g., `cms-debug-panel.tsx`, not `CmsDebugPanel.tsx`). Component exports remain PascalCase.
 
 ## Monorepo Dependencies
 

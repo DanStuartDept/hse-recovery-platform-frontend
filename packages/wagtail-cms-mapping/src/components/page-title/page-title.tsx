@@ -1,4 +1,4 @@
-import { generateRichText } from "../utils/generate-rich-text";
+import { generateRichText } from "../../utils/generate-rich-text";
 
 /** Props for the {@link PageTitle} component. */
 export type PageTitleProps = {

@@ -61,6 +61,7 @@ pnpm typecheck        # tsc --noEmit (app runs next typegen first)
 - Formatter: **tabs**, indent-width 2, line-width **120**.
 - `pnpm run lint` auto-fixes; run it before committing.
 - Prettier is used only for `.md` files (`pnpm format`).
+- **File naming**: kebab-case for all `.ts`/`.tsx` files (e.g., `cms-debug-panel.tsx`, not `CmsDebugPanel.tsx`). Component exports remain PascalCase.
 
 ### Testing
 
