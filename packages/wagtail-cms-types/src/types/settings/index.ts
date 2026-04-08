@@ -1,154 +1,149 @@
 import { z } from "zod";
-import {
-	FieldTypeCtaSchema,
-	FieldTypeImageSchema,
-	NavItemSchema,
-} from "../fields";
 
 /**
- * Basic navigation item schema.
+ * Navigation link schema for header primary navigation items.
+ * Used in the `navigation_links` array of the header API response.
+ * Contains a `page` field that references a Wagtail page ID (null for external links).
  */
-export const CMSSiteSettingsNavItemSchema = NavItemSchema;
+export const CMSHeaderNavLinkSchema = z.object({
+	/** Unique identifier for this navigation link. */
+	id: z.number(),
+	/** Wagtail translation key for i18n support. */
+	translation_key: z.string(),
+	/** Sort position within the navigation list. */
+	sort_order: z.number(),
+	/** Display text for the navigation link. */
+	label: z.string(),
+	/** Full URL the link points to. */
+	link_url: z.string(),
+	/** Locale identifier (numeric). */
+	locale: z.number(),
+	/** Snippet ID this link belongs to. */
+	snippet: z.number(),
+	/** Wagtail page ID if this link references an internal page, null for external links. */
+	page: z.number().nullable(),
+});
 
-export type CMSSiteSettingsNavItem = z.infer<
-	typeof CMSSiteSettingsNavItemSchema
+export type CMSHeaderNavLink = z.infer<typeof CMSHeaderNavLinkSchema>;
+
+/**
+ * Navigation link schema for header secondary and mobile navigation items.
+ * Used in `navigation_secondary_links` and `header_mobile_links` arrays.
+ * Same shape as {@link CMSHeaderNavLinkSchema} but without the `page` field.
+ */
+export const CMSHeaderSecondaryNavLinkSchema = z.object({
+	/** Unique identifier for this navigation link. */
+	id: z.number(),
+	/** Wagtail translation key for i18n support. */
+	translation_key: z.string(),
+	/** Sort position within the navigation list. */
+	sort_order: z.number(),
+	/** Display text for the navigation link. */
+	label: z.string(),
+	/** Full URL the link points to. */
+	link_url: z.string(),
+	/** Locale identifier (numeric). */
+	locale: z.number(),
+	/** Snippet ID this link belongs to. */
+	snippet: z.number(),
+});
+
+export type CMSHeaderSecondaryNavLink = z.infer<
+	typeof CMSHeaderSecondaryNavLinkSchema
 >;
 
 /**
- * Header banner configuration schema.
+ * Link schema for footer navigation items.
+ * Used in `footer_links` and `footer_secondary_links` arrays.
+ * Uses `link_label` (not `label`) for the display text.
  */
-export const CMSSiteSettingsHeaderBannerSchema = z.object({
-	title: z.string(),
-	description: z.string().optional(),
-	image: FieldTypeImageSchema,
-	cta: FieldTypeCtaSchema,
+export const CMSFooterLinkSchema = z.object({
+	/** Unique identifier for this footer link. */
+	id: z.number(),
+	/** Wagtail translation key for i18n support. */
+	translation_key: z.string(),
+	/** Sort position within the footer link list. */
+	sort_order: z.number(),
+	/** Full URL the link points to. */
+	link_url: z.string(),
+	/** Display text for the footer link. */
+	link_label: z.string(),
+	/** Locale identifier (numeric). */
+	locale: z.number(),
+	/** Snippet ID this link belongs to. */
+	snippet: z.number(),
 });
 
-export type CMSSiteSettingsHeaderBanner = z.infer<
-	typeof CMSSiteSettingsHeaderBannerSchema
->;
+export type CMSFooterLink = z.infer<typeof CMSFooterLinkSchema>;
 
 /**
- * Enhanced navigation item schema for main header.
+ * Complete header configuration returned by the CMS `/api/headers/` endpoint.
+ * Contains primary navigation, secondary links, mobile-specific links, and header settings.
  */
-export const CMSSiteSettingsHeaderItemSchema = z.object({
-	title: z.string(),
-	url: z.string(),
-	description: z.string().optional(),
-	banner: CMSSiteSettingsHeaderBannerSchema.optional(),
-	links: z.array(CMSSiteSettingsNavItemSchema),
-});
-
-export type CMSSiteSettingsHeaderItem = z.infer<
-	typeof CMSSiteSettingsHeaderItemSchema
->;
-
-/**
- * Site header configuration schema.
- */
-export const CMSSiteSettingsHeaderSchema = z.object({
-	global_navigation_links: z.array(CMSSiteSettingsNavItemSchema),
-	navigation_links: z.array(CMSSiteSettingsHeaderItemSchema),
-	popular_search_terms: z.array(z.string()),
-});
-
-export type CMSSiteSettingsHeader = z.infer<typeof CMSSiteSettingsHeaderSchema>;
-
-/**
- * Footer navigation column schema.
- */
-export const CMSSiteSettingsFooterNavItemSchema = z.object({
-	title: z.string(),
-	links: z.array(CMSSiteSettingsNavItemSchema),
-});
-
-export type CMSSiteSettingsFooterNavItem = z.infer<
-	typeof CMSSiteSettingsFooterNavItemSchema
->;
-
-/**
- * Site footer configuration schema.
- */
-export const CMSSiteSettingsFooterSchema = z.object({
-	footer_navigation_columns: z.array(CMSSiteSettingsFooterNavItemSchema),
-});
-
-export type CMSSiteSettingsFooter = z.infer<typeof CMSSiteSettingsFooterSchema>;
-
-/**
- * Social media link configuration schema.
- */
-export const CMSSiteSettingsSocialLinkItemSchema = z.object({
+export const CMSHeaderResponseSchema = z.object({
+	/** Unique identifier for this header configuration. */
+	id: z.number(),
+	/** Internal name for the header snippet in the CMS. */
+	name: z.string(),
+	/** Service name displayed alongside the logo (empty string if not set). */
 	service_name: z.string(),
-	service_url: z.string(),
-	service_label: z.string(),
+	/** Whether to display the service name in long format. */
+	service_long_name: z.boolean(),
+	/** Whether this is a transactional header (minimal navigation). */
+	transactional: z.boolean(),
+	/** Custom ARIA label for the logo, overriding the default. */
+	logo_aria: z.string().nullable(),
+	/** Whether to display the search bar in the header. */
+	show_search: z.boolean(),
+	/** Placeholder text for the search input field. */
+	search_prompt_text: z.string(),
+	/** Descriptive text for the navigation (used for ARIA). */
+	navigation_text: z.string(),
+	/** Locale identifier (numeric). */
+	locale: z.number(),
+	/** Custom URL for the logo link (null uses default homepage). */
+	logo_link: z.string().nullable(),
+	/** Primary navigation links displayed in the main menu. */
+	navigation_links: z.array(CMSHeaderNavLinkSchema),
+	/** Secondary navigation links displayed in the utility menu. */
+	navigation_secondary_links: z.array(CMSHeaderSecondaryNavLinkSchema),
+	/** Navigation links shown on mobile devices. */
+	header_mobile_links: z.array(CMSHeaderSecondaryNavLinkSchema),
 });
 
-export type CMSSiteSettingsSocialLinkItem = z.infer<
-	typeof CMSSiteSettingsSocialLinkItemSchema
->;
+export type CMSHeaderResponse = z.infer<typeof CMSHeaderResponseSchema>;
 
 /**
- * Complete site settings configuration schema.
+ * Complete footer configuration returned by the CMS `/api/footers/` endpoint.
+ * Contains primary footer links and secondary (legal/policy) links.
  */
-export const CMSSiteSettingsItemSchema = z.object({
-	id: z.number().optional(),
-	header: CMSSiteSettingsHeaderSchema.optional(),
-	footer: CMSSiteSettingsFooterSchema.optional(),
-	social_links: z.array(CMSSiteSettingsSocialLinkItemSchema),
-	default_twitter: z
-		.object({
-			handle: z.string(),
-			title: z.string(),
-			description: z.string(),
-			image: FieldTypeImageSchema.optional(),
-		})
-		.optional(),
-	default_og: z
-		.object({
-			title: z.string(),
-			description: z.string(),
-			type: z.string(),
-			image: FieldTypeImageSchema.optional(),
-		})
-		.optional(),
-	global_alert: z
-		.object({
-			enabled: z.boolean(),
-			variant: z.enum(["info", "warning", "danger", "success"]),
-			title: z.string(),
-			image: FieldTypeImageSchema,
-			url: z.string(),
-			url_target: z.string(),
-		})
-		.optional(),
-	search: z
-		.object({
-			enabled: z.boolean(),
-			results_page: z.string(),
-		})
-		.optional(),
-	error_404_page: z.string().optional(),
-	robots: z.string().optional(),
-	maintenance_mode: z
-		.object({
-			enabled: z.boolean(),
-			content: z.string(),
-		})
-		.optional(),
-	default_featured_news_image: FieldTypeImageSchema.optional(),
-	site: z.number().optional(),
+export const CMSFooterResponseSchema = z.object({
+	/** Unique identifier for this footer configuration. */
+	id: z.number(),
+	/** Internal name for the footer snippet in the CMS. */
+	name: z.string(),
+	/** Locale identifier (numeric). */
+	locale: z.number(),
+	/** Primary footer links (e.g., complaints, emergencies). */
+	footer_links: z.array(CMSFooterLinkSchema),
+	/** Secondary footer links (e.g., privacy, cookies, accessibility). */
+	footer_secondary_links: z.array(CMSFooterLinkSchema),
 });
 
-export type CMSSiteSettingsItem = z.infer<typeof CMSSiteSettingsItemSchema>;
+export type CMSFooterResponse = z.infer<typeof CMSFooterResponseSchema>;
 
 /**
- * API response schema for site settings endpoints.
+ * Raw API response schema for the `/api/headers/` endpoint.
+ * Returns an array of header configurations (typically one item).
  */
-export const CMSSiteSettingsAPIResponseSchema = z.array(
-	CMSSiteSettingsItemSchema,
-);
+export const CMSHeaderAPIResponseSchema = z.array(CMSHeaderResponseSchema);
 
-export type CMSSiteSettingsAPIResponse = z.infer<
-	typeof CMSSiteSettingsAPIResponseSchema
->;
+export type CMSHeaderAPIResponse = z.infer<typeof CMSHeaderAPIResponseSchema>;
+
+/**
+ * Raw API response schema for the `/api/footers/` endpoint.
+ * Returns an array of footer configurations (typically one item).
+ */
+export const CMSFooterAPIResponseSchema = z.array(CMSFooterResponseSchema);
+
+export type CMSFooterAPIResponse = z.infer<typeof CMSFooterAPIResponseSchema>;
