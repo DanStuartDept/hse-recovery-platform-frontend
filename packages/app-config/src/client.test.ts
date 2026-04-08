@@ -24,6 +24,7 @@ function clearEnv() {
 		"NEXT_PUBLIC_ONETRUST_DOMAIN_ID",
 		"NEXT_PUBLIC_PIWIK_CONTAINER_ID",
 		"NEXT_PUBLIC_PIWIK_CONTAINER_URL",
+		"NEXT_PUBLIC_REMOTE_IMAGE_DOMAINS",
 		"NODE_ENV",
 	]) {
 		delete process.env[key];
@@ -173,6 +174,30 @@ describe("client config — optional variables", () => {
 			containerId: "abc-123",
 			containerUrl: "https://hse.piwik.pro",
 		});
+	});
+
+	it("remoteImageDomains is undefined when not set", async () => {
+		setRequiredEnv();
+		const { config } = await import("./client");
+		expect(config.remoteImageDomains).toBeUndefined();
+	});
+
+	it("remoteImageDomains parses a single domain", async () => {
+		setRequiredEnv();
+		process.env.NEXT_PUBLIC_REMOTE_IMAGE_DOMAINS = "assets.hse.ie";
+		const { config } = await import("./client");
+		expect(config.remoteImageDomains).toEqual(["assets.hse.ie"]);
+	});
+
+	it("remoteImageDomains parses comma-separated domains", async () => {
+		setRequiredEnv();
+		process.env.NEXT_PUBLIC_REMOTE_IMAGE_DOMAINS =
+			"assets.hse.ie, cdn.example.com";
+		const { config } = await import("./client");
+		expect(config.remoteImageDomains).toEqual([
+			"assets.hse.ie",
+			"cdn.example.com",
+		]);
 	});
 });
 

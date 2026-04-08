@@ -3,6 +3,7 @@ import {
 	gtmSchema,
 	oneTrustSchema,
 	piwikSchema,
+	remoteImageDomainsSchema,
 } from "./schemas";
 
 /** Client-safe configuration from NEXT_PUBLIC_* env vars. */
@@ -35,6 +36,8 @@ export type AppConfig = Readonly<{
 	isProduction: boolean;
 	/** `true` when not localhost and at least one analytics integration is configured. */
 	analyticsEnabled: boolean;
+	/** Remote image hostnames for Next.js `images.remotePatterns`. `undefined` if not configured. */
+	remoteImageDomains?: readonly string[];
 }>;
 
 function deepFreeze<T extends object>(obj: T): T {
@@ -81,6 +84,13 @@ function createConfig(): AppConfig {
 		? oneTrustResult.data
 		: undefined;
 
+	const remoteImageDomainsResult = remoteImageDomainsSchema.safeParse(
+		process.env.NEXT_PUBLIC_REMOTE_IMAGE_DOMAINS,
+	);
+	const remoteImageDomains = remoteImageDomainsResult.success
+		? remoteImageDomainsResult.data
+		: undefined;
+
 	// Piwik: only validate if at least one env var is set
 	const rawPiwikId = process.env.NEXT_PUBLIC_PIWIK_CONTAINER_ID;
 	const rawPiwikUrl = process.env.NEXT_PUBLIC_PIWIK_CONTAINER_URL;
@@ -108,6 +118,7 @@ function createConfig(): AppConfig {
 		isLocalhost,
 		isProduction,
 		analyticsEnabled,
+		remoteImageDomains,
 	};
 }
 

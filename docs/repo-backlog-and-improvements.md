@@ -13,9 +13,9 @@ Tracked improvements and recommendations for the HSE Multisite Frontend monorepo
 | 5   | ~~[`@repo/wagtail-cms-mapping` Package](#5-repowagtail-cms-mapping-package)~~ | ~~Must~~              | ~~L~~       | Done                        |
 | 6   | [`@repo/hse-custom-ui` Package](#6-repohse-custom-ui-package)                 | Must                  | M           | —                           |
 | 7   | [Error Handling and Resilience](#7-error-handling-and-resilience)             | Must                  | M           | In progress                 |
-| 8   | [Caching and Revalidation Strategy](#8-caching-and-revalidation-strategy)     | Must                  | L           | —                           |
-| 9   | [Image Optimisation](#9-image-optimisation)                                   | Must                  | M           | —                           |
-| 10  | [SEO Metadata from CMS](#10-seo-metadata-from-cms)                            | Must                  | M           | —                           |
+| 8   | [Caching and Revalidation Strategy](#8-caching-and-revalidation-strategy)     | Must                  | L           | In progress                 |
+| 9   | [Image Optimisation](#9-image-optimisation)                                   | Must                  | M           | In progress                 |
+| 10  | [SEO Metadata from CMS](#10-seo-metadata-from-cms)                            | Must                  | M           | In progress                 |
 | 11  | [Expand `hse-multisite-template`](#11-expand-hse-multisite-template)          | Must                  | XL          | #2, #5, #6, #7, #8, #9, #10 |
 | 12  | [CMS Preview / Draft Mode](#12-cms-preview--draft-mode)                       | Must                  | M           | #11                         |
 | 13  | [App Cookiecutter (Makefile)](#13-app-cookiecutter-makefile)                  | Should                | M           | #11                         |
@@ -111,9 +111,10 @@ Shared package for custom UI components that don't exist in `@hseireland/hse-fro
 
 ## 8. Caching and Revalidation Strategy
 
-CMS-driven site needs a deliberate caching approach.
+**Partial.** ISR revalidation on CMS fetches and localhost fetch logging in place. Remaining: webhook-triggered invalidation, per-environment tuning.
 
-- `fetch()` cache and `revalidate` settings for CMS API calls
+- ~~`fetch()` cache and `revalidate` settings for CMS API calls~~
+- ~~Localhost fetch logging (`logging.fetches.fullUrl`) for debugging cache behaviour~~
 - Cache invalidation when content is published in Wagtail (webhook-triggered revalidation via `revalidateTag` or `revalidatePath`)
 - Per-environment cache configuration (aggressive in prod, minimal in dev/preview)
 
@@ -121,8 +122,9 @@ CMS-driven site needs a deliberate caching approach.
 
 ## 9. Image Optimisation
 
-Image optimisation strategy needs to be decided.
+**Partial.** Remote image domains configurable via `NEXT_PUBLIC_REMOTE_IMAGE_DOMAINS` env var, wired into `next.config.ts` `images.remotePatterns`. Remaining: loader strategy and `<Image>` component usage.
 
+- ~~`images.remotePatterns` configured from `@repo/app-config` (`NEXT_PUBLIC_REMOTE_IMAGE_DOMAINS`, comma-separated hostnames)~~
 - Evaluate options: custom loader pointing at Wagtail's rendition API, or third-party image CDN
 - Configure the chosen loader in the Next.js config
 - Ensure the template app ships with a working image solution
@@ -131,10 +133,13 @@ Image optimisation strategy needs to be decided.
 
 ## 10. SEO Metadata from CMS
 
-Sitemap and robots.txt are covered in the template expansion (#11), but broader SEO needs its own consideration.
+**Partial.** Dynamic `generateMetadata` with title, description, and canonical URLs in place. Remaining: Open Graph, Twitter Cards, JSON-LD.
 
-- Dynamic `generateMetadata()` wired to CMS page fields (title, description, Open Graph, Twitter Cards)
-- Canonical URL handling (especially important when multiple apps serve related content)
+- ~~Dynamic `generateMetadata()` in the catch-all route, powered by `generatePageMetadata` utility from `@repo/wagtail-cms-mapping`~~
+- ~~Title from `seo_title` (falls back to `page.title`), description from `search_description`~~
+- ~~Canonical URL built from `config.siteUrl` + request path~~
+- ~~Layout-level defaults: title template (`%s | Site Name`), `metadataBase`, default description — app-level constants, not env vars~~
+- Open Graph and Twitter Card metadata from CMS fields
 - Structured data / JSON-LD for healthcare content (health topics, services, locations)
 
 ---
@@ -156,9 +161,12 @@ The template should include:
 - Sitemap generation using the Wagtail pages API
 - `robots.txt` generated from the Wagtail site settings API endpoint
 - ~~Third-party script includes: GTM, OneTrust, Piwik Pro — env-gated via `@repo/app-config`, CSP built dynamically~~
+- ~~SEO metadata: `generateMetadata` in catch-all route with `generatePageMetadata` utility (per #10)~~
+- ~~ISR revalidation on CMS fetches, localhost fetch logging (per #8)~~
+- ~~Remote image domains via `@repo/app-config` (per #9)~~
 - Error boundaries and not-found handling (per #7)
-- Image optimisation (per #9)
-- SEO metadata (per #10)
+- Image loader strategy and `<Image>` usage (per #9)
+- Open Graph / Twitter Cards / JSON-LD (per #10)
 - Environment config for Wagtail API base URL, third-party script IDs
 - Loading states / Suspense boundaries for CMS fetch latency
 

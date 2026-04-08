@@ -135,3 +135,5 @@ export function createCMSRenderer(options: CMSRendererOptions): CMSRenderer {
 }
 
 export type * from "./types/index";
+export type { PageMetadataOptions } from "./utils/generate-page-metadata";
+export { generatePageMetadata } from "./utils/generate-page-metadata";

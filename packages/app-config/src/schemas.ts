@@ -24,6 +24,13 @@ export const piwikSchema = z
 	})
 	.optional();
 
+/** Schema for optional comma-separated remote image domains (e.g., `"assets.hse.ie,cdn.example.com"`). */
+export const remoteImageDomainsSchema = z
+	.string()
+	.min(1)
+	.transform((val) => val.split(",").map((d) => d.trim()))
+	.optional();
+
 /** Schema for required server-only secrets. */
 export const serverSchema = z.object({
 	previewToken: z.string().min(1),

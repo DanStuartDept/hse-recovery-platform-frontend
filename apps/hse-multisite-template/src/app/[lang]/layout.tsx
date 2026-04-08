@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 
 import "@hseireland/hse-frontend/packages/hse.scss";
 
+import { config } from "@repo/app-config";
 import { DictionaryProvider, loadDictionary } from "@repo/i18n";
 import { GtmScripts } from "@/components/scripts/GtmScripts";
 import { OneTrustScripts } from "@/components/scripts/OneTrustScripts";
@@ -10,9 +11,22 @@ import { PiwikProScripts } from "@/components/scripts/PiwikProScripts";
 import { i18nConfig } from "@/lib/i18n/config";
 import { dictionaryLoaders } from "@/lib/i18n/loaders";
 
+/** App-level branding constants — not env vars, set per-app when scaffolding. */
+const SITE_NAME = "HSE.ie";
+const TITLE_TEMPLATE = `%s | ${SITE_NAME}`;
+const DEFAULT_DESCRIPTION =
+	"Health Service Executive — public health information and services for Ireland.";
+
 export const metadata: Metadata = {
-	title: "HSE Multisite Frontend template",
-	description: "HSE Multisite Frontend template",
+	title: {
+		template: TITLE_TEMPLATE,
+		default: SITE_NAME,
+	},
+	description: DEFAULT_DESCRIPTION,
+	metadataBase: new URL(config.siteUrl),
+	formatDetection: {
+		telephone: false,
+	},
 };
 
 export async function generateStaticParams() {

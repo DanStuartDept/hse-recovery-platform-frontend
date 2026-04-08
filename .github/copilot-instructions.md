@@ -36,9 +36,12 @@ pnpm typecheck        # tsc --noEmit (app runs next typegen first)
 ## Architecture
 
 - **Next.js App Router** (Next.js 16 / React 19). Use Server Components by default; add `"use client"` only when interactivity, hooks, or browser APIs are required.
-- **Wagtail CMS integration**: fetch content via `CMSClient` from `@repo/wagtail-api-client`. All response shapes are typed through `@repo/wagtail-cms-types` (sub-path exports: `/core`, `/blocks`, `/fields`, `/page-models`, `/settings`, `/snippets`).
+- **Wagtail CMS integration**: fetch content via `CMSClient` from `@repo/wagtail-api-client`. All response shapes are typed through `@repo/wagtail-cms-types` (sub-path exports: `/core`, `/blocks`, `/fields`, `/page-models`, `/settings`, `/snippets`). `generatePageMetadata` from `@repo/wagtail-cms-mapping` translates CMS page fields to Next.js `Metadata` objects.
 - **Design system**: `@hseireland/hse-frontend` (CSS/tokens) and `@hseireland/hse-frontend-react` (React components) are the HSE Ireland UI library — use their components before writing custom ones.
 - **i18n**: `@repo/i18n` handles locale routing (hidden default locale, `Accept-Language` negotiation), dictionary loading (shared + app layers), and client-side translation (`DictionaryProvider` / `useDictionary`).
+- **SEO metadata**: Layout defines branding defaults (title template, `metadataBase`, default description) as app-level constants. The catch-all route's `generateMetadata` calls `generatePageMetadata` for per-page title, description, and canonical URL from CMS fields.
+- **Caching**: CMS fetches pass `{ next: { revalidate } }` for ISR. `next.config.ts` enables `logging.fetches.fullUrl` on localhost for debugging cache behaviour.
+- **Images**: `NEXT_PUBLIC_REMOTE_IMAGE_DOMAINS` env var (comma-separated hostnames) feeds `images.remotePatterns` in `next.config.ts` via `@repo/app-config`.
 - **Third-party scripts**: OneTrust, GTM, and Piwik are gated on `@repo/app-config` env vars. CSP headers in `security-headers.ts` are built dynamically per integration.
 - **Forms**: `react-hook-form` + `@hookform/resolvers` + Zod schemas.
 
