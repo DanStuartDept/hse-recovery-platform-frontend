@@ -1,0 +1,69 @@
+/* HSE Design System branding for Docusaurus */
+/* Colour values from @hseireland/hse-frontend v5.0.0 */
+/* Reference: https://service-manual.hse.ie/design-system/styles/colour */
+
+:root {
+	/* Primary — HSE purple-700 */
+	--ifm-color-primary: #5f3dc4;
+	--ifm-color-primary-dark: #4c2fb0;
+	--ifm-color-primary-darker: #42299a;
+	--ifm-color-primary-darkest: #301e71;
+	--ifm-color-primary-light: #7555d0;
+	--ifm-color-primary-lighter: #8b6dd8;
+	--ifm-color-primary-lightest: #a88fe3;
+
+	/* Links — HSE blue-500 / blue-800 */
+	--ifm-link-color: #0b55b7;
+	--ifm-link-hover-color: #07336e;
+
+	/* Typography */
+	--ifm-font-family-base: Arial, sans-serif;
+	--ifm-heading-font-weight: 600;
+	--ifm-font-weight-bold: 600;
+
+	/* Colours */
+	--ifm-background-color: #f3f3f3;
+	--ifm-font-color-base: #212b32;
+
+	/* Code blocks */
+	--ifm-code-font-size: 95%;
+
+	/* Footer */
+	--ifm-footer-background-color: #212b32;
+	--ifm-footer-color: #f3f3f3;
+	--ifm-footer-link-color: #73e6c2;
+	--ifm-footer-link-hover-color: #80ffd8;
+
+	/* Navbar */
+	--ifm-navbar-background-color: #ffffff;
+	--ifm-navbar-link-color: #212b32;
+	--ifm-navbar-link-hover-color: #5f3dc4;
+}
+
+[data-theme="dark"] {
+	--ifm-color-primary: #8b6dd8;
+	--ifm-color-primary-dark: #7555d0;
+	--ifm-color-primary-darker: #5f3dc4;
+	--ifm-color-primary-darkest: #4c2fb0;
+	--ifm-color-primary-light: #a88fe3;
+	--ifm-color-primary-lighter: #c4b1ed;
+	--ifm-color-primary-lightest: #e0d3f7;
+
+	--ifm-link-color: #6d99d4;
+	--ifm-link-hover-color: #ceddf1;
+
+	--ifm-background-color: #212b32;
+	--ifm-font-color-base: #f3f3f3;
+
+	--ifm-footer-background-color: #00473e;
+}
+
+/* Navbar logo sizing */
+.navbar__logo img {
+	height: 32px;
+}
+
+/* Sidebar active item uses HSE green for focus */
+.menu__link--active:not(.menu__link--sublist) {
+	border-left-color: #02a78b;
+}
