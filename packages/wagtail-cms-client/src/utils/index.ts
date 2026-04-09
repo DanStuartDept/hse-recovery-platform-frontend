@@ -1,3 +1,4 @@
+export { extractPath } from "./extract-path.js";
 export { isNotFound } from "./is-not-found.js";
 export { slugToPath } from "./slug-to-path.js";
 
