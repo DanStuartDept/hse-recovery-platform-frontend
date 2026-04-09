@@ -1,5 +1,5 @@
 import { describe, expect, expectTypeOf, it } from "vitest";
-import type { Unflatten } from "./types";
+import type { FlattenCategorized, MergedDictionary, Unflatten } from "./types";
 import { unflatten } from "./unflatten";
 
 describe("unflatten", () => {
@@ -66,5 +66,34 @@ describe("Unflatten type", () => {
 		type Flat = { count_one: string; count_other: string };
 		type Nested = Unflatten<Flat>;
 		expectTypeOf<Nested>().toEqualTypeOf<{ readonly count: (count: number) => string }>();
+	});
+});
+
+describe("FlattenCategorized type", () => {
+	it("produces flat dotted keys from categorized shape", () => {
+		type Categorized = {
+			common: { skipToContent: string; backToTop: string };
+			footer: { label: string };
+		};
+		type Flat = FlattenCategorized<Categorized>;
+		expectTypeOf<Flat>().toEqualTypeOf<{
+			"common.skipToContent": string;
+			"common.backToTop": string;
+			"footer.label": string;
+		}>();
+	});
+});
+
+describe("MergedDictionary type", () => {
+	it("merges shared and app categorized types into a nested type", () => {
+		type AppDict = {
+			meta: { title: string };
+			home: { heading: string };
+		};
+		type Merged = MergedDictionary<AppDict>;
+		// Should include both shared keys (common.skipToContent etc.) and app keys
+		expectTypeOf<Merged>().toHaveProperty("common");
+		expectTypeOf<Merged>().toHaveProperty("meta");
+		expectTypeOf<Merged>().toHaveProperty("home");
 	});
 });

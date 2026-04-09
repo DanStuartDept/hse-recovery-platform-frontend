@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import type SharedDict from "../dictionaries/en.json";
 
 /** Configuration for an app's supported locales. */
 export type I18nConfig = {
@@ -8,11 +9,11 @@ export type I18nConfig = {
 	locales: readonly string[];
 };
 
-/**
- * Map of locale codes to dynamic import functions.
- * Each function returns the JSON module for that locale's app-level dictionary.
- */
-export type DictionaryLoaders = Record<string, () => Promise<{ default: Record<string, string> }>>;
+/** Two-level categorized dictionary shape: `{ category: { key: value } }`. */
+export type CategorizedDictionary = Record<string, Record<string, string>>;
+
+/** Async loaders that return categorized dictionary modules, keyed by locale. */
+export type DictionaryLoaders = Record<string, () => Promise<{ default: CategorizedDictionary }>>;
 
 // ── Unflatten utility type ──────────────────────────────────────────
 
@@ -43,6 +44,40 @@ type Simplify<T> = { [K in keyof T]: T[K] extends Record<string, unknown> ? Simp
  */
 export type Unflatten<T extends Record<string, string>> = Simplify<
 	UnionToIntersection<{ [K in keyof T & string]: SetPath<Split<StripPlural<K>>, PluralValue<K>> }[keyof T & string]>
+>;
+
+// ── Categorized dictionary utilities ──────────────────────────────────
+
+/**
+ * Compile-time companion to `flattenCategorized()`.
+ * Converts `{ category: { key: string } }` to `{ "category.key": string }`.
+ */
+export type FlattenCategorized<T extends CategorizedDictionary> = {
+	[Cat in keyof T & string as `${Cat}.${keyof T[Cat] & string}`]: string;
+};
+
+/**
+ * Flatten a dictionary type if it is categorized, otherwise pass through as-is.
+ * Handles the transition period where shared dictionaries may still be flat.
+ */
+type FlattenIfCategorized<T extends Record<string, unknown>> = T extends CategorizedDictionary
+	? FlattenCategorized<T>
+	: T extends Record<string, string>
+		? T
+		: never;
+
+/**
+ * Merges the shared dictionary type with an app dictionary type,
+ * flattens both, and unflattens the result.
+ *
+ * Usage in an app:
+ * ```ts
+ * import type app from "@/dictionaries/en.json";
+ * export type Dictionary = MergedDictionary<typeof app>;
+ * ```
+ */
+export type MergedDictionary<TApp extends CategorizedDictionary> = Unflatten<
+	FlattenIfCategorized<typeof SharedDict> & FlattenCategorized<TApp>
 >;
 
 /**

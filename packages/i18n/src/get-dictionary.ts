@@ -21,7 +21,10 @@ export async function loadDictionary(
 
 	if (defaultLocale && locale !== defaultLocale) {
 		const defaultShared = sharedLoaders[defaultLocale] ? await sharedLoaders[defaultLocale]() : {};
-		const defaultApp = loaders[defaultLocale] ? (await loaders[defaultLocale]()).default : {};
+		// TODO(task-4): replace cast with flattenCategorized() call
+		const defaultApp = loaders[defaultLocale]
+			? ((await loaders[defaultLocale]()).default as unknown as Record<string, string>)
+			: {};
 		base = { ...defaultShared, ...defaultApp };
 	}
 
@@ -30,7 +33,8 @@ export async function loadDictionary(
 	}
 
 	const shared = sharedLoaders[locale] ? await sharedLoaders[locale]() : {};
-	const app = (await loaders[locale]()).default;
+	// TODO(task-4): replace cast with flattenCategorized() call
+	const app = (await loaders[locale]()).default as unknown as Record<string, string>;
 
 	return { ...base, ...shared, ...app };
 }
