@@ -5,7 +5,7 @@ A **pnpm + Turborepo monorepo** containing the HSE Multisite frontend. The prima
 ## Prerequisites
 
 - Node.js >= 24
-- pnpm >= 9.12
+- pnpm 10 (pinned via `packageManager` field)
 
 ## Getting Started
 
@@ -23,12 +23,16 @@ pnpm install
 
 ### Packages
 
+- **`packages/app-config`** (`@repo/app-config`): Centralised env var validation and typed config. Source-only.
 - **`packages/wagtail-cms-client`** (`@repo/wagtail-api-client`): Wagtail REST API client — `CMSClient` class and `fetchContent` helpers. Built with bunchee (dual ESM + CJS output).
 - **`packages/wagtail-cms-types`** (`@repo/wagtail-cms-types`): Zod-based TypeScript types for all Wagtail content. Source-only (no build step). Sub-path exports: `/core`, `/blocks`, `/fields`, `/page-models`, `/settings`, `/snippets`.
+- **`packages/wagtail-cms-mapping`** (`@repo/wagtail-cms-mapping`): CMS-to-component mapping with factory pattern. Source-only.
+- **`packages/i18n`** (`@repo/i18n`): Locale routing, dictionary loading, and translation helpers. Source-only.
 - **`packages/logger`** (`@repo/logger`): Thin `console.log` wrapper for standardised logging.
 - **`packages/config-vitest`** (`@repo/vitest-config`): Shared `createVitestConfig()` factory for Vitest 4.
 - **`packages/biome-config`** (`@repo/biome-config`): Shared [Biome](https://biomejs.dev/) rule sets.
 - **`packages/config-typescript`** (`@repo/typescript-config`): Shared `tsconfig` bases (`base.json`, `nextjs.json`, etc.).
+- **`packages/commitlint-config`** (`@repo/commitlint-config`): Shared Conventional Commits config for commitlint.
 
 ## Development
 
@@ -68,6 +72,33 @@ pnpm lint          # biome check --write (auto-fixes .ts/.tsx)
 pnpm format        # prettier --write (Markdown files only)
 pnpm typecheck     # tsc --noEmit across workspace
 ```
+
+## Docker
+
+> **Important:** Docker builds must be run from the **monorepo root** — the build context needs access to all workspace packages.
+
+Each app has its own `Dockerfile`. Build with:
+
+```sh
+NPM_TOKEN="$(grep '//npm.pkg.github.com/:_authToken=' ~/.npmrc | cut -d= -f2)" \
+docker build \
+  -f apps/hse-multisite-template/Dockerfile \
+  --secret id=NPM_TOKEN \
+  --build-arg NEXT_PUBLIC_CMS_API_ENDPOINT=https://dev.cms.hse.ie \
+  --build-arg NEXT_PUBLIC_API_PATH=/api/v2 \
+  --build-arg NEXT_PUBLIC_ENVIRONMENT_NAME=dev \
+  --build-arg NEXT_PUBLIC_SITEURL=https://dev.hse.ie \
+  --build-arg NEXT_PUBLIC_REMOTE_IMAGE_DOMAINS=assets.hse.ie \
+  -t hse-multisite-template .
+```
+
+Run the container:
+
+```sh
+docker run -p 3000:3000 hse-multisite-template
+```
+
+See each app's README for the full list of build args and runtime env vars.
 
 ## Tools
 
