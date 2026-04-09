@@ -26,7 +26,7 @@ pnpm install
 - **`packages/wagtail-cms-client`** (`@repo/wagtail-api-client`): Wagtail REST API client — `CMSClient` class and `fetchContent` helpers. Built with bunchee (dual ESM + CJS output).
 - **`packages/wagtail-cms-types`** (`@repo/wagtail-cms-types`): Zod-based TypeScript types for all Wagtail content. Source-only (no build step). Sub-path exports: `/core`, `/blocks`, `/fields`, `/page-models`, `/settings`, `/snippets`.
 - **`packages/logger`** (`@repo/logger`): Thin `console.log` wrapper for standardised logging.
-- **`packages/config-vitest`** (`@repo/vitest-config`): Shared `createVitestConfig()` factory for Vitest 3.
+- **`packages/config-vitest`** (`@repo/vitest-config`): Shared `createVitestConfig()` factory for Vitest 4.
 - **`packages/biome-config`** (`@repo/biome-config`): Shared [Biome](https://biomejs.dev/) rule sets.
 - **`packages/config-typescript`** (`@repo/typescript-config`): Shared `tsconfig` bases (`base.json`, `nextjs.json`, etc.).
 
@@ -75,6 +75,6 @@ pnpm typecheck     # tsc --noEmit across workspace
 - [Next.js](https://nextjs.org/) 16 — App Router, React 19
 
 - [Biome](https://biomejs.dev/) v2 — linting and formatting (no ESLint)
-- [Vitest](https://vitest.dev/) 3 — unit testing
+- [Vitest](https://vitest.dev/) 4 — unit testing
 - [Zod](https://zod.dev/) — runtime validation and type generation
 - [react-hook-form](https://react-hook-form.com/) — form management
