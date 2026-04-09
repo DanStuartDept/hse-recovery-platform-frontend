@@ -27,76 +27,75 @@
 
 	/* Code blocks */
 	--ifm-code-font-size: 95%;
+}
 
-	/* Footer — HSE green-700 top, green-900 bottom */
-	--ifm-footer-background-color: #02594c;
-	--ifm-footer-color: #ffffff;
-	--ifm-footer-link-color: #ffffff;
-	--ifm-footer-link-hover-color: #ffffff;
-	--ifm-footer-title-color: #ffffff;
+/* ── Navbar — HSE green-700 with white text ───────────────── */
 
-	/* Navbar — HSE green-700 header with white text */
+nav.navbar {
 	--ifm-navbar-background-color: #02594c;
 	--ifm-navbar-link-color: #ffffff;
 	--ifm-navbar-link-hover-color: #73e6c2;
-}
-
-/* Green navbar with white logo and links */
-.navbar {
-	background-color: var(--ifm-navbar-background-color);
+	background-color: #02594c;
 	box-shadow: none;
 }
 
-.navbar__title {
+nav.navbar .navbar__title {
 	color: #ffffff;
 }
 
-.navbar__link {
+nav.navbar .navbar__link {
 	color: #ffffff;
 }
 
-.navbar__link:hover {
+nav.navbar .navbar__link:hover {
 	color: #73e6c2;
 }
 
-.navbar__link--active {
+nav.navbar .navbar__link--active {
 	color: #73e6c2;
 }
 
-.navbar__logo img {
+nav.navbar .navbar__logo img {
 	height: 32px;
 }
 
-/* Footer — matches HSE footer component (green-700 / green-900) */
-.footer {
+/* ── Footer — HSE green-700 background, white text ───────── */
+
+footer.footer {
+	--ifm-footer-background-color: #02594c;
+	--ifm-footer-link-color: #ffffff;
+	--ifm-footer-title-color: #ffffff;
+	--ifm-footer-color: #ffffff;
 	background-color: #02594c;
-}
-
-.footer__title {
 	color: #ffffff;
 }
 
-.footer__link-item {
+footer.footer .footer__title {
 	color: #ffffff;
 }
 
-.footer__link-item:hover {
+footer.footer .footer__link-item {
+	color: #ffffff;
+}
+
+footer.footer .footer__link-item:hover {
 	color: #ffffff;
 	text-decoration: underline;
 }
 
-/* Copyright bar — darker green-900 */
-.footer__bottom {
-	background-color: #00473e;
-	margin: 0 calc(-1 * var(--ifm-spacing-horizontal));
-	padding: 1rem var(--ifm-spacing-horizontal);
+/* Copyright — separated by a subtle white border */
+footer.footer .footer__bottom {
+	border-top: 1px solid rgba(255, 255, 255, 0.2);
+	margin-top: 1.5rem;
+	padding-top: 1.5rem;
 }
 
-.footer__copyright {
-	color: #ffffff;
+footer.footer .footer__copyright {
+	color: rgba(255, 255, 255, 0.8);
 }
 
-/* Sidebar active item uses HSE green for focus */
+/* ── Sidebar ──────────────────────────────────────────────── */
+
 .menu__link--active:not(.menu__link--sublist) {
 	border-left-color: #02a78b;
 }
