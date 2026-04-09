@@ -23,6 +23,7 @@ import { FetchError, fetchContent, fetchRequest } from "./lib/index.js";
 import { isNotFound } from "./utils/index.js";
 
 export * from "./lib/index.js";
+export * from "./utils/index.js";
 
 /**
  * Class representing a client for fetching CMS content.
