@@ -1,8 +1,5 @@
-import type { Unflatten } from "@repo/i18n";
+import type { MergedDictionary } from "@repo/i18n";
+import type app from "@/dictionaries/en.json";
 
-// The default locale dictionary is the source of truth for keys.
-import type en from "@/dictionaries/en.json";
-
-type FlatDictionary = typeof en;
-
-export type Dictionary = Unflatten<FlatDictionary>;
+/** Fully typed dictionary available via `useDictionary<Dictionary>()`. */
+export type Dictionary = MergedDictionary<typeof app>;

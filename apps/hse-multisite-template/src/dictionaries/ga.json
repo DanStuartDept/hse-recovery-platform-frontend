@@ -1,18 +1,26 @@
 {
-	"meta.defaultDescription": "Feidhmeannacht na Seirbhíse Sláinte — eolas agus seirbhísí sláinte poiblí d'Éirinn.",
-	"home.title": "Fáilte go dtí Teimpléad Aip an FSS",
-	"error.heading": "Chuaigh rud éigin mícheart",
-	"error.body": "Bhí fadhb ann an leathanach seo a lódáil. Bain triail eile as le do thoil.",
-	"error.tryAgain": "Bain triail eile as",
-	"notFound.heading": "Leathanach gan aimsiú",
-	"notFound.body": "Ní féidir linn an leathanach a bhfuil tú ag lorg a aimsiú.",
-	"notFound.linkBroken": "D'fhéadfadh go bhfuil an nasc briste, nó go bhfuil an leathanach bogtha nó scriosta.",
-	"notFound.checkUrl": "Seiceáil go bhfuil an URL a chuir tú isteach ceart.",
-	"notFound.cantFindHeading": "Mura bhfuil tú in ann a bhfuil uait a aimsiú fós",
-	"notFound.popularInfo": "D'fhéadfadh an t-eolas a bheith i rannán coitianta, mar shampla:",
-	"notFound.link.conditions": "coinníollacha sláinte agus comharthaí",
-	"notFound.link.staff": "nuacht agus eolas d'fhoireann an FSS",
-	"notFound.link.jobs": "cuardach post an FSS",
-	"notFound.link.about": "eolas agus nuacht faoin FSS",
-	"notFound.contact": "<contactLink>Déan teagmháil linn</contactLink> má tá ceist agat nó más mian leat aiseolas a thabhairt."
+	"meta": {
+		"defaultDescription": "Feidhmeannacht na Seirbhíse Sláinte — eolas agus seirbhísí sláinte poiblí d'Éirinn."
+	},
+	"home": {
+		"title": "Fáilte go dtí Teimpléad Aip an FSS"
+	},
+	"error": {
+		"heading": "Chuaigh rud éigin mícheart",
+		"body": "Bhí fadhb ann an leathanach seo a lódáil. Bain triail eile as le do thoil.",
+		"tryAgain": "Bain triail eile as"
+	},
+	"notFound": {
+		"heading": "Leathanach gan aimsiú",
+		"body": "Ní féidir linn an leathanach a bhfuil tú ag lorg a aimsiú.",
+		"linkBroken": "D'fhéadfadh go bhfuil an nasc briste, nó go bhfuil an leathanach bogtha nó scriosta.",
+		"checkUrl": "Seiceáil go bhfuil an URL a chuir tú isteach ceart.",
+		"cantFindHeading": "Mura bhfuil tú in ann a bhfuil uait a aimsiú fós",
+		"popularInfo": "D'fhéadfadh an t-eolas a bheith i rannán coitianta, mar shampla:",
+		"link.conditions": "coinníollacha sláinte agus comharthaí",
+		"link.staff": "nuacht agus eolas d'fhoireann an FSS",
+		"link.jobs": "cuardach post an FSS",
+		"link.about": "eolas agus nuacht faoin FSS",
+		"contact": "<contactLink>Déan teagmháil linn</contactLink> má tá ceist agat nó más mian leat aiseolas a thabhairt."
+	}
 }
