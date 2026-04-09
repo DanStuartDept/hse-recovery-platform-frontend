@@ -156,6 +156,14 @@ const config: Config = {
 							href: "https://service-manual.hse.ie",
 						},
 						{
+							label: "HSE Frontend (CSS)",
+							href: "https://hseireland.github.io/hse-frontend/",
+						},
+						{
+							label: "HSE Frontend React",
+							href: "https://hseireland.github.io/hse-frontend-react/",
+						},
+						{
 							label: "GitHub",
 							href: "https://github.com/dept/hse-multisite-frontend",
 						},

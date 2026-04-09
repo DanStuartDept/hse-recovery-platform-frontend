@@ -68,6 +68,7 @@ footer.footer {
 	--ifm-footer-color: #ffffff;
 	background-color: #02594c;
 	color: #ffffff;
+	padding-bottom: 0;
 }
 
 footer.footer .footer__title {
@@ -89,8 +90,7 @@ footer.footer .footer__bottom {
 	margin-top: 2rem;
 	margin-left: calc(-50vw + 50%);
 	margin-right: calc(-50vw + 50%);
-	margin-bottom: -32px;
-	padding: 1rem calc(50vw - 50%) calc(1rem + 32px);
+	padding: 1rem calc(50vw - 50%);
 }
 
 footer.footer .footer__copyright {
