@@ -1,4 +1,5 @@
 export { isNotFound } from "./is-not-found.js";
+export { slugToPath } from "./slug-to-path.js";
 
 import type { CMSQueries } from "@repo/wagtail-cms-types/core";
 
