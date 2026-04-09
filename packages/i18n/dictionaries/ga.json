@@ -1,4 +1,30 @@
 {
-	"common.skipToContent": "Léim go dtí an príomhábhar",
-	"common.backToTop": "Ar ais go barr"
+	"common": {
+		"skipToContent": "Léim go dtí an príomhábhar",
+		"backToTop": "Ar ais go barr"
+	},
+	"footer": {
+		"label": "FSS Beo - táimid anseo chun cabhrú",
+		"hours.weekday": "Luan go hAoine: 8rn go 8in",
+		"hours.saturday": "Satharn: 9rn go 5in",
+		"hours.sunday": "Domhnach: Dúnta",
+		"hours.bankHoliday": "Laethanta saoire bainc: Dúnta",
+		"freephone.label": "Saorghlaoch:",
+		"freephone.number": "1800 700 700",
+		"freephone.href": "tel:1800700700",
+		"international.label": "Ó lasmuigh d'Éirinn:",
+		"international.number": "00 353 1 240 8787",
+		"international.href": "tel:0035312408787",
+		"social.facebook.label": "FSS Facebook",
+		"social.facebook.href": "https://www.facebook.com/HSElive/",
+		"social.instagram.label": "FSS Instagram",
+		"social.instagram.href": "https://instagram.com/irishhealthservice",
+		"social.tiktok.label": "FSS TikTok",
+		"social.tiktok.href": "https://www.tiktok.com/@hselive",
+		"social.youtube.label": "FSS YouTube",
+		"social.youtube.href": "https://www.youtube.com/channel/UCoNNhGGAYkdavsSXp1iVzCg",
+		"social.linkedin.label": "FSS Linkedin",
+		"social.linkedin.href": "https://ie.linkedin.com/company/health-service-executive",
+		"cookieSettings": "Socruithe fianán"
+	}
 }

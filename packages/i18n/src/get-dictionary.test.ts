@@ -4,17 +4,16 @@ import type { DictionaryLoaders } from "./types";
 // Mock shared loaders so tests are isolated from actual JSON files
 vi.mock("./shared-loaders", () => ({
 	sharedLoaders: {
-		en: vi.fn(() => Promise.resolve({ "common.hello": "Hello" })),
-		ga: vi.fn(() => Promise.resolve({ "common.hello": "Dia duit" })),
+		en: vi.fn(() => Promise.resolve({ common: { hello: "Hello" } })),
+		ga: vi.fn(() => Promise.resolve({ common: { hello: "Dia duit" } })),
 	},
 }));
 
 import { getDictionary, loadDictionary } from "./get-dictionary";
 
-// TODO(task-4): update mocks to use categorized format once loadDictionary calls flattenCategorized
 const mockLoaders = {
-	en: () => Promise.resolve({ default: { "app.title": "My App", "common.hello": "Hi" } }),
-	ga: () => Promise.resolve({ default: { "app.title": "Mo Aip" } }),
+	en: () => Promise.resolve({ default: { app: { title: "My App" }, common: { hello: "Hi" } } }),
+	ga: () => Promise.resolve({ default: { app: { title: "Mo Aip" } } }),
 } as unknown as DictionaryLoaders;
 
 describe("loadDictionary", () => {
@@ -31,8 +30,8 @@ describe("loadDictionary", () => {
 
 	it("falls back to default locale for missing keys", async () => {
 		const loaders = {
-			en: () => Promise.resolve({ default: { "app.title": "My App", "app.subtitle": "Welcome" } }),
-			ga: () => Promise.resolve({ default: { "app.title": "Mo Aip" } }),
+			en: () => Promise.resolve({ default: { app: { title: "My App", subtitle: "Welcome" } } }),
+			ga: () => Promise.resolve({ default: { app: { title: "Mo Aip" } } }),
 		} as unknown as DictionaryLoaders;
 		const flat = await loadDictionary("ga", loaders, "en");
 		expect(flat["app.title"]).toBe("Mo Aip");
@@ -41,7 +40,7 @@ describe("loadDictionary", () => {
 
 	it("works without defaultLocale (no fallback)", async () => {
 		const loaders = {
-			ga: () => Promise.resolve({ default: { "app.title": "Mo Aip" } }),
+			ga: () => Promise.resolve({ default: { app: { title: "Mo Aip" } } }),
 		} as unknown as DictionaryLoaders;
 		const flat = await loadDictionary("ga", loaders);
 		expect(flat["app.title"]).toBe("Mo Aip");
@@ -50,7 +49,7 @@ describe("loadDictionary", () => {
 
 	it("handles locale with no shared dictionary", async () => {
 		const loaders = {
-			uk: () => Promise.resolve({ default: { "app.title": "Мій додаток" } }),
+			uk: () => Promise.resolve({ default: { app: { title: "Мій додаток" } } }),
 		} as unknown as DictionaryLoaders;
 		const flat = await loadDictionary("uk", loaders);
 		expect(flat["app.title"]).toBe("Мій додаток");
@@ -59,7 +58,7 @@ describe("loadDictionary", () => {
 
 	it("throws a descriptive error for unknown locale", async () => {
 		const loaders = {
-			en: () => Promise.resolve({ default: {} }),
+			en: () => Promise.resolve({ default: {} as Record<string, Record<string, string>> }),
 		} as unknown as DictionaryLoaders;
 		await expect(loadDictionary("fr", loaders)).rejects.toThrow('No dictionary loader for locale "fr"');
 	});
@@ -76,7 +75,7 @@ describe("getDictionary", () => {
 		const loaders = {
 			en: () =>
 				Promise.resolve({
-					default: { "search.count_one": "1 result", "search.count_other": "{count} results" },
+					default: { search: { count_one: "1 result", count_other: "{count} results" } },
 				}),
 		} as unknown as DictionaryLoaders;
 		const dict = await getDictionary<{ search: { count: (n: number) => string } }>("en", loaders);

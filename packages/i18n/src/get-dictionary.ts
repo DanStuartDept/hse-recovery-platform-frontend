@@ -1,3 +1,4 @@
+import { flattenCategorized } from "./flatten-categorized";
 import { sharedLoaders } from "./shared-loaders";
 import type { DictionaryLoaders } from "./types";
 import { unflatten } from "./unflatten";
@@ -20,11 +21,8 @@ export async function loadDictionary(
 	let base: Record<string, string> = {};
 
 	if (defaultLocale && locale !== defaultLocale) {
-		const defaultShared = sharedLoaders[defaultLocale] ? await sharedLoaders[defaultLocale]() : {};
-		// TODO(task-4): replace cast with flattenCategorized() call
-		const defaultApp = loaders[defaultLocale]
-			? ((await loaders[defaultLocale]()).default as unknown as Record<string, string>)
-			: {};
+		const defaultShared = sharedLoaders[defaultLocale] ? flattenCategorized(await sharedLoaders[defaultLocale]()) : {};
+		const defaultApp = loaders[defaultLocale] ? flattenCategorized((await loaders[defaultLocale]()).default) : {};
 		base = { ...defaultShared, ...defaultApp };
 	}
 
@@ -32,9 +30,8 @@ export async function loadDictionary(
 		throw new Error(`No dictionary loader for locale "${locale}"`);
 	}
 
-	const shared = sharedLoaders[locale] ? await sharedLoaders[locale]() : {};
-	// TODO(task-4): replace cast with flattenCategorized() call
-	const app = (await loaders[locale]()).default as unknown as Record<string, string>;
+	const shared = sharedLoaders[locale] ? flattenCategorized(await sharedLoaders[locale]()) : {};
+	const app = flattenCategorized((await loaders[locale]()).default);
 
 	return { ...base, ...shared, ...app };
 }

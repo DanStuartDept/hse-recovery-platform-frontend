@@ -1,4 +1,30 @@
 {
-	"common.skipToContent": "Skip to main content",
-	"common.backToTop": "Back to top"
+	"common": {
+		"skipToContent": "Skip to main content",
+		"backToTop": "Back to top"
+	},
+	"footer": {
+		"label": "HSE Live - we're here to help",
+		"hours.weekday": "Monday to Friday: 8am to 8pm",
+		"hours.saturday": "Saturday: 9am to 5pm",
+		"hours.sunday": "Sunday: Closed",
+		"hours.bankHoliday": "Bank holidays: Closed",
+		"freephone.label": "Freephone:",
+		"freephone.number": "1800 700 700",
+		"freephone.href": "tel:1800700700",
+		"international.label": "From outside Ireland:",
+		"international.number": "00 353 1 240 8787",
+		"international.href": "tel:0035312408787",
+		"social.facebook.label": "HSE Facebook",
+		"social.facebook.href": "https://www.facebook.com/HSElive/",
+		"social.instagram.label": "HSE Instagram",
+		"social.instagram.href": "https://instagram.com/irishhealthservice",
+		"social.tiktok.label": "HSE TikTok",
+		"social.tiktok.href": "https://www.tiktok.com/@hselive",
+		"social.youtube.label": "HSE YouTube",
+		"social.youtube.href": "https://www.youtube.com/channel/UCoNNhGGAYkdavsSXp1iVzCg",
+		"social.linkedin.label": "HSE Linkedin",
+		"social.linkedin.href": "https://ie.linkedin.com/company/health-service-executive",
+		"cookieSettings": "Cookies settings"
+	}
 }

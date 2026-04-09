@@ -57,16 +57,6 @@ export type FlattenCategorized<T extends CategorizedDictionary> = {
 };
 
 /**
- * Flatten a dictionary type if it is categorized, otherwise pass through as-is.
- * Handles the transition period where shared dictionaries may still be flat.
- */
-type FlattenIfCategorized<T extends Record<string, unknown>> = T extends CategorizedDictionary
-	? FlattenCategorized<T>
-	: T extends Record<string, string>
-		? T
-		: never;
-
-/**
  * Merges the shared dictionary type with an app dictionary type,
  * flattens both, and unflattens the result.
  *
@@ -77,7 +67,7 @@ type FlattenIfCategorized<T extends Record<string, unknown>> = T extends Categor
  * ```
  */
 export type MergedDictionary<TApp extends CategorizedDictionary> = Unflatten<
-	FlattenIfCategorized<typeof SharedDict> & FlattenCategorized<TApp>
+	FlattenCategorized<typeof SharedDict> & FlattenCategorized<TApp>
 >;
 
 /**
