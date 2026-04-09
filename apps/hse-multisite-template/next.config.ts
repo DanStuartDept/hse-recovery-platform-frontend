@@ -5,6 +5,10 @@ import { securityHeaders } from "./security-headers";
 const nextConfig: NextConfig = {
 	trailingSlash: true,
 	transpilePackages: ["@piwikpro/next-piwik-pro"],
+	sassOptions: {
+		quietDeps: true,
+		silenceDeprecations: ["import"],
+	},
 	images: {
 		remotePatterns: (config.remoteImageDomains ?? []).map((hostname) => ({
 			protocol: "https" as const,
