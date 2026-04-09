@@ -39,6 +39,7 @@
 		"vitest-sonar-reporter": "catalog:"
 	},
 	"dependencies": {
+		"@repo/logger": "workspace:*",
 		"zod": "catalog:"
 	}
 }

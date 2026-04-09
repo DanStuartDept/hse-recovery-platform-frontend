@@ -1,5 +1,6 @@
 export { extractPath } from "./extract-path.js";
 export { isNotFound } from "./is-not-found.js";
+export { logCmsError } from "./log-cms-error.js";
 export { slugToPath } from "./slug-to-path.js";
 
 import type { CMSQueries } from "@repo/wagtail-cms-types/core";
