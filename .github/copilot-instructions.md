@@ -18,6 +18,7 @@
 | `@repo/vitest-config` | `packages/config-vitest` | Shared `createVitestConfig()` factory |
 | `@repo/biome-config` | `packages/biome-config` | Shared Biome rule sets |
 | `@repo/typescript-config` | `packages/config-typescript` | Shared `tsconfig` bases |
+| `docs` | `apps/docs` | Docusaurus 3.10 documentation site (HSE-branded, port 1337) |
 
 ## Build & Test
 
@@ -78,7 +79,7 @@ pnpm typecheck        # tsc --noEmit (app runs next typegen first)
 
 ### Testing
 
-- **Vitest 3** with `@vitest/coverage-v8`. Use `createVitestConfig()` from `@repo/vitest-config`.
+- **Vitest 4** with `@vitest/coverage-v8`. Use `createVitestConfig()` from `@repo/vitest-config`.
 - Default environment is `jsdom`; pass `environment: 'node'` for server-only packages.
 - CI coverage output goes to `coverage/` — included in Turbo `test:ci` output cache.
 
@@ -86,6 +87,14 @@ pnpm typecheck        # tsc --noEmit (app runs next typegen first)
 
 - Extend shared configs from `@repo/typescript-config` (`base.json`, `nextjs.json`, etc.).
 - Strict mode everywhere. Avoid `any`.
+
+## Documentation Site
+
+- **Docusaurus 3.10** at `apps/docs`, deployed to GitHub Pages.
+- Dev server on **port 1337** (`turbo run dev --filter=docs`).
+- TypeDoc API reference auto-generated from five packages at build time.
+- Hand-authored guides in `apps/docs/docs/` — sections: `getting-started/`, `architecture/`, `packages/`, `app-guide/`, `deployment/`, `onboarding-sites/`.
+- **Keep docs in sync**: when changing a package's public API, types, or behaviour, update the corresponding guide in `apps/docs/docs/packages/` and any affected architecture docs.
 
 ## Scoped Instructions
 
