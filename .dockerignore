@@ -39,5 +39,8 @@ reference
 .DS_Store
 Thumbs.db
 
+# Docs site (not needed in app Docker builds)
+apps/docs
+
 # Husky (not needed in container)
 .husky
