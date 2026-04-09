@@ -6,7 +6,7 @@ import "@/styles/main.scss";
 import { config } from "@repo/app-config";
 import { DictionaryProvider, loadDictionary } from "@repo/i18n";
 import { error as logError, warn } from "@repo/logger";
-import type { NotFoundContents } from "@repo/wagtail-cms-types/core";
+import { isNotFound } from "@repo/wagtail-api-client";
 import type {
 	CMSFooterResponse,
 	CMSHeaderResponse,
@@ -22,15 +22,6 @@ import { dictionaryLoaders } from "@/lib/i18n/loaders";
 
 /** ISR revalidation interval in seconds (1 hour). */
 const REVALIDATE_SECONDS = 3600;
-
-function isNotFound(response: unknown): response is NotFoundContents {
-	return (
-		response != null &&
-		typeof response === "object" &&
-		"message" in response &&
-		"data" in response
-	);
-}
 
 /** App-level branding constants — not env vars, set per-app when scaffolding. */
 const SITE_NAME = "HSE.ie";
