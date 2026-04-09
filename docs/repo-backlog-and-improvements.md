@@ -11,12 +11,12 @@ Tracked improvements and recommendations for the HSE Multisite Frontend monorepo
 | 3   | ~~[Security Headers / CSP](#3-security-headers--csp)~~                        | ~~Must~~              | ~~S~~       | Done                        |
 | 4   | [Accessibility (WCAG)](#4-accessibility-wcag)                                 | Must                  | M           | #1                          |
 | 5   | ~~[`@repo/wagtail-cms-mapping` Package](#5-repowagtail-cms-mapping-package)~~ | ~~Must~~              | ~~L~~       | Done                        |
-| 6   | [`@repo/hse-custom-ui` Package](#6-repohse-custom-ui-package)                 | Must                  | M           | —                           |
+| 6   | [`@repo/hse-custom-ui` Package](#6-repohse-custom-ui-package)                 | Should                | M           | —                           |
 | 7   | ~~[Error Handling and Resilience](#7-error-handling-and-resilience)~~         | ~~Must~~              | ~~M~~       | Done                        |
 | 8   | ~~[Caching and Revalidation Strategy](#8-caching-and-revalidation-strategy)~~ | ~~Must~~              | ~~L~~       | Done                        |
-| 9   | [Image Optimisation](#9-image-optimisation)                                   | Must                  | M           | In progress                 |
-| 10  | [SEO Metadata from CMS](#10-seo-metadata-from-cms)                            | Must                  | M           | In progress                 |
-| 11  | [Expand `hse-multisite-template`](#11-expand-hse-multisite-template)          | Must                  | XL          | #2, #5, #6, ~~#7~~, ~~#8~~, #9, #10 |
+| 9   | [Image Optimisation](#9-image-optimisation)                                   | Should                | M           | In progress                 |
+| 10  | [SEO Metadata from CMS](#10-seo-metadata-from-cms)                            | Should                | M           | In progress                 |
+| 11  | [Expand `hse-multisite-template`](#11-expand-hse-multisite-template)          | Must                  | XL          | ~~#2~~, ~~#5~~, ~~#6~~, ~~#7~~, ~~#8~~, ~~#9~~, ~~#10~~ |
 | 12  | [CMS Preview / Draft Mode](#12-cms-preview--draft-mode)                       | Must                  | M           | #11                         |
 | 13  | [App Cookiecutter (Makefile)](#13-app-cookiecutter-makefile)                  | Should                | M           | #11                         |
 | 14  | ~~[Git Hooks (Husky + commitlint)](#14-git-hooks-husky--commitlint)~~         | ~~Should~~            | ~~S~~       | Done                        |
@@ -152,15 +152,15 @@ Shared package for custom UI components that don't exist in `@hseireland/hse-fro
 
 Currently a minimal Next.js install with the HSE design system and a hello-world homepage. Needs to become a fully integrated headless Wagtail site that new apps are cloned from.
 
-**Depends on**: ~~#2~~, ~~#5~~, #6, ~~#7~~, ~~#8~~, #9, #10 — these packages and patterns need to exist before the template can integrate them.
+**Depends on**: ~~#2~~, ~~#5~~, ~~#6~~, ~~#7~~, ~~#8~~, ~~#9~~, ~~#10~~ — all prior dependencies resolved or deferred.
 
 The template should include:
 
 - CMS content fetching via `@repo/wagtail-api-client` (`CMSClient` / `fetchContent`)
 - Page routing driven by Wagtail page models, validated via `@repo/wagtail-cms-types` schemas
 - StreamField block rendering via `@repo/wagtail-cms-mapping`
-- Global site settings integration (header/footer menus from Wagtail site settings API)
-- HSE design system layout shell (`@hseireland/hse-frontend-react` header, footer, nav)
+- ~~Global site settings integration (header/footer menus from Wagtail site settings API)~~
+- ~~HSE design system layout shell (`@hseireland/hse-frontend-react` header, footer, nav)~~
 - Example page template showing the full data flow (fetch -> validate -> map -> render)
 - Sitemap generation using the Wagtail pages API
 - `robots.txt` generated from the Wagtail site settings API endpoint
