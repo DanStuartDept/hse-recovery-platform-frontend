@@ -238,34 +238,36 @@ The `@repo/logger` package exists but has no production backend.
 
 ---
 
-## 17. Internationalisation (i18n)
+## 17. Internationalisation (i18n) ✅
 
-HSE Ireland has obligations to provide content in Irish (Gaeilge) under the Official Languages Act (Acht na dTeangacha Oifigiúla). Baseline locales are `en` (default) and `ga`, but individual apps may support additional locales (e.g., `uk` Ukrainian, `pl` Polish) so the system must not hardcode a fixed locale list.
+**Done.** Full i18n infrastructure in `@repo/i18n` with locale-aware routing, shared + per-app dictionaries, and translation utilities. Footer fully internationalised.
 
-**Needs research** — several open architectural questions below.
+### Routing ✅
 
-### Routing
+- ~~Dynamic catch-all route: `src/app/[lang]/[[...slug]]/page.tsx`~~
+- ~~Default locale (`en`) hidden from URL: `www.hse.ie/about/` not `www.hse.ie/en/about/`~~
+- ~~Irish locale prefixed: `www.hse.ie/ga/about/`~~
+- ~~`createI18nProxy` middleware handles locale detection, redirects, and URL rewriting~~
+- ~~Per-app `I18nConfig` with extensible locale list (not a fixed enum)~~
 
-- Dynamic catch-all route: `src/app/[locale]/[[...slug]]/page.tsx`
-- Default locale (`en`) hidden from URL: `www.hse.ie/about/` not `www.hse.ie/en/about/`
-- Irish locale prefixed: `www.hse.ie/ga/about/`
-- Trailing slashes enabled (existing preference across HSE sites)
-- Investigate Next.js 16 i18n routing support and whether `next.config.ts` `i18n` config or middleware-based approach is appropriate
+### Configuration ✅
 
-### Configuration
+- ~~Locale settings live at app level (`i18nConfig` in each app) — `en` and `ga` are baseline, apps can add more~~
+- ~~`DictionaryLoaders` type maps locale codes to dynamic imports~~
 
-- **Open question:** Should locale settings (available locales, default locale, fallback behaviour) live in `@repo/app-config` (shared across all apps) or at the app level? Consider: `en` and `ga` are baseline for all apps, but some apps need additional locales (Ukrainian, Polish, etc.)
-- Locale list must be extensible per-app — not a fixed enum
-- Default locale, available locales, and URL behaviour should be configurable
+### Dictionaries and translations ✅
 
-### Dictionaries and translations
-
-- Static dictionaries for `en` and `ga` (UI strings, labels, common phrases — not CMS content)
-- Dictionary storage: both shared (common UI strings across all apps) and per-app (app-specific strings)
-- String encapsulation: `getDictionary(locale)` pattern returning a typed dictionary object
-- Interpolation support for dynamic values in translated strings (e.g., `"Welcome, {name}"`)
-- Server Components: `await getDictionary(locale)` directly
-- Client Components: dictionary provider (React Context) so client trees don't need prop-drilling
+- ~~Static dictionaries for `en` and `ga` in categorized JSON format (`Record<string, Record<string, string>>`)~~
+- ~~Shared dictionaries in `@repo/i18n` (common UI strings + footer content inherited by all apps)~~
+- ~~Per-app dictionaries override or extend shared keys~~
+- ~~`loadDictionary` / `getDictionary` with four-layer merge (default shared → default app → locale shared → locale app)~~
+- ~~`flattenCategorized()` converts categorized JSON to flat dotted keys before merging~~
+- ~~`unflatten()` produces typed nested objects with plural function support~~
+- ~~Interpolation (`interpolate`), pluralisation (`plural`), and rich text (`rich`) helpers~~
+- ~~Server Components: `await loadDictionary(locale)` directly~~
+- ~~Client Components: `DictionaryProvider` + `useDictionary<Dictionary>()` hook~~
+- ~~`MergedDictionary<TApp>` utility type — one-liner `Dictionary` definition per app~~
+- ~~SiteFooter fully internationalised — all hardcoded strings replaced with dictionary lookups~~
 
 ### CMS content
 
