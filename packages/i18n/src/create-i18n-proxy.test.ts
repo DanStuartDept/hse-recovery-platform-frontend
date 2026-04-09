@@ -4,13 +4,13 @@ import { createI18nProxy } from "./create-i18n-proxy";
 import type { I18nConfig } from "./types";
 
 const multiLocaleConfig: I18nConfig = {
-	defaultLocale: "en-ie",
-	locales: ["en-ie", "ga"],
+	defaultLocale: "en",
+	locales: ["en", "ga"],
 };
 
 const singleLocaleConfig: I18nConfig = {
-	defaultLocale: "en-ie",
-	locales: ["en-ie"],
+	defaultLocale: "en",
+	locales: ["en"],
 };
 
 function makeRequest(path: string, options?: { acceptLanguage?: string }) {
@@ -27,15 +27,15 @@ describe("createI18nProxy — multi-locale", () => {
 		const response = proxy(makeRequest("/about/"));
 		expect(response).toBeDefined();
 		const rewriteHeader = response!.headers.get("x-middleware-rewrite");
-		expect(rewriteHeader).toContain("/en-ie/about/");
+		expect(rewriteHeader).toContain("/en/about/");
 	});
 
 	it("redirects when default locale is explicitly in the URL", () => {
-		const response = proxy(makeRequest("/en-ie/about/"));
+		const response = proxy(makeRequest("/en/about/"));
 		expect(response).toBeDefined();
 		expect(response!.status).toBe(307);
 		expect(response!.headers.get("location")).toContain("/about/");
-		expect(response!.headers.get("location")).not.toContain("/en-ie/");
+		expect(response!.headers.get("location")).not.toContain("/en/");
 	});
 
 	it("passes through for non-default locale in URL", () => {
@@ -56,7 +56,7 @@ describe("createI18nProxy — multi-locale", () => {
 		const response = proxy(makeRequest("/about/", { acceptLanguage: "fr;q=0.9" }));
 		expect(response).toBeDefined();
 		const rewriteHeader = response!.headers.get("x-middleware-rewrite");
-		expect(rewriteHeader).toContain("/en-ie/about/");
+		expect(rewriteHeader).toContain("/en/about/");
 	});
 });
 
@@ -66,11 +66,11 @@ describe("createI18nProxy — single locale", () => {
 	it("rewrites to default locale when no prefix", () => {
 		const response = proxy(makeRequest("/about/"));
 		const rewriteHeader = response!.headers.get("x-middleware-rewrite");
-		expect(rewriteHeader).toContain("/en-ie/about/");
+		expect(rewriteHeader).toContain("/en/about/");
 	});
 
 	it("redirects to remove explicit default locale", () => {
-		const response = proxy(makeRequest("/en-ie/about/"));
+		const response = proxy(makeRequest("/en/about/"));
 		expect(response!.status).toBe(307);
 		expect(response!.headers.get("location")).toContain("/about/");
 	});

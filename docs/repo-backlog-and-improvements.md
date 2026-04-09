@@ -240,27 +240,27 @@ The `@repo/logger` package exists but has no production backend.
 
 ## 17. Internationalisation (i18n)
 
-HSE Ireland has obligations to provide content in Irish (Gaeilge) under the Official Languages Act (Acht na dTeangacha Oifigiúla). Baseline locales are `en-ie` (default) and `ga`, but individual apps may support additional locales (e.g., `uk` Ukrainian, `pl` Polish) so the system must not hardcode a fixed locale list.
+HSE Ireland has obligations to provide content in Irish (Gaeilge) under the Official Languages Act (Acht na dTeangacha Oifigiúla). Baseline locales are `en` (default) and `ga`, but individual apps may support additional locales (e.g., `uk` Ukrainian, `pl` Polish) so the system must not hardcode a fixed locale list.
 
 **Needs research** — several open architectural questions below.
 
 ### Routing
 
 - Dynamic catch-all route: `src/app/[locale]/[[...slug]]/page.tsx`
-- Default locale (`en-ie`) hidden from URL: `www.hse.ie/about/` not `www.hse.ie/en-ie/about/`
+- Default locale (`en`) hidden from URL: `www.hse.ie/about/` not `www.hse.ie/en/about/`
 - Irish locale prefixed: `www.hse.ie/ga/about/`
 - Trailing slashes enabled (existing preference across HSE sites)
 - Investigate Next.js 16 i18n routing support and whether `next.config.ts` `i18n` config or middleware-based approach is appropriate
 
 ### Configuration
 
-- **Open question:** Should locale settings (available locales, default locale, fallback behaviour) live in `@repo/app-config` (shared across all apps) or at the app level? Consider: `en-ie` and `ga` are baseline for all apps, but some apps need additional locales (Ukrainian, Polish, etc.)
+- **Open question:** Should locale settings (available locales, default locale, fallback behaviour) live in `@repo/app-config` (shared across all apps) or at the app level? Consider: `en` and `ga` are baseline for all apps, but some apps need additional locales (Ukrainian, Polish, etc.)
 - Locale list must be extensible per-app — not a fixed enum
 - Default locale, available locales, and URL behaviour should be configurable
 
 ### Dictionaries and translations
 
-- Static dictionaries for `en-ie` and `ga` (UI strings, labels, common phrases — not CMS content)
+- Static dictionaries for `en` and `ga` (UI strings, labels, common phrases — not CMS content)
 - Dictionary storage: both shared (common UI strings across all apps) and per-app (app-specific strings)
 - String encapsulation: `getDictionary(locale)` pattern returning a typed dictionary object
 - Interpolation support for dynamic values in translated strings (e.g., `"Welcome, {name}"`)

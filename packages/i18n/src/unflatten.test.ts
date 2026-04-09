@@ -5,23 +5,23 @@ import { unflatten } from "./unflatten";
 describe("unflatten", () => {
 	it("converts a flat dotted-key object to a nested object", () => {
 		const flat = { "a.b": "hello", "a.c": "world" };
-		const result = unflatten(flat, "en-ie");
+		const result = unflatten(flat, "en");
 		expect(result).toEqual({ a: { b: "hello", c: "world" } });
 	});
 
 	it("handles keys without dots", () => {
 		const flat = { greeting: "hello" };
-		const result = unflatten(flat, "en-ie");
+		const result = unflatten(flat, "en");
 		expect(result).toEqual({ greeting: "hello" });
 	});
 
 	it("handles an empty object", () => {
-		expect(unflatten({}, "en-ie")).toEqual({});
+		expect(unflatten({}, "en")).toEqual({});
 	});
 
 	it("handles deeply nested keys", () => {
 		const flat = { "a.b.c.d": "deep" };
-		const result = unflatten(flat, "en-ie") as { a: { b: { c: { d: string } } } };
+		const result = unflatten(flat, "en") as { a: { b: { c: { d: string } } } };
 		expect(result.a.b.c.d).toBe("deep");
 	});
 
@@ -31,7 +31,7 @@ describe("unflatten", () => {
 			"search.resultCount_one": "1 result",
 			"search.resultCount_other": "{count} results",
 		};
-		const result = unflatten(flat, "en-ie") as { search: { resultCount: (n: number) => string } };
+		const result = unflatten(flat, "en") as { search: { resultCount: (n: number) => string } };
 		expect(typeof result.search.resultCount).toBe("function");
 		expect(result.search.resultCount(0)).toBe("No results");
 		expect(result.search.resultCount(1)).toBe("1 result");
@@ -44,7 +44,7 @@ describe("unflatten", () => {
 			"search.resultCount_one": "1 result",
 			"search.resultCount_other": "{count} results",
 		};
-		const result = unflatten(flat, "en-ie") as {
+		const result = unflatten(flat, "en") as {
 			search: { heading: string; resultCount: (n: number) => string };
 		};
 		expect(result.search.heading).toBe("Search");

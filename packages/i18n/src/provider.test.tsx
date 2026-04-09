@@ -15,7 +15,7 @@ function PluralConsumer() {
 describe("DictionaryProvider", () => {
 	it("renders children", () => {
 		render(
-			<DictionaryProvider flat={{}} locale="en-ie">
+			<DictionaryProvider flat={{}} locale="en">
 				<p>child</p>
 			</DictionaryProvider>,
 		);
@@ -26,7 +26,7 @@ describe("DictionaryProvider", () => {
 describe("useDictionary", () => {
 	it("returns the unflattened dictionary", () => {
 		render(
-			<DictionaryProvider flat={{ greeting: "Hello" }} locale="en-ie">
+			<DictionaryProvider flat={{ greeting: "Hello" }} locale="en">
 				<TestConsumer />
 			</DictionaryProvider>,
 		);
@@ -39,7 +39,7 @@ describe("useDictionary", () => {
 			"items.count_other": "{count} items",
 		};
 		render(
-			<DictionaryProvider flat={flat} locale="en-ie">
+			<DictionaryProvider flat={flat} locale="en">
 				<PluralConsumer />
 			</DictionaryProvider>,
 		);
