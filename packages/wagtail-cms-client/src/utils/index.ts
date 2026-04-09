@@ -1,3 +1,5 @@
+export { isNotFound } from "./is-not-found.js";
+
 import type { CMSQueries } from "@repo/wagtail-cms-types/core";
 
 export function buildQueryString(queries: CMSQueries | undefined): string {
