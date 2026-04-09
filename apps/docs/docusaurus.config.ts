@@ -107,6 +107,11 @@ const config: Config = {
 	],
 
 	themeConfig: {
+		colorMode: {
+			defaultMode: "light",
+			disableSwitch: true,
+			respectPrefersColorScheme: false,
+		},
 		navbar: {
 			title: "HSE Multisite Docs",
 			logo: {
@@ -162,7 +167,6 @@ const config: Config = {
 		},
 		prism: {
 			theme: prismThemes.github,
-			darkTheme: prismThemes.dracula,
 			additionalLanguages: ["bash", "json", "yaml", "docker"],
 		},
 	} satisfies Preset.ThemeConfig,
