@@ -46,6 +46,15 @@ pnpm typecheck        # tsc --noEmit (app runs next typegen first)
 - **Forms**: `react-hook-form` + `@hookform/resolvers` + Zod schemas.
 - **Error handling & logging**: `@repo/logger` provides `log`, `warn`, and `error` levels. CMS fetch errors are classified by HTTP status in the catch-all route and logged at appropriate severity. CMS responses are validated with Zod `safeParse` — mismatches logged as warnings without crashing. Error boundaries log at `error` level in all environments.
 
+## Docker
+
+- Each app has a `Dockerfile` in its directory (e.g., `apps/hse-multisite-template/Dockerfile`). Docker builds **must run from the monorepo root** with `-f` pointing to the app Dockerfile — the build context needs access to all workspace packages.
+- The build uses `turbo prune --docker` to create a minimal monorepo subset, then installs and builds only what the target app needs.
+- `next.config.ts` has `output: "standalone"` — the runner stage copies the standalone output, not the full `node_modules`.
+- `NEXT_PUBLIC_*` env vars are passed as `--build-arg` (inlined at build time by Next.js). Server-only secrets (`PREVIEW_TOKEN`, `REVALIDATE_TOKEN`) are runtime env vars passed at `docker run`.
+- Private `@hseireland` packages require an `NPM_TOKEN` passed as a Docker build secret (`--secret id=NPM_TOKEN`).
+- `.dockerignore` lives at the repo root (where the build context is).
+
 ## Conventions
 
 ### Dependency declarations

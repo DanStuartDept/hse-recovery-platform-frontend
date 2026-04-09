@@ -1,0 +1,43 @@
+# Dependencies (reinstalled in Docker)
+node_modules
+**/node_modules
+
+# Build outputs (rebuilt in Docker)
+.next
+**/.next
+**/dist
+**/coverage
+
+# Turborepo cache
+.turbo
+**/.turbo
+
+# Git
+.git
+.gitignore
+
+# IDE
+.vscode
+.idea
+
+# Environment files (passed as build args instead)
+.env
+.env.*
+!.env.example
+
+# Docker
+Dockerfile
+docker-compose*.yml
+.dockerignore
+
+# Documentation / reference
+reference
+*.md
+!pnpm-workspace.yaml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Husky (not needed in container)
+.husky

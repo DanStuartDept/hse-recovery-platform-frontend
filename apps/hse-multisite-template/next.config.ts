@@ -3,6 +3,7 @@ import type { NextConfig } from "next";
 import { securityHeaders } from "./security-headers";
 
 const nextConfig: NextConfig = {
+	output: "standalone",
 	trailingSlash: true,
 	transpilePackages: ["@piwikpro/next-piwik-pro"],
 	sassOptions: {
