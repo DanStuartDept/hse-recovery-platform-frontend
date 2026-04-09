@@ -26,6 +26,7 @@ const REVALIDATE_SECONDS = 3600;
 /** App-level branding constants — not env vars, set per-app when scaffolding. */
 const SITE_NAME = "HSE.ie";
 const TITLE_TEMPLATE = `%s | ${SITE_NAME}`;
+const FAVICONS_PATH = "/assets/images/favicons";
 export const metadata: Metadata = {
 	title: {
 		template: TITLE_TEMPLATE,
@@ -34,6 +35,24 @@ export const metadata: Metadata = {
 	metadataBase: new URL(config.siteUrl),
 	formatDetection: {
 		telephone: false,
+	},
+	icons: {
+		icon: [
+			{ url: `${FAVICONS_PATH}/favicon.svg`, type: "image/svg+xml" },
+			{
+				url: `${FAVICONS_PATH}/favicon-192x192.png`,
+				type: "image/png",
+				sizes: "192x192",
+			},
+			{ url: `${FAVICONS_PATH}/favicon.png`, type: "image/png" },
+		],
+		apple: [
+			{
+				url: `${FAVICONS_PATH}/apple-touch-icon-180x180.png`,
+				sizes: "180x180",
+				type: "image/png",
+			},
+		],
 	},
 };
 
