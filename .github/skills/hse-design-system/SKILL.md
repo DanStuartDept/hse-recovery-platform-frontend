@@ -1,5 +1,5 @@
 ---
-name: HSE Design System
+name: hse-design-system
 description: Component catalogue, SCSS tokens, and usage guide for @hseireland/hse-frontend and @hseireland/hse-frontend-react
 ---
 

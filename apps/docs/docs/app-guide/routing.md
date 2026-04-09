@@ -66,7 +66,7 @@ This allows pages that were **not** returned by `generateStaticParams` to be ren
 const REVALIDATE_SECONDS = 3600;
 ```
 
-The `cmsClient.findPageByPath` call passes `{ next: { revalidate: REVALIDATE_SECONDS } }` as fetch options. Cached responses are considered stale after one hour. For real-time updates, the `/api/revalidate/` webhook endpoint calls `revalidatePath` when content is published in Wagtail — see [`src/app/api/revalidate/route.ts`](/Users/danstuart/Sites/work/hse/hse-multisite-frontend/apps/hse-multisite-template/src/app/api/revalidate/route.ts).
+The `cmsClient.findPageByPath` call passes `{ next: { revalidate: REVALIDATE_SECONDS } }` as fetch options. Cached responses are considered stale after one hour. For real-time updates, the `/api/revalidate/` webhook endpoint calls `revalidatePath` when content is published in Wagtail — see `src/app/api/revalidate/route.ts`.
 
 ## `generateStaticParams` in the layout
 

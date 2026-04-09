@@ -3,9 +3,9 @@
 	"version": "0.0.0",
 	"private": true,
 	"scripts": {
-		"dev": "docusaurus start",
+		"dev": "docusaurus start --port 1337",
 		"build": "docusaurus build",
-		"serve": "docusaurus serve",
+		"serve": "docusaurus serve --port 1337",
 		"typecheck": "tsc --noEmit",
 		"lint": "biome check --write",
 		"clear": "docusaurus clear"
@@ -19,14 +19,15 @@
 		"react-dom": "^18.0.0"
 	},
 	"devDependencies": {
+		"@docusaurus/faster": "3.10.0",
 		"@docusaurus/module-type-aliases": "3.10.0",
 		"@docusaurus/tsconfig": "3.10.0",
 		"@docusaurus/types": "3.10.0",
+		"@repo/biome-config": "workspace:*",
+		"@repo/typescript-config": "workspace:*",
 		"docusaurus-plugin-typedoc": "^1.4.0",
 		"typedoc": "^0.28.0",
 		"typedoc-plugin-markdown": "^4.6.0",
-		"@repo/biome-config": "workspace:*",
-		"@repo/typescript-config": "workspace:*",
 		"typescript": "catalog:"
 	},
 	"engines": {

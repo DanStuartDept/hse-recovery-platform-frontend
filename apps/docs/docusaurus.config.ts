@@ -14,7 +14,16 @@ const config: Config = {
 	trailingSlash: false,
 
 	onBrokenLinks: "throw",
-	onBrokenMarkdownLinks: "warn",
+	markdown: {
+		hooks: {
+			onBrokenMarkdownLinks: "warn",
+		},
+	},
+
+	future: {
+		faster: true,
+		v4: true,
+	},
 
 	i18n: {
 		defaultLocale: "en",
@@ -44,7 +53,7 @@ const config: Config = {
 				id: "api-client",
 				entryPoints: ["../../packages/wagtail-cms-client/src/index.ts"],
 				tsconfig: "../../packages/wagtail-cms-client/tsconfig.json",
-				out: "api/wagtail-api-client",
+				out: "docs/api/wagtail-api-client",
 				sidebar: { autoConfiguration: true },
 			},
 		],
@@ -52,9 +61,16 @@ const config: Config = {
 			"docusaurus-plugin-typedoc",
 			{
 				id: "cms-types",
-				entryPoints: ["../../packages/wagtail-cms-types/src/index.ts"],
+				entryPoints: [
+					"../../packages/wagtail-cms-types/src/types/blocks/index.ts",
+					"../../packages/wagtail-cms-types/src/types/core/index.ts",
+					"../../packages/wagtail-cms-types/src/types/fields/index.ts",
+					"../../packages/wagtail-cms-types/src/types/page-models/index.ts",
+					"../../packages/wagtail-cms-types/src/types/settings/index.ts",
+					"../../packages/wagtail-cms-types/src/types/snippets/index.ts",
+				],
 				tsconfig: "../../packages/wagtail-cms-types/tsconfig.json",
-				out: "api/wagtail-cms-types",
+				out: "docs/api/wagtail-cms-types",
 				sidebar: { autoConfiguration: true },
 			},
 		],
@@ -62,9 +78,9 @@ const config: Config = {
 			"docusaurus-plugin-typedoc",
 			{
 				id: "cms-mapping",
-				entryPoints: ["../../packages/wagtail-cms-mapping/src/index.ts"],
+				entryPoints: ["../../packages/wagtail-cms-mapping/src/index.tsx"],
 				tsconfig: "../../packages/wagtail-cms-mapping/tsconfig.json",
-				out: "api/wagtail-cms-mapping",
+				out: "docs/api/wagtail-cms-mapping",
 				sidebar: { autoConfiguration: true },
 			},
 		],
@@ -74,7 +90,7 @@ const config: Config = {
 				id: "app-config",
 				entryPoints: ["../../packages/app-config/src/index.ts"],
 				tsconfig: "../../packages/app-config/tsconfig.json",
-				out: "api/app-config",
+				out: "docs/api/app-config",
 				sidebar: { autoConfiguration: true },
 			},
 		],
@@ -84,7 +100,7 @@ const config: Config = {
 				id: "i18n-pkg",
 				entryPoints: ["../../packages/i18n/src/index.ts"],
 				tsconfig: "../../packages/i18n/tsconfig.json",
-				out: "api/i18n",
+				out: "docs/api/i18n",
 				sidebar: { autoConfiguration: true },
 			},
 		],

@@ -1,0 +1,6 @@
+# TypeDoc auto-generated API reference (regenerated on build)
+docs/api/
+
+# Docusaurus build output
+build/
+.docusaurus/

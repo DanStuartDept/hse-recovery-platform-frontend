@@ -61,6 +61,6 @@ Keeping the app and its internal packages in one repo gives several practical be
 
 ## Where to go next
 
-- **[Architecture](../architecture)** — detailed explanations of the CMS content flow, caching strategy, i18n routing, and configuration model
+- **[Architecture](../architecture/monorepo-structure)** — detailed explanations of the CMS content flow, caching strategy, i18n routing, and configuration model
 - **[Installation](./installation.md)** — step-by-step setup instructions
 - **[Running Locally](./running-locally.md)** — starting dev servers and working with environment variables
