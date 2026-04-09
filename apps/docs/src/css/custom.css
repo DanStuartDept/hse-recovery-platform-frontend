@@ -83,15 +83,18 @@ footer.footer .footer__link-item:hover {
 	text-decoration: underline;
 }
 
-/* Copyright — separated by a subtle white border */
+/* Copyright bar — full-width green-900 matching HSE footer */
 footer.footer .footer__bottom {
-	border-top: 1px solid rgba(255, 255, 255, 0.2);
-	margin-top: 1.5rem;
-	padding-top: 1.5rem;
+	background-color: #00473e;
+	margin-top: 2rem;
+	margin-left: calc(-50vw + 50%);
+	margin-right: calc(-50vw + 50%);
+	margin-bottom: -32px;
+	padding: 1rem calc(50vw - 50%) calc(1rem + 32px);
 }
 
 footer.footer .footer__copyright {
-	color: rgba(255, 255, 255, 0.8);
+	color: #ffffff;
 }
 
 /* ── Sidebar ──────────────────────────────────────────────── */
