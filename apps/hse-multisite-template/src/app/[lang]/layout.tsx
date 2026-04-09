@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import "@hseireland/hse-frontend/packages/hse.scss";
+import "@/styles/main.scss";
 
 import { config } from "@repo/app-config";
 import { DictionaryProvider, loadDictionary } from "@repo/i18n";

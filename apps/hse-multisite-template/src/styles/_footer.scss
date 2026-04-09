@@ -1,0 +1,26 @@
+/**
+ * Resets default button styles on the footer cookies settings button
+ * so it matches the link appearance of other footer list items.
+ *
+ * The button already receives `.hse-footer__list-item-link` from the
+ * design system component, which sets default + hover colour to white.
+ * We only need to: reset browser button defaults, add the underline
+ * that <a> gets natively, and replicate the focus style that the
+ * design system applies to <a> tags via global styles.
+ */
+footer button.hse-footer__list-item-link {
+	background: none;
+	border: none;
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
+	text-decoration: underline;
+
+	&:hover {
+		text-decoration-thickness: $hse-link-hover-text-decoration-thickness;
+	}
+
+	&:focus {
+		@include hse-focused-text;
+	}
+}
