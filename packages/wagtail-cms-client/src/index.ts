@@ -20,6 +20,7 @@ import type {
 	CMSHeaderResponse,
 } from "@repo/wagtail-cms-types/settings";
 import { FetchError, fetchContent, fetchRequest } from "./lib/index.js";
+import { isNotFound } from "./utils/index.js";
 
 export * from "./lib/index.js";
 
@@ -67,19 +68,6 @@ export class CMSClient {
 			return { message, data: error };
 		}
 		return { message: "An unknown error occurred:", data: error };
-	}
-
-	/**
-	 * Type guard to check if a response is a NotFoundContents error.
-	 */
-	private isNotFound(response: unknown): response is NotFoundContents {
-		return (
-			response != null &&
-			typeof response === "object" &&
-			"message" in response &&
-			typeof (response as Record<string, unknown>).message === "string" &&
-			"data" in response
-		);
 	}
 
 	/**
@@ -373,7 +361,7 @@ export class CMSClient {
 			init,
 		);
 
-		if (this.isNotFound(response)) {
+		if (isNotFound(response)) {
 			return response;
 		}
 
@@ -400,7 +388,7 @@ export class CMSClient {
 			init,
 		);
 
-		if (this.isNotFound(response)) {
+		if (isNotFound(response)) {
 			return response;
 		}
 
