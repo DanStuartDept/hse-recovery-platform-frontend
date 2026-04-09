@@ -11,10 +11,10 @@ vi.mock("./shared-loaders", () => ({
 
 import { getDictionary, loadDictionary } from "./get-dictionary";
 
-const mockLoaders = {
+const mockLoaders: DictionaryLoaders = {
 	en: () => Promise.resolve({ default: { app: { title: "My App" }, common: { hello: "Hi" } } }),
 	ga: () => Promise.resolve({ default: { app: { title: "Mo Aip" } } }),
-} as unknown as DictionaryLoaders;
+};
 
 describe("loadDictionary", () => {
 	it("merges shared and app dictionaries (flat)", async () => {
@@ -29,37 +29,37 @@ describe("loadDictionary", () => {
 	});
 
 	it("falls back to default locale for missing keys", async () => {
-		const loaders = {
+		const loaders: DictionaryLoaders = {
 			en: () => Promise.resolve({ default: { app: { title: "My App", subtitle: "Welcome" } } }),
 			ga: () => Promise.resolve({ default: { app: { title: "Mo Aip" } } }),
-		} as unknown as DictionaryLoaders;
+		};
 		const flat = await loadDictionary("ga", loaders, "en");
 		expect(flat["app.title"]).toBe("Mo Aip");
 		expect(flat["app.subtitle"]).toBe("Welcome"); // fell back to en
 	});
 
 	it("works without defaultLocale (no fallback)", async () => {
-		const loaders = {
+		const loaders: DictionaryLoaders = {
 			ga: () => Promise.resolve({ default: { app: { title: "Mo Aip" } } }),
-		} as unknown as DictionaryLoaders;
+		};
 		const flat = await loadDictionary("ga", loaders);
 		expect(flat["app.title"]).toBe("Mo Aip");
 		expect(flat["common.hello"]).toBe("Dia duit"); // from shared only
 	});
 
 	it("handles locale with no shared dictionary", async () => {
-		const loaders = {
+		const loaders: DictionaryLoaders = {
 			uk: () => Promise.resolve({ default: { app: { title: "Мій додаток" } } }),
-		} as unknown as DictionaryLoaders;
+		};
 		const flat = await loadDictionary("uk", loaders);
 		expect(flat["app.title"]).toBe("Мій додаток");
 		expect(flat["common.hello"]).toBeUndefined();
 	});
 
 	it("throws a descriptive error for unknown locale", async () => {
-		const loaders = {
-			en: () => Promise.resolve({ default: {} as Record<string, Record<string, string>> }),
-		} as unknown as DictionaryLoaders;
+		const loaders: DictionaryLoaders = {
+			en: () => Promise.resolve({ default: {} }),
+		};
 		await expect(loadDictionary("fr", loaders)).rejects.toThrow('No dictionary loader for locale "fr"');
 	});
 });
@@ -72,12 +72,12 @@ describe("getDictionary", () => {
 	});
 
 	it("returns nested object with plural functions when present", async () => {
-		const loaders = {
+		const loaders: DictionaryLoaders = {
 			en: () =>
 				Promise.resolve({
 					default: { search: { count_one: "1 result", count_other: "{count} results" } },
 				}),
-		} as unknown as DictionaryLoaders;
+		};
 		const dict = await getDictionary<{ search: { count: (n: number) => string } }>("en", loaders);
 		expect(dict.search.count(1)).toBe("1 result");
 		expect(dict.search.count(5)).toBe("5 results");

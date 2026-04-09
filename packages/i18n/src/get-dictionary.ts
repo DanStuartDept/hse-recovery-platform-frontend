@@ -4,14 +4,15 @@ import type { DictionaryLoaders } from "./types";
 import { unflatten } from "./unflatten";
 
 /**
- * Load and merge flat dictionaries for a locale (shared + app layers).
+ * Load and merge dictionaries for a locale (shared + app layers).
+ * Each dictionary (categorized JSON) is flattened before merging.
  * Returns the flat merged `Record<string, string>`.
  *
  * Merge order (last wins):
- * 1. Default locale shared dict (fallback base, if `defaultLocale` provided and differs)
- * 2. Default locale app dict (fallback base)
- * 3. Requested locale shared dict
- * 4. Requested locale app dict
+ * 1. Default locale shared dict (flattened)
+ * 2. Default locale app dict (flattened)
+ * 3. Requested locale shared dict (flattened)
+ * 4. Requested locale app dict (flattened)
  */
 export async function loadDictionary(
 	locale: string,
