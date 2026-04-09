@@ -2,8 +2,10 @@
 
 import { Footer } from "@hseireland/hse-frontend-react";
 import { config } from "@repo/app-config";
+import { useDictionary } from "@repo/i18n";
 import type { CMSFooterResponse } from "@repo/wagtail-cms-types/settings";
 import Link from "next/link";
+import type { Dictionary } from "@/lib/i18n/dictionary";
 import { toggleOneTrustDisplay } from "@/lib/one-trust";
 
 /**
@@ -17,19 +19,22 @@ function toLocalHref(url: string): string {
 	return url;
 }
 
-const SOCIAL_LINKS = [
-	{ label: "HSE Facebook", href: "https://www.facebook.com/HSElive/" },
-	{ label: "HSE Instagram", href: "https://instagram.com/irishhealthservice" },
-	{ label: "HSE TikTok", href: "https://www.tiktok.com/@hselive" },
-	{
-		label: "HSE YouTube",
-		href: "https://www.youtube.com/channel/UCoNNhGGAYkdavsSXp1iVzCg",
-	},
-	{
-		label: "HSE Linkedin",
-		href: "https://ie.linkedin.com/company/health-service-executive",
-	},
-] as const;
+/** Extract social link entries from the footer dictionary namespace. */
+function getSocialLinks(
+	footer: Dictionary["footer"],
+): { label: string; href: string }[] {
+	const socialKeys = [
+		"facebook",
+		"instagram",
+		"tiktok",
+		"youtube",
+		"linkedin",
+	] as const;
+	return socialKeys.map((key) => ({
+		label: footer.social[key].label,
+		href: footer.social[key].href,
+	}));
+}
 
 /**
  * Props for the {@link SiteFooter} component.
@@ -44,6 +49,8 @@ interface SiteFooterProps {
  * Renders a copyright-only fallback when CMS data is unavailable.
  */
 export function SiteFooter({ data }: SiteFooterProps) {
+	const dict = useDictionary<Dictionary>();
+
 	if (!data) {
 		return (
 			<Footer>
@@ -54,34 +61,40 @@ export function SiteFooter({ data }: SiteFooterProps) {
 		);
 	}
 
+	const { footer } = dict;
+	const socialLinks = getSocialLinks(footer);
+
 	return (
 		<Footer>
 			<Footer.Top>
-				<Footer.Label>HSE Live - we&apos;re here to help</Footer.Label>
+				<Footer.Label>{footer.label}</Footer.Label>
 				<Footer.Content>
 					<p>
-						Monday to Friday: 8am to 8pm
+						{footer.hours.weekday}
 						<br />
-						Saturday: 9am to 5pm
+						{footer.hours.saturday}
 						<br />
-						Sunday: Closed
+						{footer.hours.sunday}
 						<br />
-						Bank holidays: Closed
+						{footer.hours.bankHoliday}
 					</p>
 					<p>
 						<strong>
-							Freephone: <a href="tel:1800700700">1800 700 700</a>
+							{footer.freephone.label}{" "}
+							<a href={footer.freephone.href}>{footer.freephone.number}</a>
 						</strong>
 					</p>
 					<p>
 						<strong>
-							From outside Ireland:{" "}
-							<a href="tel:0035312408787">00 353 1 240 8787</a>
+							{footer.international.label}{" "}
+							<a href={footer.international.href}>
+								{footer.international.number}
+							</a>
 						</strong>
 					</p>
 				</Footer.Content>
 				<Footer.Content>
-					{SOCIAL_LINKS.map((link) => (
+					{socialLinks.map((link) => (
 						<Footer.ListItem
 							key={link.label}
 							href={link.href}
@@ -105,7 +118,7 @@ export function SiteFooter({ data }: SiteFooterProps) {
 					))}
 					{!config.isLocalhost && config.oneTrustDomainId && (
 						<Footer.ListItem asElement="button" onClick={toggleOneTrustDisplay}>
-							Cookies settings
+							{footer.cookieSettings}
 						</Footer.ListItem>
 					)}
 				</Footer.Content>
