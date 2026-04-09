@@ -5,7 +5,7 @@ import type {
 	CMSQueries,
 } from "@repo/wagtail-cms-types/core";
 import { buildQueryString } from "../../utils/index.js";
-import { fetchRequest } from "../index.js";
+import { fetchRequest } from "../fetch.js";
 
 /**
  * Fetches CMS content using the provided parameters and handles response and error cases.

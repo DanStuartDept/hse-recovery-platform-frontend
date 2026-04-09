@@ -73,10 +73,32 @@ export const CMSPageBreadcrumbSchema = z.object({
 
 export type CMSPageBreadcrumb = z.infer<typeof CMSPageBreadcrumbSchema>;
 
+/**
+ * Parent page metadata schema — a subset of page meta returned by the CMS
+ * for nested parent references (some fields are omitted by the API).
+ */
+export const CMSParentPageMetaSchema = z.object({
+	slug: z.string().optional(),
+	type: CMSPageTypeSchema,
+	locale: z.string().optional(),
+	html_url: z.string(),
+	detail_url: z.string(),
+	seo_title: z.string().optional(),
+	first_published_at: z.string().optional(),
+	last_published_at: z.string().optional(),
+	search_description: z.string().optional(),
+	parent: z
+		.lazy(() => CMSParentPageContentSchema)
+		.nullable()
+		.optional(),
+});
+
+export type CMSParentPageMeta = z.infer<typeof CMSParentPageMetaSchema>;
+
 export type CMSParentPageContent = {
 	id: number;
 	title: string;
-	meta: CMSPageMeta;
+	meta: CMSParentPageMeta;
 };
 
 /**
@@ -87,7 +109,7 @@ export const CMSParentPageContentSchema: z.ZodType<CMSParentPageContent> =
 		z.object({
 			id: z.number(),
 			title: z.string(),
-			meta: CMSPageMetaSchema,
+			meta: CMSParentPageMetaSchema,
 		}),
 	);
 
@@ -97,12 +119,12 @@ export const CMSParentPageContentSchema: z.ZodType<CMSParentPageContent> =
 export const CMSPageMetaSchema = z.object({
 	slug: z.string(),
 	type: CMSPageTypeSchema,
-	locale: z.string(),
+	locale: z.string().optional(),
 	html_url: z.string(),
 	detail_url: z.string(),
 	seo_title: z.string().optional(),
 	first_published_at: z.string(),
-	last_published_at: z.string(),
+	last_published_at: z.string().optional(),
 	search_description: z.string(),
 	parent: CMSParentPageContentSchema.nullable(),
 });
